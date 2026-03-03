@@ -103,8 +103,8 @@ TextureImporter:
       name: Warden_Die_0
       rect:
         serializedVersion: 2
-        x: 66
-        y: 75
+        x: 456
+        y: 337
         width: 396
         height: 356
       alignment: 0

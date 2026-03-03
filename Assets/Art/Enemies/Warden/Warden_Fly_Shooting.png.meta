@@ -103,12 +103,12 @@ TextureImporter:
       name: Warden_Fly_Shooting_0
       rect:
         serializedVersion: 2
-        x: 233
-        y: 158
-        width: 901
-        height: 447
+        x: 236
+        y: 271
+        width: 896
+        height: 440
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 221b5d1dc8e2d044ead5fb9e16a97870
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 

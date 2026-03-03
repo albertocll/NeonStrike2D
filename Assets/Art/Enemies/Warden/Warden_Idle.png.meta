@@ -103,12 +103,12 @@ TextureImporter:
       name: Warden_Idle_0
       rect:
         serializedVersion: 2
-        x: 140
-        y: 264
-        width: 642
-        height: 377
+        x: 268
+        y: 268
+        width: 641
+        height: 369
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -125,7 +125,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0abd2a8dc1e89de4eb0b653ad3b5500d
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 

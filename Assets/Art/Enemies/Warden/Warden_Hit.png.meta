@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: e4c0f6598a42ec94a80151d6e4df4c8e
+guid: c68c22d9a76aded4cbe393e891231c4f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3322118924407536798
-    second: Warde_Hit_0
+      213: 1860041035894905803
+    second: Warden_Hit_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,12 +100,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Warde_Hit_0
+      name: Warden_Hit_0
       rect:
         serializedVersion: 2
-        x: 59
-        y: 60
-        width: 485
+        x: 383
+        y: 375
+        width: 484
         height: 269
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2630619807675e1d0800000000000000
-      internalID: -3322118924407536798
+      spriteID: bcb5a2c977130d910800000000000000
+      internalID: 1860041035894905803
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Warde_Hit_0: -3322118924407536798
+      Warden_Hit_0: 1860041035894905803
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
