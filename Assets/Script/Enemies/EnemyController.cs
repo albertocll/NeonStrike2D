@@ -9,6 +9,8 @@ public class EnemyController : MonoBehaviour
     private Animator animator;
     private bool isDead;
 
+    [SerializeField] private float deathDestroyDelay = 0.8f;
+
     void Awake()
     {
         currentHealth = maxHealth;
@@ -43,6 +45,18 @@ public class EnemyController : MonoBehaviour
         var movement = GetComponent<EnemyMovement>();
         if (movement) movement.enabled = false;
 
+        // Desactivar colisión para que no sea un bloque al morir
+        var col = GetComponent<Collider2D>();
+        if (col) col.enabled = false;
+
+        // Parar físicas
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+
         if (animator != null)
         {
             animator.ResetTrigger("Hit");
@@ -56,7 +70,7 @@ public class EnemyController : MonoBehaviour
 
     IEnumerator DestroyAfterDeath()
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
     }
 }
