@@ -242,7 +242,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 55401438}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: FirePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -311,6 +311,7 @@ GameObject:
   - component: {fileID: 508698054}
   - component: {fileID: 508698056}
   - component: {fileID: 508698057}
+  - component: {fileID: 508698058}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -556,6 +557,24 @@ MonoBehaviour:
   firePoint: {fileID: 1099117898}
   bulletPrefab: {fileID: -4140543666674948957, guid: e587320a36c4a0a4da50162a1e68baa7, type: 3}
   fireRate: 10
+--- !u!114 &508698058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 508698048}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90b9f4cec9bdd394593d59d70c95f3e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerAutoOrientation2D
+  spriteRenderer: {fileID: 508698052}
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  detectionRadius: 20
+  searchInterval: 0.1
 --- !u!1 &607525414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1409,7 +1428,7 @@ GameObject:
   - component: {fileID: 1794828506}
   - component: {fileID: 1794828508}
   - component: {fileID: 1794828507}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1979,6 +1998,10 @@ PrefabInstance:
     - target: {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
       propertyPath: m_Name
       value: Enemy_Warden
+      objectReference: {fileID: 0}
+    - target: {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
       propertyPath: m_TagString
