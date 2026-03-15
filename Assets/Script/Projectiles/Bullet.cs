@@ -11,6 +11,9 @@ public class Bullet : MonoBehaviour
     [Header("Behaviour")]
     public bool destroyOnHit = true;
 
+    [Header("Visual")]
+    [SerializeField] private float rotationOffset = 0f;
+
     private Vector2 dir = Vector2.right;
     private Collider2D myCol;
 
@@ -24,12 +27,11 @@ public class Bullet : MonoBehaviour
         dir = direction.normalized;
 
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
-
-        // Si la estela va por delante, el sprite está invertido: gira 180°
-        transform.rotation = Quaternion.Euler(0f, 0f, angle + 180f);
+        transform.rotation = Quaternion.Euler(0f, 0f, angle + rotationOffset);
 
         Destroy(gameObject, lifeTime);
     }
+
     // Llamar justo al instanciar para evitar autocolisión
     public void IgnoreCollider(Collider2D other)
     {
@@ -60,5 +62,4 @@ public class Bullet : MonoBehaviour
         if (destroyOnHit)
             Destroy(gameObject);
     }
-
 }
