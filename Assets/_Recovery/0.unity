@@ -556,7 +556,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 1099117898}
   bulletPrefab: {fileID: -4140543666674948957, guid: e587320a36c4a0a4da50162a1e68baa7, type: 3}
-  autoOrientation: {fileID: 0}
   fireRate: 10
 --- !u!114 &508698058
 MonoBehaviour:
@@ -1383,7 +1382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5681407dfef9cd641bdc993be0356e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 3
   deathDestroyDelay: 0.8
 --- !u!1 &1697332681
 GameObject:
