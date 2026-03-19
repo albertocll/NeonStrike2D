@@ -173,4 +173,5 @@ MonoBehaviour:
   lifeTime: 2
   damage: 1
   destroyOnHit: 1
+  owner: 0
   rotationOffset: 180
