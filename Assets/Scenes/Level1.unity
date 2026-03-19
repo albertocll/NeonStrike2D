@@ -634,7 +634,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   firePoint: {fileID: 1099117898}
   bulletPrefab: {fileID: -4140543666674948957, guid: e587320a36c4a0a4da50162a1e68baa7, type: 3}
-  autoOrientation: {fileID: 0}
+  autoOrientation: {fileID: 508698058}
   fireRate: 10
 --- !u!114 &508698058
 MonoBehaviour:
@@ -749,6 +749,37 @@ Transform:
   - {fileID: 1697332682}
   - {fileID: 1284175874}
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1039937536
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1039937537}
+  m_Layer: 0
+  m_Name: SpawnArea
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1039937537
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1039937536}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1916839832}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1099117897
 GameObject:
@@ -1461,7 +1492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5681407dfef9cd641bdc993be0356e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 15
   deathDestroyDelay: 0.8
 --- !u!1 &1697332681
 GameObject:
@@ -1778,7 +1809,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   enemyPrefabs:
-  - {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
+  - {fileID: 1676448222}
   spawnArea: {fileID: 284086550}
   spawnInterval: 2
   maxEnemies: 4
@@ -1794,7 +1825,8 @@ Transform:
   m_LocalPosition: {x: 1038.3622, y: 529.1262, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1039937537}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2002069245
@@ -2177,6 +2209,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8304933502751458696, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1794828507}
+    - target: {fileID: 8304933502751458696, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
       propertyPath: target
       value: 
       objectReference: {fileID: 508698053}
@@ -2225,8 +2261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d0bab249ced9e64584ed3afb863677f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyOrientation2D
-  visual: {fileID: 0}
-  target: {fileID: 0}
+  visual: {fileID: 1794828506}
+  target: {fileID: 508698053}
   invertFacing: 1
   xDeadzone: 0.05
   minFlipInterval: 0.08

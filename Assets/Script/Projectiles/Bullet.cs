@@ -3,6 +3,12 @@ using UnityEngine;
 [RequireComponent(typeof(Collider2D))]
 public class Bullet : MonoBehaviour
 {
+    public enum BulletOwner
+    {
+        Player,
+        Enemy
+    }
+
     [Header("Stats")]
     public float speed = 18f;
     public float lifeTime = 2f;
@@ -10,6 +16,7 @@ public class Bullet : MonoBehaviour
 
     [Header("Behaviour")]
     public bool destroyOnHit = true;
+    [SerializeField] private BulletOwner owner = BulletOwner.Player;
 
     [Header("Visual")]
     [SerializeField] private float rotationOffset = 0f;
@@ -46,16 +53,39 @@ public class Bullet : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        // Ignora al Player
-        if (other.CompareTag("Player")) return;
+        if (other.name == "SpawnArea") return;
 
-        // Si golpea enemigo
-        if (other.CompareTag("Enemy"))
+
+        if (owner == BulletOwner.Player)
         {
-            EnemyController enemy = other.GetComponent<EnemyController>();
-            if (enemy != null)
+            if (other.CompareTag("Player")) return;
+
+            if (other.CompareTag("Enemy"))
             {
-                enemy.TakeDamage(damage);
+                EnemyController enemy = other.GetComponent<EnemyController>();
+                if (enemy != null)
+                {
+                    enemy.TakeDamage(damage);
+
+                    if (destroyOnHit)
+                        Destroy(gameObject);
+
+                    return;
+                }
+            }
+        }
+        else if (owner == BulletOwner.Enemy)
+        {
+            if (other.CompareTag("Enemy")) return;
+
+            if (other.CompareTag("Player"))
+            {
+                Debug.Log("Enemy bullet hit Player");
+
+                if (destroyOnHit)
+                    Destroy(gameObject);
+
+                return;
             }
         }
 
