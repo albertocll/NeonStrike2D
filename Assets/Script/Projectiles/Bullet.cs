@@ -39,10 +39,9 @@ public class Bullet : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    // Llamar justo al instanciar para evitar autocolisión
     public void IgnoreCollider(Collider2D other)
     {
-        if (myCol && other)
+        if (myCol != null && other != null)
             Physics2D.IgnoreCollision(myCol, other, true);
     }
 
@@ -55,22 +54,30 @@ public class Bullet : MonoBehaviour
     {
         if (other.name == "SpawnArea") return;
 
-
         if (owner == BulletOwner.Player)
         {
             if (other.CompareTag("Player")) return;
 
             if (other.CompareTag("Enemy"))
             {
-                EnemyController enemy = other.GetComponent<EnemyController>();
+                Debug.Log($"[Bullet] Impacto con collider: {other.name}");
+
+                EnemyController enemy = other.GetComponentInParent<EnemyController>();
+
                 if (enemy != null)
                 {
+                    Debug.Log($"[Bullet] Daño aplicado a: {enemy.name}");
+
                     enemy.TakeDamage(damage);
 
                     if (destroyOnHit)
                         Destroy(gameObject);
 
                     return;
+                }
+                else
+                {
+                    Debug.Log($"[Bullet] NO se encontró EnemyController en: {other.name}");
                 }
             }
         }

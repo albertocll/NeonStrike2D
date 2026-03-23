@@ -4,10 +4,10 @@ using System.Collections;
 public class EnemyController : MonoBehaviour
 {
     public int maxHealth = 3;
-    private int currentHealth;
+    [SerializeField] private int currentHealth;
 
     private Animator animator;
-    private bool isDead;
+    [SerializeField] private bool isDead;
 
     [SerializeField] private float deathDestroyDelay = 0.8f;
 
@@ -19,18 +19,24 @@ public class EnemyController : MonoBehaviour
         if (animator == null)
             Debug.LogError("[EnemyController] Animator no encontrado en el enemigo.");
     }
-
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
         currentHealth -= damage;
 
-        if (animator != null)
-            animator.SetTrigger("Hit");
+        Debug.Log($"[Enemy] {gameObject.name} vida: {currentHealth}");
 
         if (currentHealth <= 0)
+        {
             Die();
+            return;
+        }
+
+        if (animator != null)
+        {
+            animator.SetTrigger("Hit");
+        }
     }
 
     void Die()
@@ -38,18 +44,23 @@ public class EnemyController : MonoBehaviour
         if (isDead) return;
         isDead = true;
 
-        // Desactivar comportamiento del enemigo
+        Debug.Log($"[EnemyController] Die() llamado en {gameObject.name}");
+
+        EnemyWaveMember waveMember = GetComponent<EnemyWaveMember>();
+        if (waveMember != null)
+        {
+            waveMember.NotifyDeath();
+        }
+
         var ai = GetComponent<WardenAI>();
         if (ai) ai.enabled = false;
 
         var movement = GetComponent<EnemyMovement>();
         if (movement) movement.enabled = false;
 
-        // Desactivar colisión para que no sea un bloque al morir
         var col = GetComponent<Collider2D>();
         if (col) col.enabled = false;
 
-        // Parar físicas
         var rb = GetComponent<Rigidbody2D>();
         if (rb)
         {
@@ -73,4 +84,6 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
     }
+
+
 }
