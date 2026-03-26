@@ -60,14 +60,10 @@ public class Bullet : MonoBehaviour
 
             if (other.CompareTag("Enemy"))
             {
-                Debug.Log($"[Bullet] Impacto con collider: {other.name}");
-
                 EnemyController enemy = other.GetComponentInParent<EnemyController>();
 
                 if (enemy != null)
                 {
-                    Debug.Log($"[Bullet] Daño aplicado a: {enemy.name}");
-
                     enemy.TakeDamage(damage);
 
                     if (destroyOnHit)
@@ -87,7 +83,12 @@ public class Bullet : MonoBehaviour
 
             if (other.CompareTag("Player"))
             {
-                Debug.Log("Enemy bullet hit Player");
+                PlayerHealth playerHealth = other.GetComponentInParent<PlayerHealth>();
+
+                if (playerHealth != null)
+                {
+                    playerHealth.TakeDamage(damage);
+                }
 
                 if (destroyOnHit)
                     Destroy(gameObject);

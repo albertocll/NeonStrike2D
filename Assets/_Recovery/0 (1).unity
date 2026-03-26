@@ -359,7 +359,6 @@ GameObject:
   - component: {fileID: 508698056}
   - component: {fileID: 508698057}
   - component: {fileID: 508698058}
-  - component: {fileID: 508698059}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -624,19 +623,6 @@ MonoBehaviour:
     m_Bits: 64
   detectionRadius: 20
   searchInterval: 0.1
---- !u!114 &508698059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 508698048}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad965001535b224c84f325757d544ab, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 10
 --- !u!1 &573412839
 GameObject:
   m_ObjectHideFlags: 0
