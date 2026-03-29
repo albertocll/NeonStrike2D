@@ -70,6 +70,6 @@ public class WaveManager : MonoBehaviour
     {
         int realEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
 
-        Debug.Log($"[WaveManager] Contador: {enemiesAlive} | Reales en escena: {realEnemies}");
+        //Debug.Log($"[WaveManager] Contador: {enemiesAlive} | Reales en escena: {realEnemies}");
     }
 }
