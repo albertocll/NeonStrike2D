@@ -9,6 +9,10 @@ public class PlayerHealth : MonoBehaviour
 
     private bool isDead = false;
 
+    public int CurrentHealth => currentHealth;
+    public int MaxHealth => maxHealth;
+    public bool IsDead => isDead;
+
     private void Awake()
     {
         Time.timeScale = 1f;
@@ -24,6 +28,7 @@ public class PlayerHealth : MonoBehaviour
 
         if (currentHealth <= 0)
         {
+            currentHealth = 0;
             Die();
         }
     }
