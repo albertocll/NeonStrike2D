@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] private int maxHealth = 10;
+    [SerializeField] private int maxHealth = 250;
     private int currentHealth;
 
     private bool isDead = false;

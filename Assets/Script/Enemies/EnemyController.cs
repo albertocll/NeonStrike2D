@@ -17,15 +17,16 @@ public class EnemyController : MonoBehaviour
         animator = GetComponentInChildren<Animator>();
 
         if (animator == null)
+        {
             Debug.LogError("[EnemyController] Animator no encontrado en el enemigo.");
+        }
     }
+
     public void TakeDamage(int damage)
     {
         if (isDead) return;
 
         currentHealth -= damage;
-
-        Debug.Log($"[Enemy] {gameObject.name} vida: {currentHealth}");
 
         if (currentHealth <= 0)
         {
@@ -43,8 +44,6 @@ public class EnemyController : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
-
-        Debug.Log($"[EnemyController] Die() llamado en {gameObject.name}");
 
         EnemyWaveMember waveMember = GetComponent<EnemyWaveMember>();
         if (waveMember != null)
@@ -84,6 +83,4 @@ public class EnemyController : MonoBehaviour
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
     }
-
-
 }
