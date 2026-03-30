@@ -11,7 +11,7 @@ public class Bullet : MonoBehaviour
 
     [Header("Stats")]
     public float speed = 18f;
-    public float lifeTime = 2f;
+    public float lifeTime = 5f;
     public int damage = 1;
 
     [Header("Behaviour")]
@@ -36,13 +36,13 @@ public class Bullet : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle + rotationOffset);
 
-        Destroy(gameObject, lifeTime);
+        //Destroy(gameObject, lifeTime);
     }
 
     public void IgnoreCollider(Collider2D other)
     {
-        if (myCol != null && other != null)
-            Physics2D.IgnoreCollision(myCol, other, true);
+        //if (myCol != null && other != null)
+            //Physics2D.IgnoreCollision(myCol, other, true);
     }
 
     void Update()

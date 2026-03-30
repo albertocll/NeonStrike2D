@@ -4,10 +4,10 @@ public class AnimatorStateDebugger : MonoBehaviour
 {
     [SerializeField] private Animator anim;
     [SerializeField] private int layer = 0;
-
     [SerializeField] private float pollInterval = 0.1f;
-    private float timer;
+    [SerializeField] private bool enableLogs = false;
 
+    private float timer;
     private int lastStateHash;
     private int lastNextHash;
     private bool lastInTransition;
@@ -19,7 +19,7 @@ public class AnimatorStateDebugger : MonoBehaviour
 
     void Update()
     {
-        if (!anim) return;
+        if (!enableLogs || !anim) return;
 
         timer += Time.deltaTime;
         if (timer < pollInterval) return;
