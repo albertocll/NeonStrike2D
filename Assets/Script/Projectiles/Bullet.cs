@@ -36,7 +36,7 @@ public class Bullet : MonoBehaviour
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0f, 0f, angle + rotationOffset);
 
-        //Destroy(gameObject, lifeTime);
+        Destroy(gameObject, lifeTime);
     }
 
     public void IgnoreCollider(Collider2D other)

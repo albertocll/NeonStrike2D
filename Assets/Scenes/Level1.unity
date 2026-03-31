@@ -684,7 +684,7 @@ MonoBehaviour:
   firePoint: {fileID: 1099117898}
   bulletPrefab: {fileID: -4140543666674948957, guid: e587320a36c4a0a4da50162a1e68baa7, type: 3}
   autoOrientation: {fileID: 508698058}
-  fireRate: 10
+  fireRate: 5
 --- !u!114 &508698058
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -715,7 +715,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ad965001535b224c84f325757d544ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerHealth
-  maxHealth: 250
+  maxHealth: 100
 --- !u!1 &573412839
 GameObject:
   m_ObjectHideFlags: 0
@@ -748,8 +748,8 @@ MonoBehaviour:
   enemySpawner: {fileID: 1916839831}
   startingWave: 1
   baseEnemiesPerWave: 3
-  enemiesAddedPerWave: 2
-  timeBetweenWaves: 2
+  enemiesAddedPerWave: 1
+  timeBetweenWaves: 2.5
 --- !u!4 &573412841
 Transform:
   m_ObjectHideFlags: 0
@@ -1715,7 +1715,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'HP: 250'
+  m_text: 'HP: 100'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}

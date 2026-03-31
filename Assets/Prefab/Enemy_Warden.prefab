@@ -80,11 +80,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 3
+  speed: 2.8
   stopDistance: 2
   firePoint: {fileID: 396311858236302613}
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
-  fireRate: 10
+  fireRate: 1.6
   shootRange: 5
   anim: {fileID: 4490529092211434942}
   movingParam: Moving
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5681407dfef9cd641bdc993be0356e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 10
+  maxHealth: 75
   currentHealth: 0
   isDead: 0
   deathDestroyDelay: 1
@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e3da4e9aaec74b43883a5a9ac80ea58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 2.8
   direction: {x: -1, y: 0}
 --- !u!114 &346634447034822126
 MonoBehaviour:

@@ -12,8 +12,6 @@ public class PlayerAutoOrientation2D : MonoBehaviour
 
     private Transform currentTarget;
     private float searchTimer;
-
-    // Guarda la última dirección válida hacia un enemigo
     private Vector2 lastAimDirection = Vector2.right;
 
     public Vector2 CurrentAimDirection => lastAimDirection;
@@ -59,13 +57,12 @@ public class PlayerAutoOrientation2D : MonoBehaviour
         {
             if (hit == null) continue;
 
-            Transform candidate = hit.transform;
-            float sqrDistance = ((Vector2)candidate.position - playerPosition).sqrMagnitude;
+            float sqrDistance = ((Vector2)hit.transform.position - playerPosition).sqrMagnitude;
 
             if (sqrDistance < closestSqrDistance)
             {
                 closestSqrDistance = sqrDistance;
-                closest = candidate;
+                closest = hit.transform;
             }
         }
 
@@ -74,19 +71,16 @@ public class PlayerAutoOrientation2D : MonoBehaviour
 
     private void UpdateOrientation()
     {
-        if (spriteRenderer == null)
-            return;
+        if (spriteRenderer == null) return;
 
-        // Si hay enemigo, actualizamos dirección
         if (currentTarget != null)
         {
-            Vector2 direction = (currentTarget.position - transform.position);
+            Vector2 direction = currentTarget.position - transform.position;
 
             if (direction.sqrMagnitude > 0.001f)
                 lastAimDirection = direction.normalized;
         }
 
-        // Aplicar flip según dirección
         spriteRenderer.flipX = lastAimDirection.x < 0f;
     }
 

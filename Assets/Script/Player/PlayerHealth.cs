@@ -1,13 +1,16 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
     [Header("Health")]
-    [SerializeField] private int maxHealth = 250;
-    private int currentHealth;
+    [SerializeField] private int maxHealth = 100;
+    [SerializeField] private float deathFreezeDelay = 0.6f;
 
+    private int currentHealth;
     private bool isDead = false;
+    private Animator anim;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
@@ -17,6 +20,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Time.timeScale = 1f;
         currentHealth = maxHealth;
+        anim = GetComponent<Animator>();
     }
 
     public void TakeDamage(int amount)
@@ -24,7 +28,11 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
 
         currentHealth -= amount;
-        Debug.Log("Vida Player: " + currentHealth);
+
+        if (anim != null)
+        {
+            anim.SetTrigger("Hit");
+        }
 
         if (currentHealth <= 0)
         {
@@ -36,8 +44,18 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        Debug.Log("Player muerto");
 
+        if (anim != null)
+        {
+            anim.SetTrigger("Dead");
+        }
+
+        StartCoroutine(HandleDeath());
+    }
+
+    private IEnumerator HandleDeath()
+    {
+        yield return new WaitForSeconds(deathFreezeDelay);
         Time.timeScale = 0f;
     }
 
