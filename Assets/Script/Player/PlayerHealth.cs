@@ -7,6 +7,7 @@ public class PlayerHealth : MonoBehaviour
     [Header("Health")]
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private float deathFreezeDelay = 0.6f;
+    [SerializeField] private GameOverUI gameOverUI;
 
     private int currentHealth;
     private bool isDead = false;
@@ -56,6 +57,10 @@ public class PlayerHealth : MonoBehaviour
     private IEnumerator HandleDeath()
     {
         yield return new WaitForSeconds(deathFreezeDelay);
+        if (gameOverUI != null)
+        {
+            gameOverUI.Show(0);
+        }
         Time.timeScale = 0f;
     }
 
