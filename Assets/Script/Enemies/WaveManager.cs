@@ -16,6 +16,8 @@ public class WaveManager : MonoBehaviour
     private int enemiesAlive;
     private bool waveInProgress;
 
+    public int CurrentWave => currentWave;
+
     private void Start()
     {
         currentWave = startingWave - 1;
@@ -32,26 +34,27 @@ public class WaveManager : MonoBehaviour
 
         currentWave++;
         waveInProgress = true;
-
-        enemiesAlive = 0; // 👈 importante
+        enemiesAlive = 0;
 
         int enemiesToSpawn = baseEnemiesPerWave + ((currentWave - 1) * enemiesAddedPerWave);
-
-        Debug.Log($"[WaveManager] Iniciando Wave {currentWave} con {enemiesToSpawn} enemigos.");
-
         enemySpawner.SpawnWave(enemiesToSpawn, this);
     }
+
+    public void RegisterEnemy()
+    {
+        enemiesAlive++;
+    }
+
     public void OnEnemyKilled()
     {
-        if (!waveInProgress) return;
+        if (!waveInProgress)
+            return;
 
         enemiesAlive--;
-        Debug.Log($"[WaveManager] Enemigo eliminado. Quedan: {enemiesAlive}");
 
         if (enemiesAlive <= 0)
         {
             waveInProgress = false;
-            Debug.Log($"[WaveManager] Wave {currentWave} completada.");
             StartCoroutine(StartNextWaveWithDelay());
         }
     }
@@ -60,16 +63,5 @@ public class WaveManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenWaves);
         StartNextWave();
-    }
-    public void RegisterEnemy()
-    {
-        enemiesAlive++;
-    }
-    
-    void Update()
-    {
-        int realEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
-
-        //Debug.Log($"[WaveManager] Contador: {enemiesAlive} | Reales en escena: {realEnemies}");
     }
 }
