@@ -10,7 +10,7 @@ public class GameOverUI : MonoBehaviour
     private void Awake()
     {
         if (gameOverPanel != null)
-            gameOverPanel.SetActive(false);
+            gameOverPanel.transform.root.gameObject.SetActive(true);
     }
 
     public void Show(int waveReached)
