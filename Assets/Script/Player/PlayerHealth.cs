@@ -59,7 +59,7 @@ public class PlayerHealth : MonoBehaviour
         yield return new WaitForSeconds(deathFreezeDelay);
         if (gameOverUI != null)
         {
-            gameOverUI.Show(0);
+            gameOverUI.Show();
         }
         Time.timeScale = 0f;
     }

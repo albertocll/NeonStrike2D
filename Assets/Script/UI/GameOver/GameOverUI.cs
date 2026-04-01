@@ -6,28 +6,27 @@ public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text waveReachedText;
+    [SerializeField] private WaveManager waveManager;
+    [SerializeField] private string mainMenuSceneName = "MainMenu";
 
-    private void Awake()
+    public void Show()
     {
         if (gameOverPanel != null)
-            gameOverPanel.transform.root.gameObject.SetActive(true);
+            gameOverPanel.SetActive(true);
+
+        if (waveReachedText != null && waveManager != null)
+            waveReachedText.text = "WAVE " + waveManager.CurrentWave;
     }
 
-    public void Show(int waveReached)
-    {
-        Debug.Log("SHOW GAME OVER");
-        Debug.Log(gameOverPanel.name);
-
-        if (gameOverPanel != null)
-            gameObject.SetActive(true);
-
-        if (waveReachedText != null)
-            waveReachedText.text = "Wave alcanzada: " + waveReached;
-    }
-
-    public void RestartLevel()
+    public void RestartScene()
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    public void LoadMainMenu()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 }
