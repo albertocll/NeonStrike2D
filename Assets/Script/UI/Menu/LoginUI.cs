@@ -1,0 +1,120 @@
+using System;
+using TMPro;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class LoginUI : MonoBehaviour
+{
+    [Header("Panel Login")]
+    [SerializeField] private TMP_InputField inputEmail;
+    [SerializeField] private TMP_InputField inputPassword;
+    [SerializeField] private Button buttonLogin;
+    [SerializeField] private Button buttonGoToRegister;
+    [SerializeField] private Button buttonClose;
+
+    [Header("Panel Register")]
+    [SerializeField] private TMP_InputField inputUsername;
+    [SerializeField] private TMP_InputField inputEmailReg;
+    [SerializeField] private TMP_InputField inputPasswordReg;
+    [SerializeField] private Button buttonRegister;
+    [SerializeField] private Button buttonGoToLogin;
+    [SerializeField] private Button buttonCloseReg;
+
+    [Header("Feedback")]
+    [SerializeField] private TMP_Text textFeedbackLogin;
+    [SerializeField] private TMP_Text textFeedbackRegister;
+
+    [Header("Refs")]
+    [SerializeField] private MenuManager menuManager;
+
+    private void Start()
+    {
+        buttonLogin.onClick.AddListener(OnLoginClicked);
+        buttonGoToRegister.onClick.AddListener(() => menuManager.AbrirRegister());
+        buttonClose.onClick.AddListener(() => menuManager.CerrarPaneles());
+
+        buttonRegister.onClick.AddListener(OnRegisterClicked);
+        buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
+        buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
+    }
+
+    private async void OnLoginClicked()
+    {
+        string email = inputEmail.text.Trim();
+        string password = inputPassword.text.Trim();
+
+        if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            textFeedbackLogin.text = "Rellena todos los campos.";
+            return;
+        }
+
+        textFeedbackLogin.text = "Conectando...";
+        buttonLogin.interactable = false;
+
+        try
+        {
+            var response = await ApiManager.Instance.LoginAsync(email, password);
+
+            if (response != null && response.success)
+            {
+                NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
+                textFeedbackLogin.text = $"Bienvenido, {response.username}!";
+                menuManager.CerrarPaneles();
+            }
+            else
+            {
+                textFeedbackLogin.text = response?.message ?? "Error al conectar.";
+            }
+        }
+        catch (Exception e)
+        {
+            textFeedbackLogin.text = "Error de conexión.";
+            Debug.LogError(e.Message);
+        }
+        finally
+        {
+            buttonLogin.interactable = true;
+        }
+    }
+
+    private async void OnRegisterClicked()
+    {
+        string username = inputUsername.text.Trim();
+        string email = inputEmailReg.text.Trim();
+        string password = inputPasswordReg.text.Trim();
+
+        if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
+        {
+            textFeedbackRegister.text = "Rellena todos los campos.";
+            return;
+        }
+
+        textFeedbackRegister.text = "Registrando...";
+        buttonRegister.interactable = false;
+
+        try
+        {
+            var response = await ApiManager.Instance.RegisterAsync(username, email, password);
+
+            if (response != null && response.success)
+            {
+                textFeedbackRegister.text = "Registro correcto. Ahora inicia sesión.";
+                menuManager.AbrirLogin();
+            }
+            else
+            {
+                textFeedbackRegister.text = response?.message ?? "Error al registrar.";
+            }
+        }
+        catch (Exception e)
+        {
+            textFeedbackRegister.text = "Error de conexión.";
+            Debug.LogError(e.Message);
+        }
+        finally
+        {
+            buttonRegister.interactable = true;
+        }
+    }
+}
