@@ -38,7 +38,7 @@ public class LoginUI : MonoBehaviour
         buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
     }
 
-    private async void OnLoginClicked()
+    public async void OnLoginClicked()
     {
         string email = inputEmail.text.Trim();
         string password = inputPassword.text.Trim();
@@ -60,7 +60,9 @@ public class LoginUI : MonoBehaviour
             {
                 NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
                 textFeedbackLogin.text = $"Bienvenido, {response.username}!";
+                await System.Threading.Tasks.Task.Delay(1000);
                 menuManager.CerrarPaneles();
+                UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
             }
             else
             {
@@ -78,7 +80,7 @@ public class LoginUI : MonoBehaviour
         }
     }
 
-    private async void OnRegisterClicked()
+    public async void OnRegisterClicked()
     {
         string username = inputUsername.text.Trim();
         string email = inputEmailReg.text.Trim();

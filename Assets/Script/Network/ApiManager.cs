@@ -32,11 +32,11 @@ public class ApiManager : MonoBehaviour
     // REGISTRO
     public async Task<RegisterResponse> RegisterAsync(string username, string email, string password)
     {
-        var body = JsonUtility.ToJson(new RegisterRequest 
-        { 
-            username = username, 
-            email = email, 
-            password = password 
+        var body = JsonUtility.ToJson(new RegisterRequest
+        {
+            username = username,
+            email = email,
+            password = password
         });
         var result = await PostAsync("/register", body);
         return JsonUtility.FromJson<RegisterResponse>(result);
@@ -61,9 +61,11 @@ public class ApiManager : MonoBehaviour
         while (!operation.isDone)
             await Task.Yield();
 
-        if (request.result != UnityWebRequest.Result.Success)
+        // Devolvemos la respuesta aunque sea un error 400
+        // porque el backend manda el mensaje de error en el body
+        if (request.result == UnityWebRequest.Result.ConnectionError)
         {
-            Debug.LogError($"Error en {endpoint}: {request.error}");
+            Debug.LogError($"Error de conexión en {endpoint}: {request.error}");
             return null;
         }
 
@@ -123,4 +125,18 @@ public class RegisterResponse
 {
     public bool success;
     public string message;
+}
+
+[Serializable]
+public class RankingEntry
+{
+    public int userId;
+    public string username;
+    public int bestWave;
+}
+
+[Serializable]
+public class RankingList
+{
+    public RankingEntry[] items;
 }

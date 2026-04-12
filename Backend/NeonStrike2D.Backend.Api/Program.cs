@@ -195,11 +195,9 @@ app.MapGet("/ranking", async (AppDbContext db) =>
         {
             UserId = g.Key,
             Username = g.First().User.Username,
-            TotalGames = g.Count(),
-            Wins = g.Count(r => r.Won),
-            Losses = g.Count(r => !r.Won)
+            BestWave = g.Max(r => r.RoundsWon)
         })
-        .OrderByDescending(r => r.Wins)
+        .OrderByDescending(r => r.BestWave)
         .Take(10)
         .ToListAsync();
 

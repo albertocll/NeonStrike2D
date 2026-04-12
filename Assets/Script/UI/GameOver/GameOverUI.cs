@@ -9,6 +9,9 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
+    [Header("Ranking")]
+    [SerializeField] private RankingUI rankingUI;   // arrastra el GameObject que tenga RankingUI
+
     public void Show()
     {
         if (gameOverPanel != null)
@@ -28,5 +31,11 @@ public class GameOverUI : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene(mainMenuSceneName);
+    }
+
+    public void ShowRanking()
+    {
+        if (rankingUI != null)
+            rankingUI.Show();
     }
 }
