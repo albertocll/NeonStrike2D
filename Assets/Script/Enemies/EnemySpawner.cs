@@ -9,37 +9,6 @@ public class EnemySpawner : MonoBehaviour
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
 
-    [Header("Legacy Spawn Settings (desactivado para Wave System)")]
-    [SerializeField] private float spawnInterval = 2f;
-    [SerializeField] private int maxEnemies = 5;
-
-    private float spawnTimer;
-
-    private void Update()
-    {
-        // SISTEMA VIEJO DESACTIVADO
-        // spawnTimer += Time.deltaTime;
-        //
-        // if (spawnTimer >= spawnInterval)
-        // {
-        //     spawnTimer = 0f;
-        //     TrySpawnEnemy();
-        // }
-    }
-
-    private void TrySpawnEnemy()
-    {
-        if (enemyPrefabs == null || enemyPrefabs.Count == 0) return;
-
-        int currentEnemies = GameObject.FindGameObjectsWithTag("Enemy").Length;
-        if (currentEnemies >= maxEnemies) return;
-
-        Vector2 spawnPosition = GetRandomPosition();
-        GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
-
-        Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
-    }
-
     public void SpawnWave(int enemyCount, WaveManager waveManager)
     {
         if (enemyPrefabs == null || enemyPrefabs.Count == 0)

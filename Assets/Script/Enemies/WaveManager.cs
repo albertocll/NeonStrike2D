@@ -11,6 +11,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int baseEnemiesPerWave = 3;
     [SerializeField] private int enemiesAddedPerWave = 2;
     [SerializeField] private float timeBetweenWaves = 2f;
+    [SerializeField] private float initialDelay = 3f;
 
     private int currentWave;
     private int enemiesAlive;
@@ -21,7 +22,7 @@ public class WaveManager : MonoBehaviour
     private void Start()
     {
         currentWave = startingWave - 1;
-        StartNextWave();
+        StartCoroutine(StartWithDelay());
     }
 
     public void StartNextWave()
@@ -62,6 +63,12 @@ public class WaveManager : MonoBehaviour
     private IEnumerator StartNextWaveWithDelay()
     {
         yield return new WaitForSeconds(timeBetweenWaves);
+        StartNextWave();
+    }
+
+    private IEnumerator StartWithDelay()
+    {
+        yield return new WaitForSeconds(initialDelay);
         StartNextWave();
     }
 }

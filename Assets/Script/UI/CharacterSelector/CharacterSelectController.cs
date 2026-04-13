@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CharacterSelectController : MonoBehaviour
 {
@@ -13,19 +14,24 @@ public class CharacterSelectController : MonoBehaviour
     public void ClickNyx()    => ShowPanel(infoPanel_Nyx);
     public void ClickAtlas()  => ShowPanel(infoPanel_Atlas);
 
+    // Solo Violet funciona de momento
+    public void DeployViolet()
+    {
+        GameData.SelectedCharacter = "Violet";
+        SceneManager.LoadScene("Level1");
+    }
+
     private void ShowPanel(GameObject target)
     {
         SafeSetActive(infoPanel_Violet, false);
-        SafeSetActive(infoPanel_Cyrus, false);
-        SafeSetActive(infoPanel_Nyx, false);
-        SafeSetActive(infoPanel_Atlas, false);
-
+        SafeSetActive(infoPanel_Cyrus,  false);
+        SafeSetActive(infoPanel_Nyx,    false);
+        SafeSetActive(infoPanel_Atlas,  false);
         SafeSetActive(target, true);
     }
 
     private void SafeSetActive(GameObject go, bool value)
     {
-        if (go != null)
-            go.SetActive(value);
+        if (go != null) go.SetActive(value);
     }
 }
