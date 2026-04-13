@@ -80,8 +80,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 2.8
-  stopDistance: 2
+  speed: 4
+  stopDistance: 0.5
   firePoint: {fileID: 396311858236302613}
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   fireRate: 1.6

@@ -145,13 +145,14 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 // Guarda el resultado de una partida
 app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db) =>
 {
+    // Crear una sesión automática para modo solitario
     var session = new GameSession
     {
-        RoomId = request.RoomId,
-        Player1Id = request.Player1Id,
-        Player2Id = request.Player2Id,
-        WinnerId = request.WinnerId,
-        StartedAt = request.StartedAt,
+        RoomId = $"solo_{request.UserId}_{DateTime.UtcNow.Ticks}",
+        Player1Id = request.UserId,
+        Player2Id = request.UserId,
+        WinnerId = null,
+        StartedAt = DateTime.UtcNow,
         EndedAt = DateTime.UtcNow,
         Status = "finished"
     };
@@ -159,31 +160,19 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
     db.GameSessions.Add(session);
     await db.SaveChangesAsync();
 
-    // Resultado jugador 1
     db.GameResults.Add(new GameResult
     {
-        UserId = request.Player1Id,
+        UserId = request.UserId,
         GameSessionId = session.Id,
-        Won = request.WinnerId == request.Player1Id,
-        RoundsWon = request.Player1RoundsWon,
-        RoundsLost = request.Player2RoundsWon,
-        PlayedAt = DateTime.UtcNow
-    });
-
-    // Resultado jugador 2
-    db.GameResults.Add(new GameResult
-    {
-        UserId = request.Player2Id,
-        GameSessionId = session.Id,
-        Won = request.WinnerId == request.Player2Id,
-        RoundsWon = request.Player2RoundsWon,
-        RoundsLost = request.Player1RoundsWon,
+        Won = false,
+        RoundsWon = request.BestWave,
+        RoundsLost = 0,
         PlayedAt = DateTime.UtcNow
     });
 
     await db.SaveChangesAsync();
 
-    return Results.Ok(new { Success = true, Message = "Resultado guardado correctamente." });
+    return Results.Ok(new { Success = true });
 }).RequireAuthorization();
 
 // Devuelve el top 10 de jugadores
