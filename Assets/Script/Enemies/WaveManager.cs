@@ -1,10 +1,12 @@
 using System.Collections;
 using UnityEngine;
+using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private TMP_Text waveText;
 
     [Header("Wave Settings")]
     [SerializeField] private int startingWave = 1;
@@ -37,22 +39,19 @@ public class WaveManager : MonoBehaviour
         waveInProgress = true;
         enemiesAlive = 0;
 
+        if (waveText != null)
+            waveText.text = $"WAVE: {currentWave}";
+
         int enemiesToSpawn = baseEnemiesPerWave + ((currentWave - 1) * enemiesAddedPerWave);
         enemySpawner.SpawnWave(enemiesToSpawn, this);
     }
 
-    public void RegisterEnemy()
-    {
-        enemiesAlive++;
-    }
+    public void RegisterEnemy() => enemiesAlive++;
 
     public void OnEnemyKilled()
     {
-        if (!waveInProgress)
-            return;
-
+        if (!waveInProgress) return;
         enemiesAlive--;
-
         if (enemiesAlive <= 0)
         {
             waveInProgress = false;

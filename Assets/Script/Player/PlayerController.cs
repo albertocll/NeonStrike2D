@@ -9,6 +9,12 @@ public class PlayerController : MonoBehaviour
     [Header("Animator params")]
     [SerializeField] private string movingParam = "Moving";
 
+    [Header("Bounds")]
+    [SerializeField] private float minX = -12f;
+    [SerializeField] private float maxX = 12f;
+    [SerializeField] private float minY = -6f;
+    [SerializeField] private float maxY = 6f;
+
     private Rigidbody2D rb;
     private Animator anim;
     private Vector2 input;
@@ -31,6 +37,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        rb.linearVelocity = input * speed;
+        Vector2 newPos = rb.position + input * speed * Time.fixedDeltaTime;
+        newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
+        newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
+        rb.MovePosition(newPos);
     }
 }
