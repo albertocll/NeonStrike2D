@@ -48,21 +48,32 @@ public class ApiManager : MonoBehaviour
         return await GetAsync("/ranking");
     }
 
+    // GUARDAR RESULTADO
+    public async Task SaveMatchResultAsync(int userId, int bestWave)
+    {
+        var body = JsonUtility.ToJson(new MatchResultRequest
+        {
+            userId = userId,
+            bestWave = bestWave
+        });
+        await PostAsync("/match/result", body, NetworkManager.Instance.Token);
+    }
+
     // HTTP POST
-    private async Task<string> PostAsync(string endpoint, string json)
+    private async Task<string> PostAsync(string endpoint, string json, string token = null)
     {
         var request = new UnityWebRequest($"{serverUrl}{endpoint}", "POST");
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
+        if (token != null)
+            request.SetRequestHeader("Authorization", $"Bearer {token}");
 
         var operation = request.SendWebRequest();
         while (!operation.isDone)
             await Task.Yield();
 
-        // Devolvemos la respuesta aunque sea un error 400
-        // porque el backend manda el mensaje de error en el body
         if (request.result == UnityWebRequest.Result.ConnectionError)
         {
             Debug.LogError($"Error de conexión en {endpoint}: {request.error}");
@@ -94,49 +105,10 @@ public class ApiManager : MonoBehaviour
 }
 
 // DTOs
-[Serializable]
-public class LoginRequest
-{
-    public string email;
-    public string password;
-}
-
-[Serializable]
-public class LoginResponse
-{
-    public bool success;
-    public string message;
-    public int userId;
-    public string username;
-    public string email;
-    public string token;
-}
-
-[Serializable]
-public class RegisterRequest
-{
-    public string username;
-    public string email;
-    public string password;
-}
-
-[Serializable]
-public class RegisterResponse
-{
-    public bool success;
-    public string message;
-}
-
-[Serializable]
-public class RankingEntry
-{
-    public int userId;
-    public string username;
-    public int bestWave;
-}
-
-[Serializable]
-public class RankingList
-{
-    public RankingEntry[] items;
-}
+[Serializable] public class LoginRequest { public string email; public string password; }
+[Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
+[Serializable] public class RegisterRequest { public string username; public string email; public string password; }
+[Serializable] public class RegisterResponse { public bool success; public string message; }
+[Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; }
+[Serializable] public class RankingList { public RankingEntry[] items; }
+[Serializable] public class MatchResultRequest { public int userId; public int bestWave; }

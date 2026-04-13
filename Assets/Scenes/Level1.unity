@@ -1231,6 +1231,7 @@ MonoBehaviour:
   maxHealth: 100
   deathFreezeDelay: 0.6
   gameOverUI: {fileID: 1421158490}
+  waveManager: {fileID: 573412840}
 --- !u!1 &520634149
 GameObject:
   m_ObjectHideFlags: 0
@@ -1340,6 +1341,7 @@ MonoBehaviour:
   baseEnemiesPerWave: 3
   enemiesAddedPerWave: 1
   timeBetweenWaves: 2.5
+  initialDelay: 3
 --- !u!4 &573412841
 Transform:
   m_ObjectHideFlags: 0
@@ -4326,8 +4328,6 @@ MonoBehaviour:
   enemyPrefabs:
   - {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
   spawnArea: {fileID: 284086550}
-  spawnInterval: 2
-  maxEnemies: 4
 --- !u!4 &1916839832
 Transform:
   m_ObjectHideFlags: 0
