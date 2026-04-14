@@ -10,10 +10,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string movingParam = "Moving";
 
     [Header("Bounds")]
-    [SerializeField] private float minX = -12f;
-    [SerializeField] private float maxX = 12f;
-    [SerializeField] private float minY = -6f;
-    [SerializeField] private float maxY = 6f;
+    [SerializeField] private float minX = 1029f;
+    [SerializeField] private float maxX = 1052f;
+    [SerializeField] private float minY = 524f;
+    [SerializeField] private float maxY = 534f;
+
+    [Header("Mobile")]
+    [SerializeField] private Joystick joystick;
 
     private Rigidbody2D rb;
     private Animator anim;
@@ -28,9 +31,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        input.x = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
-        input.y = (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0);
-        input = input.normalized;
+        // Teclado
+        Vector2 keyboardInput;
+        keyboardInput.x = (Input.GetKey(KeyCode.D) ? 1 : 0) - (Input.GetKey(KeyCode.A) ? 1 : 0);
+        keyboardInput.y = (Input.GetKey(KeyCode.W) ? 1 : 0) - (Input.GetKey(KeyCode.S) ? 1 : 0);
+
+        // Joystick móvil
+        Vector2 joystickInput = joystick != null ? joystick.Direction : Vector2.zero;
+
+        // Combinar ambos
+        input = (keyboardInput + joystickInput).normalized;
 
         anim.SetBool(movingParam, input.sqrMagnitude > 0.01f);
     }

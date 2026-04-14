@@ -28,3 +28,9 @@ Thumbs.db
 
 Assets/_Recovery
 Assets/_Recovery.meta
+
+# Backend secrets
+Backend/**/appsettings.json
+Backend/**/appsettings.*.json
+Backend/**/bin/
+Backend/**/obj/
