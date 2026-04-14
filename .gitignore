@@ -34,3 +34,4 @@ Backend/**/appsettings.json
 Backend/**/appsettings.*.json
 Backend/**/bin/
 Backend/**/obj/
+!Backend/**/*.csproj
