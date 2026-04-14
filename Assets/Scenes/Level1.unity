@@ -1102,7 +1102,7 @@ MonoBehaviour:
   maxX: 1052
   minY: 524
   maxY: 534
-  joystick: {fileID: 0}
+  joystick: {fileID: 1391268633}
 --- !u!60 &508698056
 PolygonCollider2D:
   m_ObjectHideFlags: 0
