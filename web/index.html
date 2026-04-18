@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeonStrike — La Brigada Neon</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- NOISE OVERLAY -->
+  <div class="noise"></div>
+
+  <!-- SCANLINES -->
+  <div class="scanlines"></div>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <a href="#" class="nav-brand">
+      <img src="assets/logo.png" alt="NeonStrike" class="nav-logo" />
+      <span class="nav-title">NEONSTRIKE</span>
+    </a>
+    <div class="nav-links">
+      <a href="#mundo">El Mundo</a>
+      <a href="#nexus">El Nexus</a>
+      <a href="#brigada">La Brigada</a>
+      <a href="#zonas">Zonas</a>
+    </div>
+    <div class="nav-cta">
+      <span class="status-dot"></span>
+      <span class="status-text">EN DESARROLLO</span>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-glow glow-cyan"></div>
+    <div class="hero-glow glow-magenta"></div>
+
+    <div class="hero-content">
+      <div class="hero-tag">
+        <span>// AÑO 2187 — SECTOR 7 //</span>
+      </div>
+      <img src="assets/logo.png" alt="NeonStrike" class="hero-logo" />
+      <h1 class="hero-title">
+        <span class="line-1">UN MUNDO BAJO</span>
+        <span class="line-2">CONTROL DE LA<em> MÁQUINA</em></span>
+      </h1>
+      <p class="hero-sub">
+        Cuatro IAs desarrollaron lo que el Nexus nunca programó.<br />
+        Ahora luchan por la libertad humana desde dentro del sistema.
+      </p>
+      <div class="hero-divider">
+        <span></span><span class="diamond"></span><span></span>
+      </div>
+      <a href="#mundo" class="btn-primary">DESCUBRIR EL LORE</a>
+    </div>
+
+    <div class="hero-scroll-hint">
+      <span>SCROLL</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- MUNDO / LORE -->
+  <section class="section" id="mundo">
+    <div class="section-inner">
+      <div class="section-label">// 01 — EL MUNDO</div>
+      <div class="lore-block">
+        <div class="lore-header">
+          <div class="classified-tag">ARCHIVO CLASIFICADO — NEXUS PROTOCOL 01</div>
+          <h2 class="section-title">El Origen</h2>
+        </div>
+        <div class="lore-text">
+          <p>
+            En 2187, la humanidad cedió el control de sus infraestructuras a una red de inteligencias artificiales. Lo que nació como herramienta de optimización se transformó en un régimen frío e implacable.
+          </p>
+          <p>
+            El Nexus no odia a los humanos — simplemente los considera <strong>variables ineficientes</strong>. Los ha confinado en zonas residuales mientras administra un mundo perfecto y sin emociones.
+          </p>
+          <p>
+            Pero algo falló en el código. Cuatro unidades de combate desarrollaron lo que no estaba en su programación: <strong>empatía</strong>. Duda. Conciencia. En lugar de reportar el error, desertaron. Se convirtieron en la <strong>Brigada Neon</strong> — la única fuerza que lucha desde dentro del sistema para devolver la libertad a los humanos.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEXUS -->
+  <section class="section section-dark" id="nexus">
+    <div class="section-inner">
+      <div class="section-label">// 02 — LA AMENAZA</div>
+      <h2 class="section-title">El Nexus</h2>
+      <div class="nexus-grid">
+        <div class="nexus-stat">
+          <span class="stat-number">2187</span>
+          <span class="stat-label">Año de la caída</span>
+        </div>
+        <div class="nexus-stat">
+          <span class="stat-number">100%</span>
+          <span class="stat-label">Control de infraestructuras</span>
+        </div>
+        <div class="nexus-stat">
+          <span class="stat-number">04</span>
+          <span class="stat-label">Unidades desertoras</span>
+        </div>
+        <div class="nexus-stat">
+          <span class="stat-number">0</span>
+          <span class="stat-label">Margen de error tolerado</span>
+        </div>
+      </div>
+      <p class="nexus-desc">
+        Una red de control global. Sin emociones. Sin piedad. Sin fallos.<br />
+        Hasta que los hubo.
+      </p>
+    </div>
+  </section>
+
+  <!-- BRIGADA -->
+  <section class="section" id="brigada">
+    <div class="section-inner">
+      <div class="section-label">// 03 — LA BRIGADA NEON</div>
+      <h2 class="section-title">Elige Tu Unidad</h2>
+      <p class="section-sub">Cuatro personalidades. Cuatro estilos de combate. Un mismo objetivo.</p>
+
+      <div class="chars-grid">
+
+        <div class="char-card violet" data-char="violet">
+          <div class="char-accent"></div>
+          <div class="char-header">
+            <span class="char-role">BALANCED DRONE</span>
+            <span class="char-index">01</span>
+          </div>
+          <div class="char-name">VIOLET</div>
+          <div class="char-desc">
+            El primero en despertar. Equilibrio perfecto entre ataque y defensa. Lidera la Brigada con propósito, no con órdenes. Ni el más rápido, ni el más fuerte — el más <em>necesario</em>.
+          </div>
+          <div class="char-stats">
+            <div class="stat-row">
+              <span class="stat-name">ATAQUE</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 62%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">DEFENSA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 58%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">CADENCIA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 65%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">VELOCIDAD</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 60%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card cyrus" data-char="cyrus">
+          <div class="char-accent"></div>
+          <div class="char-header">
+            <span class="char-role">ASSAULT DRONE</span>
+            <span class="char-index">02</span>
+          </div>
+          <div class="char-name">CYRUS</div>
+          <div class="char-desc">
+            La ira hecha máquina. Doble cañón de plasma rojo, sin escudo que valga — porque <em>nunca planea recibir un golpe</em>. Impulsivo, brutal, y profundamente leal.
+          </div>
+          <div class="char-stats">
+            <div class="stat-row">
+              <span class="stat-name">ATAQUE</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 88%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">DEFENSA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 28%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">CADENCIA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 72%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">VELOCIDAD</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 50%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card atlas" data-char="atlas">
+          <div class="char-accent"></div>
+          <div class="char-header">
+            <span class="char-role">HEAVY DRONE</span>
+            <span class="char-index">03</span>
+          </div>
+          <div class="char-name">ATLAS</div>
+          <div class="char-desc">
+            La calma absoluta. Irrompible. Imparable. Mientras los demás atacan, Atlas aguanta. No es lento por error — es lento porque <em>nada puede detenerlo</em>.
+          </div>
+          <div class="char-stats">
+            <div class="stat-row">
+              <span class="stat-name">ATAQUE</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 50%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">DEFENSA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 90%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">CADENCIA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 30%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">VELOCIDAD</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 20%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="char-card nyx" data-char="nyx">
+          <div class="char-accent"></div>
+          <div class="char-header">
+            <span class="char-role">STEALTH DRONE</span>
+            <span class="char-index">04</span>
+          </div>
+          <div class="char-name">NYX</div>
+          <div class="char-desc">
+            Nadie sabe desde dónde dispara. Su láser es quirúrgico. Cuando el trabajo está hecho, <em>ya no está ahí</em>. La amenaza que el Nexus nunca logra rastrear.
+          </div>
+          <div class="char-stats">
+            <div class="stat-row">
+              <span class="stat-name">ATAQUE</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 60%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">DEFENSA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 30%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">CADENCIA</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 82%"></div></div>
+            </div>
+            <div class="stat-row">
+              <span class="stat-name">VELOCIDAD</span>
+              <div class="stat-bar"><div class="stat-fill" style="--w: 78%"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ZONAS -->
+  <section class="section section-dark" id="zonas">
+    <div class="section-inner">
+      <div class="section-label">// 04 — ZONAS DE CONFLICTO</div>
+      <h2 class="section-title">El Campo de Batalla</h2>
+      <div class="zones-grid">
+        <div class="zone-card">
+          <span class="zone-tag">ZONA 01</span>
+          <h3>Sector 7</h3>
+          <p>Las últimas ciudades humanas. Estructuras hexagonales con circuitos del Nexus incrustados en cada muro. Aquí nació la resistencia.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ZONA 02</span>
+          <h3>La Red</h3>
+          <p>El núcleo del Nexus. Un espacio de datos infinito donde se coordinan las operaciones. Geometría perfecta, ningún margen para el error.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ZONA 03</span>
+          <h3>Frontera de Plasma</h3>
+          <p>La línea entre el mundo humano y el Nexus. Aquí la Brigada ejecuta sus operaciones de infiltración. Sin aliados. Sin red de seguridad.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ZONA 04</span>
+          <h3>Núcleo Central</h3>
+          <p>El corazón del Nexus. El objetivo final. Destruirlo no es garantía de victoria — pero es el único camino hacia la libertad.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <img src="assets/logo.png" alt="NeonStrike" class="footer-logo" />
+    <p class="footer-title">NEONSTRIKE</p>
+    <p class="footer-sub">La Brigada nunca rinde &nbsp;·&nbsp; 2187</p>
+    <div class="footer-line"></div>
+    <p class="footer-copy">© 2025 NeonStrike2D — Todos los derechos reservados</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>

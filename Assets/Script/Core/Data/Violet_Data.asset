@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca714f334a39f5c4a80f79db9eb1fc6c, type: 3}
+  m_Name: Violet_Data
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  characterName: Violet
+  speed: 8
+  maxHealth: 100
+  damage: 1
+  animatorController: {fileID: 9100000, guid: 929e9a7bae1876a478a2b125e2b50de8, type: 2}
+  prefab: {fileID: 8646312050570444231, guid: 815d0c3e9e3591e41990ae5bb6213cae, type: 3}

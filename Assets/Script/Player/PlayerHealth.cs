@@ -20,12 +20,19 @@ public class PlayerHealth : MonoBehaviour
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
 
+    public void Init(int maxHealth)
+    {
+        this.maxHealth = maxHealth;
+        currentHealth = maxHealth;
+    }
+
     private void Awake()
     {
         Time.timeScale = 1f;
         currentHealth = maxHealth;
         anim = GetComponent<Animator>();
     }
+
 
     public void TakeDamage(int amount)
     {

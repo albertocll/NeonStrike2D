@@ -22,6 +22,8 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private Vector2 input;
 
+    private int damage = 1;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -51,5 +53,11 @@ public class PlayerController : MonoBehaviour
         newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
         newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
         rb.MovePosition(newPos);
+    }
+
+    public void Init(float speed, int damage)
+    {
+        this.speed = speed;
+        this.damage = damage;
     }
 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 554e8a2a4c165744883ac8748671ae7f
+guid: fef00eec1729bff4b829305cfbea9407
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -667612102006355300
-    second: Logo-provisional-nenonstrike_0
+      213: -4320295261928297051
+    second: logo_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,7 +126,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Logo-provisional-nenonstrike_0
+      name: logo_0
       rect:
         serializedVersion: 2
         x: 0
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c9ac824945a2cb6f0800000000000000
-      internalID: -667612102006355300
+      spriteID: 5ade5f3695a3b04c0800000000000000
+      internalID: -4320295261928297051
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Logo-provisional-nenonstrike_0: -667612102006355300
+      logo_0: -4320295261928297051
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

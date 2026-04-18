@@ -14,10 +14,14 @@ public class CharacterSelectController : MonoBehaviour
     public void ClickNyx()    => ShowPanel(infoPanel_Nyx);
     public void ClickAtlas()  => ShowPanel(infoPanel_Atlas);
 
-    // Solo Violet funciona de momento
-    public void DeployViolet()
+    public void DeployViolet() => Deploy("Violet");
+    public void DeployCyrus()  => Deploy("Cyrus");
+    public void DeployNyx()    => Deploy("Nyx");
+    public void DeployAtlas()  => Deploy("Atlas");
+
+    private void Deploy(string characterName)
     {
-        GameData.SelectedCharacter = "Violet";
+        GameData.SelectedCharacter = characterName;
         SceneManager.LoadScene("Level1");
     }
 

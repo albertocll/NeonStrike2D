@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca714f334a39f5c4a80f79db9eb1fc6c, type: 3}
+  m_Name: Cyrus_Data
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterData
+  characterName: Cyrus
+  speed: 8
+  maxHealth: 100
+  damage: 1
+  animatorController: {fileID: 22100000, guid: d4b96728a89e486448986cae142727b2, type: 2}
+  prefab: {fileID: 1409231209191363337, guid: 092b6dc9cd360c64c80b5f9ec079e637, type: 3}
