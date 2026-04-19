@@ -10,15 +10,23 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     [Header("Ranking")]
-    [SerializeField] private RankingUI rankingUI;   
+    [SerializeField] private RankingUI rankingUI;
+
+    [SerializeField] private GameObject joystickContainer;
 
     public void Show()
     {
+        if (joystickContainer != null)
+            joystickContainer.SetActive(false);
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
         if (waveReachedText != null && waveManager != null)
             waveReachedText.text = "WAVE " + waveManager.CurrentWave;
+
+        if (rankingUI != null)
+            rankingUI.Show();
     }
 
     public void RestartScene()
