@@ -33,6 +33,15 @@ public class PlayerHealth : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
+    private void Start()
+    {
+        if (waveManager == null)
+            waveManager = FindFirstObjectByType<WaveManager>();
+
+        if (gameOverUI == null)
+            gameOverUI = FindFirstObjectByType<GameOverUI>(FindObjectsInactive.Include);
+    }
+
 
     public void TakeDamage(int amount)
     {
@@ -49,6 +58,7 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        Debug.Log($"[PlayerHealth] Die() — gameOverUI: {gameOverUI}");
         if (anim != null) anim.SetTrigger("Dead");
         StartCoroutine(HandleDeath());
     }
@@ -90,4 +100,5 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
 }

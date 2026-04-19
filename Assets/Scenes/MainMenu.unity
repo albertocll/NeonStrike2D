@@ -9616,7 +9616,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 13a0e141aa14cd3478f927355c34cb94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ApiManager
-  serverUrl: http://localhost:5036
+  serverUrl: https://neonstrike2d-production.up.railway.app
 --- !u!114 &1611089938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9629,7 +9629,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b234c12f682774c98f41059a277e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkManager
-  serverUrl: http://localhost:5036
+  serverUrl: https://neonstrike2d-production.up.railway.app
 --- !u!4 &1611089939
 Transform:
   m_ObjectHideFlags: 0

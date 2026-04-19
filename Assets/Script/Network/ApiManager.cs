@@ -8,7 +8,7 @@ public class ApiManager : MonoBehaviour
 {
     public static ApiManager Instance { get; private set; }
 
-    [SerializeField] private string serverUrl = "http://192.168.1.26:5036";
+    [SerializeField] private string serverUrl = "https://neonstrike2d-production.up.railway.app";
 
     private void Awake()
     {

@@ -10,7 +10,7 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
     [Header("Ranking")]
-    [SerializeField] private RankingUI rankingUI;   // arrastra el GameObject que tenga RankingUI
+    [SerializeField] private RankingUI rankingUI;   
 
     public void Show()
     {

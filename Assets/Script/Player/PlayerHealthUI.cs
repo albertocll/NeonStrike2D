@@ -12,4 +12,12 @@ public class PlayerHealthUI : MonoBehaviour
 
         healthText.text = "HP: " + playerHealth.CurrentHealth;
     }
+
+    private void Start()
+    {
+        if (playerHealth == null)
+            playerHealth = FindFirstObjectByType<PlayerHealth>();
+    }
+
+
 }
