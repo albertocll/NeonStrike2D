@@ -9,4 +9,5 @@ public class CharacterData : ScriptableObject
     public int damage = 1;
     public RuntimeAnimatorController animatorController;
     public GameObject prefab;
+    public Vector3 scale = Vector3.one;
 }

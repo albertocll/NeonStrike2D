@@ -18,3 +18,4 @@ MonoBehaviour:
   damage: 1
   animatorController: {fileID: 22100000, guid: c8fb1cdea7635cb47a7505334d62256e, type: 2}
   prefab: {fileID: 6711650825844994113, guid: 57e7d16327c01d64b979a77ace05d658, type: 3}
+  scale: {x: 0.8, y: 0.8, z: 0.8}

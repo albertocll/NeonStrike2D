@@ -14,6 +14,8 @@ public class PlayerSpawner : MonoBehaviour
             {
                 GameObject player = Instantiate(data.prefab, transform.position, Quaternion.identity);
 
+                player.transform.localScale = data.scale;
+
                 var health = player.GetComponent<PlayerHealth>();
                 if (health) health.Init(data.maxHealth);
 
@@ -28,6 +30,5 @@ public class PlayerSpawner : MonoBehaviour
             }
         }
 
-        Debug.LogError($"[PlayerSpawner] No se encontró CharacterData para: {selected}");
     }
 }
