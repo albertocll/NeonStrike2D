@@ -3679,6 +3679,7 @@ MonoBehaviour:
   waveManager: {fileID: 573412840}
   mainMenuSceneName: MainMenu
   rankingUI: {fileID: 2103062475}
+  joystickContainer: {fileID: 1026122109}
 --- !u!1 &1492681317
 GameObject:
   m_ObjectHideFlags: 0
