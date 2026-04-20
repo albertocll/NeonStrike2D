@@ -4,21 +4,22 @@ namespace NeonStrike2D.Backend.Api.Hubs;
 
 public class GameHub : Hub
 {
-    // Diccionario estático que guarda las salas activas
-    // Clave: roomId | Valor: lista de connectionIds de los jugadores
     private static readonly Dictionary<string, List<string>> Rooms = new();
+    private static readonly Dictionary<string, string> ConnectedUsers = new();
 
-    // Un jugador solicita unirse o crear una sala
+    public async Task Register(string username)
+    {
+        ConnectedUsers[username] = Context.ConnectionId;
+        await Clients.Caller.SendAsync("Registered");
+    }
+
     public async Task JoinRoom(string roomId, string username)
     {
         if (!Rooms.ContainsKey(roomId))
-        {
             Rooms[roomId] = new List<string>();
-        }
 
         var room = Rooms[roomId];
 
-        // Máximo 2 jugadores por sala
         if (room.Count >= 2)
         {
             await Clients.Caller.SendAsync("RoomFull");
@@ -27,33 +28,52 @@ public class GameHub : Hub
 
         room.Add(Context.ConnectionId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-
-        // Avisamos a todos en la sala de que alguien entró
         await Clients.Group(roomId).SendAsync("PlayerJoined", username, room.Count);
 
-        // Si ya hay 2 jugadores, arrancamos la partida
         if (room.Count == 2)
-        {
             await Clients.Group(roomId).SendAsync("GameStart");
-        }
     }
 
-    // Un jugador manda su estado (posición, etc.)
+    public async Task SendInvite(string fromUsername, string toUsername)
+    {
+        if (!ConnectedUsers.TryGetValue(toUsername, out var targetConnectionId))
+        {
+            await Clients.Caller.SendAsync("InviteError", "El jugador no está conectado.");
+            return;
+        }
+
+        string roomId = $"{fromUsername}_{toUsername}_{DateTime.UtcNow.Ticks}";
+        await Clients.Client(targetConnectionId).SendAsync("InviteReceived", fromUsername, roomId);
+        await Clients.Caller.SendAsync("InviteWaiting", roomId);
+    }
+
+    public async Task AcceptInvite(string username, string roomId)
+    {
+        await JoinRoom(roomId, username);
+    }
+
+    public async Task DeclineInvite(string fromUsername)
+    {
+        if (ConnectedUsers.TryGetValue(fromUsername, out var connectionId))
+            await Clients.Client(connectionId).SendAsync("InviteDeclined");
+    }
+
     public async Task SendGameState(string roomId, string stateJson)
     {
-        // Reenviamos el estado a los OTROS jugadores de la sala (no al que lo mandó)
         await Clients.OthersInGroup(roomId).SendAsync("ReceiveGameState", stateJson);
     }
 
-    // Un jugador notifica fin de ronda
     public async Task EndRound(string roomId, string winnerUsername)
     {
         await Clients.Group(roomId).SendAsync("RoundEnded", winnerUsername);
     }
 
-    // Gestión de desconexión
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
+        var userToRemove = ConnectedUsers.FirstOrDefault(x => x.Value == Context.ConnectionId).Key;
+        if (userToRemove != null)
+            ConnectedUsers.Remove(userToRemove);
+
         foreach (var room in Rooms)
         {
             if (room.Value.Contains(Context.ConnectionId))
@@ -62,9 +82,7 @@ public class GameHub : Hub
                 await Clients.Group(room.Key).SendAsync("PlayerLeft");
 
                 if (room.Value.Count == 0)
-                {
                     Rooms.Remove(room.Key);
-                }
                 break;
             }
         }
