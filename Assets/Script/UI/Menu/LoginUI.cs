@@ -27,6 +27,12 @@ public class LoginUI : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private MenuManager menuManager;
 
+    [Header("Recordar cuenta")]
+    [SerializeField] private Toggle toggleRememberMe;
+
+    private const string KEY_EMAIL = "remembered_email";
+    private const string KEY_REMEMBER = "remember_me";
+
     private void Start()
     {
         buttonLogin.onClick.AddListener(OnLoginClicked);
@@ -36,6 +42,13 @@ public class LoginUI : MonoBehaviour
         buttonRegister.onClick.AddListener(OnRegisterClicked);
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
         buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
+
+        // Cargar email guardado
+        if (PlayerPrefs.GetInt(KEY_REMEMBER, 0) == 1)
+        {
+            inputEmail.text = PlayerPrefs.GetString(KEY_EMAIL, "");
+            toggleRememberMe.isOn = true;
+        }
     }
 
     public async void OnLoginClicked()
@@ -51,6 +64,19 @@ public class LoginUI : MonoBehaviour
 
         textFeedbackLogin.text = "Conectando...";
         buttonLogin.interactable = false;
+
+        // Guardar o borrar email
+        if (toggleRememberMe.isOn)
+        {
+            PlayerPrefs.SetString(KEY_EMAIL, email);
+            PlayerPrefs.SetInt(KEY_REMEMBER, 1);
+        }
+        else
+        {
+            PlayerPrefs.DeleteKey(KEY_EMAIL);
+            PlayerPrefs.SetInt(KEY_REMEMBER, 0);
+        }
+        PlayerPrefs.Save();
 
         try
         {
