@@ -30,7 +30,11 @@ public class PlayerController : MonoBehaviour
         anim = GetComponent<Animator>();
         rb.gravityScale = 0f;
     }
-
+    private void Start()
+    {
+        if (joystick == null)
+            joystick = FindFirstObjectByType<Joystick>();
+    }
     private void Update()
     {
         // Teclado

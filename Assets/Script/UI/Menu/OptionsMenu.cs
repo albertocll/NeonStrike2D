@@ -15,12 +15,13 @@ public class OptionsMenu : MonoBehaviour
 
     private void Start()
     {
+        if (musicSource == null)
+            musicSource = FindFirstObjectByType<MusicManager>().GetComponent<AudioSource>();
+
         // Inicializamos valores
         cachedVolume = musicSlider.value;
-
         musicSource.volume = cachedVolume;
         musicSource.mute = false;
-
         musicToggle.isOn = true;
 
         // Eventos

@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class OpenURL : MonoBehaviour
 {
+    [SerializeField] private string url = "https://neonstrike-game.netlify.app/";
+    
     public void OpenLink()
     {
-        Application.OpenURL("https://tulink.com");
+        Application.OpenURL(url);
     }
 }
