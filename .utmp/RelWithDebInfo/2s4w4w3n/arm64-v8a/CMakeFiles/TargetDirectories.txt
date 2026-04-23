@@ -1,8 +1,0 @@
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/CMakeFiles/edit_cache.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/CMakeFiles/rebuild_cache.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/GameActivity/CMakeFiles/game.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/GameActivity/CMakeFiles/edit_cache.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/GameActivity/CMakeFiles/rebuild_cache.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/FramePacing/CMakeFiles/swappywrapper.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/FramePacing/CMakeFiles/edit_cache.dir
-C:/Users/alber/Desktop/NeonStrike2D/.utmp/RelWithDebInfo/2s4w4w3n/arm64-v8a/FramePacing/CMakeFiles/rebuild_cache.dir

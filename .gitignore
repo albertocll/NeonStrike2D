@@ -35,3 +35,13 @@ Backend/**/appsettings.*.json
 Backend/**/bin/
 Backend/**/obj/
 !Backend/**/*.csproj
+
+Builds/
+
+*.apk
+
+Windows/
+
+Android/
+
+.utmp/
