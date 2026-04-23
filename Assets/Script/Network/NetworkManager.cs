@@ -8,22 +8,27 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager Instance { get; private set; }
 
     [Header("Config")]
-    [SerializeField] private string serverUrl = "http://192.168.1.26:5036";
+    [SerializeField] private string serverUrl = "https://neonstrike2d-production.up.railway.app";
 
     private HubConnection _connection;
 
-    // Datos del jugador logueado
     public int UserId { get; private set; }
     public string Username { get; private set; }
     public string Token { get; private set; }
     public bool IsConnected => _connection?.State == HubConnectionState.Connected;
 
-    // Eventos que otros scripts pueden escuchar
+    // Eventos existentes
     public event Action<string, int> OnPlayerJoined;
     public event Action OnGameStart;
     public event Action<string> OnPlayerLeft;
     public event Action<string> OnReceiveGameState;
     public event Action<string> OnRoundEnded;
+
+    // Eventos de invitaciones
+    public event Action<string, string> OnInviteReceived;  // fromUsername, roomId
+    public event Action<string> OnInviteWaiting;           // roomId
+    public event Action<string> OnInviteError;             // mensaje
+    public event Action OnInviteDeclined;
 
     private void Awake()
     {
@@ -36,7 +41,6 @@ public class NetworkManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // Guardar datos del login
     public void SetUserData(int userId, string username, string token)
     {
         UserId = userId;
@@ -44,50 +48,60 @@ public class NetworkManager : MonoBehaviour
         Token = token;
     }
 
-    // Conectar al GameHub
-    public async Task ConnectAsync(string roomId)
+    public async Task ConnectAsync(string roomId = null)
     {
         _connection = new HubConnectionBuilder()
             .WithUrl($"{serverUrl}/gamehub")
             .WithAutomaticReconnect()
             .Build();
 
-        // Escuchar eventos del servidor
+        // Eventos existentes
         _connection.On<string, int>("PlayerJoined", (username, count) =>
-        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerJoined?.Invoke(username, count));
-        });
+                OnPlayerJoined?.Invoke(username, count)));
 
         _connection.On("GameStart", () =>
-        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnGameStart?.Invoke());
-        });
+                OnGameStart?.Invoke()));
 
         _connection.On("PlayerLeft", () =>
-        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerLeft?.Invoke("opponent"));
-        });
+                OnPlayerLeft?.Invoke("opponent")));
 
         _connection.On<string>("ReceiveGameState", (stateJson) =>
-        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnReceiveGameState?.Invoke(stateJson));
-        });
+                OnReceiveGameState?.Invoke(stateJson)));
 
         _connection.On<string>("RoundEnded", (winner) =>
-        {
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnRoundEnded?.Invoke(winner));
-        });
+                OnRoundEnded?.Invoke(winner)));
+
+        // Eventos de invitaciones
+        _connection.On<string, string>("InviteReceived", (fromUsername, roomId) =>
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                OnInviteReceived?.Invoke(fromUsername, roomId)));
+
+        _connection.On<string>("InviteWaiting", (roomId) =>
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                OnInviteWaiting?.Invoke(roomId)));
+
+        _connection.On<string>("InviteError", (message) =>
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                OnInviteError?.Invoke(message)));
+
+        _connection.On("InviteDeclined", () =>
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                OnInviteDeclined?.Invoke()));
 
         try
         {
             await _connection.StartAsync();
-            await _connection.InvokeAsync("JoinRoom", roomId, Username);
-            Debug.Log($"Conectado al GameHub en sala {roomId}");
+            await _connection.InvokeAsync("Register", Username);
+
+            if (roomId != null)
+                await _connection.InvokeAsync("JoinRoom", roomId, Username);
+
+            Debug.Log($"Conectado al GameHub");
         }
         catch (Exception e)
         {
@@ -95,14 +109,30 @@ public class NetworkManager : MonoBehaviour
         }
     }
 
-    // Enviar estado del juego
+    public async Task SendInviteAsync(string toUsername)
+    {
+        if (!IsConnected) return;
+        await _connection.InvokeAsync("SendInvite", Username, toUsername);
+    }
+
+    public async Task AcceptInviteAsync(string roomId)
+    {
+        if (!IsConnected) return;
+        await _connection.InvokeAsync("AcceptInvite", Username, roomId);
+    }
+
+    public async Task DeclineInviteAsync(string fromUsername)
+    {
+        if (!IsConnected) return;
+        await _connection.InvokeAsync("DeclineInvite", fromUsername);
+    }
+
     public async Task SendGameStateAsync(string roomId, string stateJson)
     {
         if (!IsConnected) return;
         await _connection.InvokeAsync("SendGameState", roomId, stateJson);
     }
 
-    // Desconectar
     public async Task DisconnectAsync()
     {
         if (_connection != null)
