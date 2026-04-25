@@ -31,6 +31,7 @@ public class LoginUI : MonoBehaviour
     [SerializeField] private Toggle toggleRememberMe;
 
     private const string KEY_EMAIL = "remembered_email";
+    private const string KEY_PASSWORD = "remembered_password";
     private const string KEY_REMEMBER = "remember_me";
 
     private void Start()
@@ -43,10 +44,10 @@ public class LoginUI : MonoBehaviour
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
         buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
 
-        // Cargar email guardado
         if (PlayerPrefs.GetInt(KEY_REMEMBER, 0) == 1)
         {
             inputEmail.text = PlayerPrefs.GetString(KEY_EMAIL, "");
+            inputPassword.text = PlayerPrefs.GetString(KEY_PASSWORD, "");
             toggleRememberMe.isOn = true;
         }
     }
@@ -65,15 +66,16 @@ public class LoginUI : MonoBehaviour
         textFeedbackLogin.text = "Conectando...";
         buttonLogin.interactable = false;
 
-        // Guardar o borrar email
         if (toggleRememberMe.isOn)
         {
             PlayerPrefs.SetString(KEY_EMAIL, email);
+            PlayerPrefs.SetString(KEY_PASSWORD, password);
             PlayerPrefs.SetInt(KEY_REMEMBER, 1);
         }
         else
         {
             PlayerPrefs.DeleteKey(KEY_EMAIL);
+            PlayerPrefs.DeleteKey(KEY_PASSWORD);
             PlayerPrefs.SetInt(KEY_REMEMBER, 0);
         }
         PlayerPrefs.Save();
