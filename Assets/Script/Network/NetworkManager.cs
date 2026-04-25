@@ -15,6 +15,7 @@ public class NetworkManager : MonoBehaviour
     public int UserId { get; private set; }
     public string Username { get; private set; }
     public string Token { get; private set; }
+    public bool IsGuest { get; private set; }
     public bool IsConnected => _connection?.State == HubConnectionState.Connected;
 
     // Eventos existentes
@@ -25,9 +26,9 @@ public class NetworkManager : MonoBehaviour
     public event Action<string> OnRoundEnded;
 
     // Eventos de invitaciones
-    public event Action<string, string> OnInviteReceived;  // fromUsername, roomId
-    public event Action<string> OnInviteWaiting;           // roomId
-    public event Action<string> OnInviteError;             // mensaje
+    public event Action<string, string> OnInviteReceived;
+    public event Action<string> OnInviteWaiting;
+    public event Action<string> OnInviteError;
     public event Action OnInviteDeclined;
 
     private void Awake()
@@ -46,6 +47,15 @@ public class NetworkManager : MonoBehaviour
         UserId = userId;
         Username = username;
         Token = token;
+        IsGuest = false;
+    }
+
+    public void SetGuestData()
+    {
+        UserId = -1;
+        Username = "Invitado_" + UnityEngine.Random.Range(1000, 9999);
+        Token = null;
+        IsGuest = true;
     }
 
     public async Task ConnectAsync(string roomId = null)
@@ -55,7 +65,6 @@ public class NetworkManager : MonoBehaviour
             .WithAutomaticReconnect()
             .Build();
 
-        // Eventos existentes
         _connection.On<string, int>("PlayerJoined", (username, count) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnPlayerJoined?.Invoke(username, count)));
@@ -76,7 +85,6 @@ public class NetworkManager : MonoBehaviour
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnRoundEnded?.Invoke(winner)));
 
-        // Eventos de invitaciones
         _connection.On<string, string>("InviteReceived", (fromUsername, roomId) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnInviteReceived?.Invoke(fromUsername, roomId)));
