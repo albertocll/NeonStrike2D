@@ -72,6 +72,7 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnInviteReceived(string fromUsername, string roomId)
     {
+        Debug.Log($"[MultiplayerUI] Invitación recibida de {fromUsername}, roomId: {roomId}");
         _pendingFromUsername = fromUsername;
         _pendingRoomId = roomId;
         textInviteFrom.text = $"{fromUsername} te ha invitado a jugar";
@@ -93,32 +94,5 @@ public class MultiplayerUI : MonoBehaviour
     private void OnGameStart()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
-    }
-
-    public void SendInvite()
-    {
-        _ = OnSendInviteAsync();
-    }
-
-    private async System.Threading.Tasks.Task OnSendInviteAsync()
-    {
-        string toUsername = inputFriendUsername.text.Trim();
-        if (string.IsNullOrEmpty(toUsername)) return;
-
-        buttonSendInvite.interactable = false;
-        textInviteStatus.text = "Enviando invitación...";
-        await NetworkManager.Instance.SendInviteAsync(toUsername);
-    }
-
-    public void AcceptInvite()
-    {
-        _ = NetworkManager.Instance.AcceptInviteAsync(_pendingRoomId);
-        receivePanel.SetActive(false);
-    }
-
-    public void DeclineInvite()
-    {
-        _ = NetworkManager.Instance.DeclineInviteAsync(_pendingFromUsername);
-        receivePanel.SetActive(false);
     }
 }
