@@ -105,6 +105,7 @@ public class NetworkManager : MonoBehaviour
         {
             await _connection.StartAsync();
             await _connection.InvokeAsync("Register", Username);
+            Debug.Log($"[NetworkManager] Conectado y registrado como {Username}");
 
             if (roomId != null)
                 await _connection.InvokeAsync("JoinRoom", roomId, Username);
