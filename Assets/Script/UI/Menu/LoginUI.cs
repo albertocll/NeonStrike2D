@@ -30,6 +30,9 @@ public class LoginUI : MonoBehaviour
     [Header("Recordar cuenta")]
     [SerializeField] private Toggle toggleRememberMe;
 
+    [Header("Invitado")]
+    [SerializeField] private Button buttonGuest;
+
     private const string KEY_EMAIL = "remembered_email";
     private const string KEY_PASSWORD = "remembered_password";
     private const string KEY_REMEMBER = "remember_me";
@@ -39,6 +42,7 @@ public class LoginUI : MonoBehaviour
         buttonLogin.onClick.AddListener(OnLoginClicked);
         buttonGoToRegister.onClick.AddListener(() => menuManager.AbrirRegister());
         buttonClose.onClick.AddListener(() => menuManager.CerrarPaneles());
+        buttonGuest.onClick.AddListener(OnGuestClicked);
 
         buttonRegister.onClick.AddListener(OnRegisterClicked);
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
@@ -147,5 +151,11 @@ public class LoginUI : MonoBehaviour
         {
             buttonRegister.interactable = true;
         }
+    }
+
+    public void OnGuestClicked()
+    {
+        NetworkManager.Instance.SetGuestData();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
     }
 }
