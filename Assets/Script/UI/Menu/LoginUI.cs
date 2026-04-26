@@ -30,7 +30,11 @@ public class LoginUI : MonoBehaviour
     [Header("Recordar cuenta")]
     [SerializeField] private Toggle toggleRememberMe;
 
+    [Header("Invitado")]
+    [SerializeField] private Button buttonGuest;
+
     private const string KEY_EMAIL = "remembered_email";
+    private const string KEY_PASSWORD = "remembered_password";
     private const string KEY_REMEMBER = "remember_me";
 
     private void Start()
@@ -38,15 +42,16 @@ public class LoginUI : MonoBehaviour
         buttonLogin.onClick.AddListener(OnLoginClicked);
         buttonGoToRegister.onClick.AddListener(() => menuManager.AbrirRegister());
         buttonClose.onClick.AddListener(() => menuManager.CerrarPaneles());
+        buttonGuest.onClick.AddListener(OnGuestClicked);
 
         buttonRegister.onClick.AddListener(OnRegisterClicked);
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
         buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
 
-        // Cargar email guardado
         if (PlayerPrefs.GetInt(KEY_REMEMBER, 0) == 1)
         {
             inputEmail.text = PlayerPrefs.GetString(KEY_EMAIL, "");
+            inputPassword.text = PlayerPrefs.GetString(KEY_PASSWORD, "");
             toggleRememberMe.isOn = true;
         }
     }
@@ -65,15 +70,16 @@ public class LoginUI : MonoBehaviour
         textFeedbackLogin.text = "Conectando...";
         buttonLogin.interactable = false;
 
-        // Guardar o borrar email
         if (toggleRememberMe.isOn)
         {
             PlayerPrefs.SetString(KEY_EMAIL, email);
+            PlayerPrefs.SetString(KEY_PASSWORD, password);
             PlayerPrefs.SetInt(KEY_REMEMBER, 1);
         }
         else
         {
             PlayerPrefs.DeleteKey(KEY_EMAIL);
+            PlayerPrefs.DeleteKey(KEY_PASSWORD);
             PlayerPrefs.SetInt(KEY_REMEMBER, 0);
         }
         PlayerPrefs.Save();
@@ -145,5 +151,11 @@ public class LoginUI : MonoBehaviour
         {
             buttonRegister.interactable = true;
         }
+    }
+
+    public void OnGuestClicked()
+    {
+        NetworkManager.Instance.SetGuestData();
+        UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
     }
 }
