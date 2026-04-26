@@ -27,6 +27,10 @@ public class GameOverUI : MonoBehaviour
 
         if (rankingUI != null)
             rankingUI.Show();
+
+        var joystick = FindFirstObjectByType<Joystick>();
+        if (joystick != null)
+            joystick.gameObject.SetActive(false);
     }
 
     public void RestartScene()
