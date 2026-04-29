@@ -18,14 +18,12 @@ public class NetworkManager : MonoBehaviour
     public bool IsGuest { get; private set; }
     public bool IsConnected => _connection?.State == HubConnectionState.Connected;
 
-    // Eventos existentes
     public event Action<string, int> OnPlayerJoined;
     public event Action OnGameStart;
     public event Action<string> OnPlayerLeft;
     public event Action<string> OnReceiveGameState;
     public event Action<string> OnRoundEnded;
 
-    // Eventos de invitaciones
     public event Action<string, string> OnInviteReceived;
     public event Action<string> OnInviteWaiting;
     public event Action<string> OnInviteError;
@@ -33,13 +31,16 @@ public class NetworkManager : MonoBehaviour
 
     private void Awake()
     {
+        Debug.Log("[NetworkManager] Awake llamado");
         if (Instance != null && Instance != this)
         {
+            Debug.Log("[NetworkManager] Instancia duplicada, destruyendo...");
             Destroy(gameObject);
             return;
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
+        Debug.Log("[NetworkManager] Instancia creada y persistiendo");
     }
 
     public void SetUserData(int userId, string username, string token)
@@ -60,6 +61,8 @@ public class NetworkManager : MonoBehaviour
 
     public async Task ConnectAsync(string roomId = null)
     {
+        Debug.Log($"[NetworkManager] Iniciando conexión como {Username}...");
+
         _connection = new HubConnectionBuilder()
             .WithUrl($"{serverUrl}/gamehub")
             .WithAutomaticReconnect()
@@ -105,15 +108,14 @@ public class NetworkManager : MonoBehaviour
         {
             await _connection.StartAsync();
             await _connection.InvokeAsync("Register", Username);
+            Debug.Log($"[NetworkManager] Conectado y registrado como {Username}");
 
             if (roomId != null)
                 await _connection.InvokeAsync("JoinRoom", roomId, Username);
-
-            Debug.Log($"Conectado al GameHub");
         }
         catch (Exception e)
         {
-            Debug.LogError($"Error conectando al GameHub: {e.Message}");
+            Debug.LogError($"[NetworkManager] Error conectando al GameHub: {e.Message}");
         }
     }
 
