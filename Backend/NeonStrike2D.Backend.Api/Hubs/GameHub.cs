@@ -93,5 +93,6 @@ public class GameHub : Hub
         }
 
         await base.OnDisconnectedAsync(exception);
+        
     }
 }
