@@ -28,7 +28,13 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (NetworkManager.Instance == null) return;
+        Debug.Log("[MultiplayerUI] OnEnable llamado");
+        if (NetworkManager.Instance == null)
+        {
+            Debug.Log("[MultiplayerUI] NetworkManager es null!");
+            return;
+        }
+        Debug.Log("[MultiplayerUI] Suscribiendo eventos...");
         NetworkManager.Instance.OnInviteReceived += OnInviteReceived;
         NetworkManager.Instance.OnInviteWaiting += OnInviteWaiting;
         NetworkManager.Instance.OnInviteError += OnInviteError;
