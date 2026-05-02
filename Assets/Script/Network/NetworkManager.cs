@@ -41,6 +41,7 @@ public class NetworkManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         Debug.Log("[NetworkManager] Instancia creada y persistiendo");
+        _ = UnityMainThreadDispatcher.Instance; // forzar inicialización
     }
 
     public void SetUserData(int userId, string username, string token)

@@ -7,6 +7,7 @@ public class UnityMainThreadDispatcher : MonoBehaviour
 {
     private static UnityMainThreadDispatcher _instance;
     private readonly Queue<Action> _queue = new Queue<Action>();
+    
 
     public static UnityMainThreadDispatcher Instance
     {
