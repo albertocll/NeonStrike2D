@@ -24,7 +24,11 @@ public class MultiplayerUI : MonoBehaviour
         buttonSendInvite.onClick.AddListener(OnSendInviteClicked);
         buttonAccept.onClick.AddListener(OnAcceptClicked);
         buttonDecline.onClick.AddListener(OnDeclineClicked);
+    }
 
+    private void OnEnable()
+    {
+        if (NetworkManager.Instance == null) return;
         NetworkManager.Instance.OnInviteReceived += OnInviteReceived;
         NetworkManager.Instance.OnInviteWaiting += OnInviteWaiting;
         NetworkManager.Instance.OnInviteError += OnInviteError;
@@ -32,7 +36,7 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnGameStart += OnGameStart;
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         if (NetworkManager.Instance == null) return;
         NetworkManager.Instance.OnInviteReceived -= OnInviteReceived;
