@@ -91,7 +91,7 @@ public class LoginUI : MonoBehaviour
             if (response != null && response.success)
             {
                 NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
-                _ = NetworkManager.Instance.ConnectAsync();
+                await NetworkManager.Instance.ConnectAsync();
                 textFeedbackLogin.text = $"Bienvenido, {response.username}!";
                 await System.Threading.Tasks.Task.Delay(1000);
                 menuManager.CerrarPaneles();
