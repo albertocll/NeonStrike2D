@@ -89,9 +89,11 @@ public class NetworkManager : MonoBehaviour
                 OnRoundEnded?.Invoke(winner)));
 
         _connection.On<string, string>("InviteReceived", (fromUsername, roomId) =>
+        {
+            Debug.Log($"[NetworkManager] InviteReceived disparado de {fromUsername}");
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteReceived?.Invoke(fromUsername, roomId)));
-
+                OnInviteReceived?.Invoke(fromUsername, roomId));
+        });
         _connection.On<string>("InviteWaiting", (roomId) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnInviteWaiting?.Invoke(roomId)));
