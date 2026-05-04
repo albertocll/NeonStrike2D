@@ -5,7 +5,7 @@ namespace NeonStrike2D.Backend.Api.Hubs;
 public class GameHub : Hub
 {
     private static readonly Dictionary<string, List<string>> Rooms = new();
-    private static readonly Dictionary<string, string> ConnectedUsers = new();
+    public static readonly Dictionary<string, string> ConnectedUsers = new();
 
     public async Task Register(string username)
     {

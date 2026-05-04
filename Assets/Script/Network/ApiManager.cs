@@ -59,6 +59,22 @@ public class ApiManager : MonoBehaviour
         await PostAsync("/match/result", body, NetworkManager.Instance.Token);
     }
 
+    // AMIGOS
+    public async Task<string> SendFriendRequestAsync(string username)
+    {
+        return await PostAsync($"/friends/request/{username}", "{}", NetworkManager.Instance.Token);
+    }
+
+    public async Task<string> AcceptFriendRequestAsync(int requesterId)
+    {
+        return await PostAsync($"/friends/accept/{requesterId}", "{}", NetworkManager.Instance.Token);
+    }
+
+    public async Task<string> GetOnlineFriendsAsync()
+    {
+        return await GetAsync("/friends/online", NetworkManager.Instance.Token);
+    }
+
     // HTTP POST
     private async Task<string> PostAsync(string endpoint, string json, string token = null)
     {
@@ -112,3 +128,5 @@ public class ApiManager : MonoBehaviour
 [Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; }
 [Serializable] public class RankingList { public RankingEntry[] items; }
 [Serializable] public class MatchResultRequest { public int userId; public int bestWave; }
+[Serializable] public class FriendRequestResponse { public bool success; public string message; }
+[Serializable] public class OnlineFriendsResponse { public string[] items; }
