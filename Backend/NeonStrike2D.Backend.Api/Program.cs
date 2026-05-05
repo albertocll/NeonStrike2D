@@ -142,10 +142,8 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 
-// Guarda el resultado de una partida
 app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db) =>
 {
-    // Crear una sesión automática para modo solitario
     var session = new GameSession
     {
         RoomId = $"solo_{request.UserId}_{DateTime.UtcNow.Ticks}",
@@ -175,7 +173,6 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
     return Results.Ok(new { Success = true });
 }).RequireAuthorization();
 
-// Devuelve el top 10 de jugadores
 app.MapGet("/ranking", async (AppDbContext db) =>
 {
     var ranking = await db.GameResults
@@ -192,6 +189,68 @@ app.MapGet("/ranking", async (AppDbContext db) =>
 
     return Results.Ok(ranking);
 });
+
+// ── AMIGOS ───────────────────────────────────────────────────────────────────
+
+app.MapPost("/friends/request/{username}", async (string username, ClaimsPrincipal user, AppDbContext db) =>
+{
+    var requesterId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+    var addressee = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+    if (addressee == null)
+        return Results.BadRequest(new { Success = false, Message = "Usuario no encontrado." });
+
+    if (addressee.Id == requesterId)
+        return Results.BadRequest(new { Success = false, Message = "No puedes añadirte a ti mismo." });
+
+    var exists = await db.Friendships.AnyAsync(f =>
+        (f.RequesterId == requesterId && f.AddresseeId == addressee.Id) ||
+        (f.RequesterId == addressee.Id && f.AddresseeId == requesterId));
+
+    if (exists)
+        return Results.BadRequest(new { Success = false, Message = "Ya existe una solicitud entre estos usuarios." });
+
+    db.Friendships.Add(new Friendship
+    {
+        RequesterId = requesterId,
+        AddresseeId = addressee.Id,
+        Status = FriendshipStatus.Pending
+    });
+
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { Success = true, Message = "Solicitud enviada." });
+}).RequireAuthorization();
+
+app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrincipal user, AppDbContext db) =>
+{
+    var addresseeId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+    var friendship = await db.Friendships.FirstOrDefaultAsync(f =>
+        f.RequesterId == requesterId && f.AddresseeId == addresseeId && f.Status == FriendshipStatus.Pending);
+
+    if (friendship == null)
+        return Results.NotFound(new { Success = false, Message = "Solicitud no encontrada." });
+
+    friendship.Status = FriendshipStatus.Accepted;
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { Success = true, Message = "Solicitud aceptada." });
+}).RequireAuthorization();
+
+app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db, IHubContext<GameHub> hubContext) =>
+{
+    var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+    var friends = await db.Friendships
+        .Where(f => (f.RequesterId == userId || f.AddresseeId == userId) && f.Status == FriendshipStatus.Accepted)
+        .Select(f => f.RequesterId == userId ? f.Addressee.Username : f.Requester.Username)
+        .ToListAsync();
+
+    var onlineFriends = friends.Where(f => GameHub.ConnectedUsers.ContainsKey(f)).ToList();
+
+    return Results.Ok(onlineFriends);
+}).RequireAuthorization();
 
 // ── SIGNALR ──────────────────────────────────────────────────────────────────
 
