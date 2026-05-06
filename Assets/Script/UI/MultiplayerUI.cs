@@ -46,13 +46,8 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnEnable()
     {
-        Debug.Log("[MultiplayerUI] OnEnable llamado");
-        if (NetworkManager.Instance == null)
-        {
-            Debug.Log("[MultiplayerUI] NetworkManager es null!");
-            return;
-        }
-        Debug.Log("[MultiplayerUI] Suscribiendo eventos...");
+        if (NetworkManager.Instance == null) return;
+
         NetworkManager.Instance.OnInviteReceived += OnInviteReceived;
         NetworkManager.Instance.OnInviteWaiting += OnInviteWaiting;
         NetworkManager.Instance.OnInviteError += OnInviteError;
@@ -190,7 +185,6 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnInviteReceived(string fromUsername, string roomId)
     {
-        Debug.Log($"[MultiplayerUI] Invitación recibida de {fromUsername}, roomId: {roomId}");
         _pendingFromUsername = fromUsername;
         _pendingRoomId = roomId;
         textInviteFrom.text = $"{fromUsername} te ha invitado a jugar";

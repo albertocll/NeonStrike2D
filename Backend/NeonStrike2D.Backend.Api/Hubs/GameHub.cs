@@ -9,7 +9,6 @@ public class GameHub : Hub
 
     public async Task Register(string username)
     {
-        Console.WriteLine($"[GameHub] Register: {username} -> {Context.ConnectionId}");
         ConnectedUsers[username] = Context.ConnectionId;
         await Clients.Caller.SendAsync("Registered");
     }
@@ -45,12 +44,8 @@ public class GameHub : Hub
 
     public async Task SendInvite(string fromUsername, string toUsername)
     {
-        Console.WriteLine($"[GameHub] SendInvite: {fromUsername} -> {toUsername}");
-        Console.WriteLine($"[GameHub] Usuarios conectados: {string.Join(", ", ConnectedUsers.Keys)}");
-
         if (!ConnectedUsers.TryGetValue(toUsername, out var targetConnectionId))
         {
-            Console.WriteLine($"[GameHub] {toUsername} no encontrado");
             await Clients.Caller.SendAsync("InviteError", "El jugador no está conectado.");
             return;
         }
