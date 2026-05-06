@@ -32,16 +32,13 @@ public class NetworkManager : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("[NetworkManager] Awake llamado");
         if (Instance != null && Instance != this)
         {
-            Debug.Log("[NetworkManager] Instancia duplicada, destruyendo...");
             Destroy(gameObject);
             return;
         }
         Instance = this;
         DontDestroyOnLoad(gameObject);
-        Debug.Log("[NetworkManager] Instancia creada y persistiendo");
         _ = UnityMainThreadDispatcher.Instance;
     }
 
@@ -63,8 +60,6 @@ public class NetworkManager : MonoBehaviour
 
     public async Task ConnectAsync(string roomId = null)
     {
-        Debug.Log($"[NetworkManager] Iniciando conexión como {Username}...");
-
         _connection = new HubConnectionBuilder()
             .WithUrl($"{serverUrl}/gamehub")
             .WithAutomaticReconnect()
@@ -91,11 +86,8 @@ public class NetworkManager : MonoBehaviour
                 OnRoundEnded?.Invoke(winner)));
 
         _connection.On<string, string>("InviteReceived", (fromUsername, roomId) =>
-        {
-            Debug.Log($"[NetworkManager] InviteReceived disparado de {fromUsername}");
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteReceived?.Invoke(fromUsername, roomId));
-        });
+                OnInviteReceived?.Invoke(fromUsername, roomId)));
 
         _connection.On<string>("InviteWaiting", (roomId) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
@@ -117,14 +109,13 @@ public class NetworkManager : MonoBehaviour
         {
             await _connection.StartAsync();
             await _connection.InvokeAsync("Register", Username);
-            Debug.Log($"[NetworkManager] Conectado y registrado como {Username}");
 
             if (roomId != null)
                 await _connection.InvokeAsync("JoinRoom", roomId, Username);
         }
         catch (Exception e)
         {
-            Debug.LogError($"[NetworkManager] Error conectando al GameHub: {e.Message}");
+            Debug.LogError($"[NetworkManager] Error conectando: {e.Message}");
         }
     }
 
