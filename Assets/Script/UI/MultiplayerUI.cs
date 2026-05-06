@@ -73,6 +73,13 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnFriendRequestReceived -= OnFriendRequestReceived;
     }
 
+    private async void ShowStatus(string message, int durationMs = 3000)
+    {
+        textInviteStatus.text = message;
+        await System.Threading.Tasks.Task.Delay(durationMs);
+        textInviteStatus.text = "";
+    }
+
     private async System.Threading.Tasks.Task LoadOnlineFriendsAsync()
     {
         if (ApiManager.Instance == null || NetworkManager.Instance.IsGuest) return;
@@ -119,8 +126,9 @@ public class MultiplayerUI : MonoBehaviour
         if (string.IsNullOrEmpty(toUsername)) return;
 
         buttonSendInvite.interactable = false;
-        textInviteStatus.text = "Enviando invitación...";
+        ShowStatus("Enviando invitación...");
         await NetworkManager.Instance.SendInviteAsync(toUsername);
+        buttonSendInvite.interactable = true;
     }
 
     private async void OnAddFriendClicked()
@@ -129,10 +137,10 @@ public class MultiplayerUI : MonoBehaviour
         if (string.IsNullOrEmpty(username)) return;
 
         buttonAddFriend.interactable = false;
-        textInviteStatus.text = "Enviando solicitud...";
+        ShowStatus("Enviando solicitud...");
         var result = await ApiManager.Instance.SendFriendRequestAsync(username);
         await NetworkManager.Instance.SendFriendRequestSignalRAsync(username);
-        textInviteStatus.text = string.IsNullOrEmpty(result) ? "Error al enviar solicitud." : "Solicitud enviada!";
+        ShowStatus(string.IsNullOrEmpty(result) ? "Error al enviar solicitud." : "Solicitud enviada!");
         buttonAddFriend.interactable = true;
     }
 
@@ -160,18 +168,18 @@ public class MultiplayerUI : MonoBehaviour
     private void OnInviteWaiting(string roomId)
     {
         _pendingRoomId = roomId;
-        textInviteStatus.text = "Esperando respuesta...";
+        ShowStatus("Esperando respuesta...", 10000);
     }
 
     private void OnInviteError(string message)
     {
-        textInviteStatus.text = message;
+        ShowStatus(message);
         buttonSendInvite.interactable = true;
     }
 
     private void OnInviteDeclined()
     {
-        textInviteStatus.text = "Invitación rechazada.";
+        ShowStatus("Invitación rechazada.");
         buttonSendInvite.interactable = true;
     }
 
