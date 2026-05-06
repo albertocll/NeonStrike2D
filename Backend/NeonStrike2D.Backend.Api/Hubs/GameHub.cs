@@ -35,6 +35,14 @@ public class GameHub : Hub
             await Clients.Group(roomId).SendAsync("GameStart");
     }
 
+    public async Task SendFriendRequest(string fromUsername, string toUsername)
+    {
+        if (!ConnectedUsers.TryGetValue(toUsername, out var targetConnectionId))
+            return;
+
+        await Clients.Client(targetConnectionId).SendAsync("FriendRequestReceived", fromUsername);
+    }
+
     public async Task SendInvite(string fromUsername, string toUsername)
     {
         Console.WriteLine($"[GameHub] SendInvite: {fromUsername} -> {toUsername}");
@@ -93,6 +101,5 @@ public class GameHub : Hub
         }
 
         await base.OnDisconnectedAsync(exception);
-        
     }
 }
