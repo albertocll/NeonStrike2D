@@ -118,6 +118,15 @@ public class ApiManager : MonoBehaviour
 
         return request.downloadHandler.text;
     }
+
+    // USUARIOS
+    public async Task<int?> GetUserIdByUsernameAsync(string username)
+    {
+        var result = await GetAsync($"/users/{username}", NetworkManager.Instance.Token);
+        if (string.IsNullOrEmpty(result)) return null;
+        var response = JsonUtility.FromJson<UserResponse>(result);
+        return response?.userId;
+    }
 }
 
 // DTOs
@@ -130,3 +139,4 @@ public class ApiManager : MonoBehaviour
 [Serializable] public class MatchResultRequest { public int userId; public int bestWave; }
 [Serializable] public class FriendRequestResponse { public bool success; public string message; }
 [Serializable] public class OnlineFriendsResponse { public string[] items; }
+[Serializable] public class UserResponse { public int userId; public string username; }

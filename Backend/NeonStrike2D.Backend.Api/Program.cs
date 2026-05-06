@@ -253,6 +253,15 @@ app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db, IHub
     return Results.Ok(onlineFriends);
 }).RequireAuthorization();
 
+// ── USUARIOS ─────────────────────────────────────────────────────────────────
+
+app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
+{
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
+    if (user == null) return Results.NotFound();
+    return Results.Ok(new { userId = user.Id, username = user.Username });
+}).RequireAuthorization();
+
 // ── SIGNALR ──────────────────────────────────────────────────────────────────
 
 app.MapHub<GameHub>("/gamehub");

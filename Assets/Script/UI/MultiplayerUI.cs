@@ -18,6 +18,12 @@ public class MultiplayerUI : MonoBehaviour
     [SerializeField] private Button buttonAccept;
     [SerializeField] private Button buttonDecline;
 
+    [Header("Panel Solicitud de Amistad")]
+    [SerializeField] private GameObject friendRequestPanel;
+    [SerializeField] private TMP_Text textFriendRequestFrom;
+    [SerializeField] private Button buttonAcceptFriend;
+    [SerializeField] private Button buttonDeclineFriend;
+
     [Header("Lista Amigos Online")]
     [SerializeField] private Transform friendListContent;
     [SerializeField] private GameObject friendRowPrefab;
@@ -25,6 +31,7 @@ public class MultiplayerUI : MonoBehaviour
 
     private string _pendingRoomId;
     private string _pendingFromUsername;
+    private string _pendingFriendRequestFrom;
 
     private void Start()
     {
@@ -32,6 +39,8 @@ public class MultiplayerUI : MonoBehaviour
         buttonAddFriend.onClick.AddListener(OnAddFriendClicked);
         buttonAccept.onClick.AddListener(OnAcceptClicked);
         buttonDecline.onClick.AddListener(OnDeclineClicked);
+        buttonAcceptFriend.onClick.AddListener(OnAcceptFriendClicked);
+        buttonDeclineFriend.onClick.AddListener(OnDeclineFriendClicked);
     }
 
     private void OnEnable()
@@ -48,6 +57,7 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnInviteError += OnInviteError;
         NetworkManager.Instance.OnInviteDeclined += OnInviteDeclined;
         NetworkManager.Instance.OnGameStart += OnGameStart;
+        NetworkManager.Instance.OnFriendRequestReceived += OnFriendRequestReceived;
 
         _ = LoadOnlineFriendsAsync();
     }
@@ -60,6 +70,7 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnInviteError -= OnInviteError;
         NetworkManager.Instance.OnInviteDeclined -= OnInviteDeclined;
         NetworkManager.Instance.OnGameStart -= OnGameStart;
+        NetworkManager.Instance.OnFriendRequestReceived -= OnFriendRequestReceived;
     }
 
     private async System.Threading.Tasks.Task LoadOnlineFriendsAsync()
@@ -120,8 +131,30 @@ public class MultiplayerUI : MonoBehaviour
         buttonAddFriend.interactable = false;
         textInviteStatus.text = "Enviando solicitud...";
         var result = await ApiManager.Instance.SendFriendRequestAsync(username);
+        await NetworkManager.Instance.SendFriendRequestSignalRAsync(username);
         textInviteStatus.text = string.IsNullOrEmpty(result) ? "Error al enviar solicitud." : "Solicitud enviada!";
         buttonAddFriend.interactable = true;
+    }
+
+    private void OnFriendRequestReceived(string fromUsername)
+    {
+        _pendingFriendRequestFrom = fromUsername;
+        textFriendRequestFrom.text = $"{fromUsername} quiere ser tu amigo";
+        friendRequestPanel.SetActive(true);
+    }
+
+    private async void OnAcceptFriendClicked()
+    {
+        friendRequestPanel.SetActive(false);
+        var requester = await ApiManager.Instance.GetUserIdByUsernameAsync(_pendingFriendRequestFrom);
+        if (requester != null)
+            await ApiManager.Instance.AcceptFriendRequestAsync(requester.Value);
+        _ = LoadOnlineFriendsAsync();
+    }
+
+    private void OnDeclineFriendClicked()
+    {
+        friendRequestPanel.SetActive(false);
     }
 
     private void OnInviteWaiting(string roomId)

@@ -28,6 +28,7 @@ public class NetworkManager : MonoBehaviour
     public event Action<string> OnInviteWaiting;
     public event Action<string> OnInviteError;
     public event Action OnInviteDeclined;
+    public event Action<string> OnFriendRequestReceived;
 
     private void Awake()
     {
@@ -41,7 +42,7 @@ public class NetworkManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
         Debug.Log("[NetworkManager] Instancia creada y persistiendo");
-        _ = UnityMainThreadDispatcher.Instance; // forzar inicialización
+        _ = UnityMainThreadDispatcher.Instance;
     }
 
     public void SetUserData(int userId, string username, string token)
@@ -95,6 +96,7 @@ public class NetworkManager : MonoBehaviour
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnInviteReceived?.Invoke(fromUsername, roomId));
         });
+
         _connection.On<string>("InviteWaiting", (roomId) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnInviteWaiting?.Invoke(roomId)));
@@ -106,6 +108,10 @@ public class NetworkManager : MonoBehaviour
         _connection.On("InviteDeclined", () =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
                 OnInviteDeclined?.Invoke()));
+
+        _connection.On<string>("FriendRequestReceived", (fromUsername) =>
+            UnityMainThreadDispatcher.Instance.Enqueue(() =>
+                OnFriendRequestReceived?.Invoke(fromUsername)));
 
         try
         {
@@ -126,6 +132,12 @@ public class NetworkManager : MonoBehaviour
     {
         if (!IsConnected) return;
         await _connection.InvokeAsync("SendInvite", Username, toUsername);
+    }
+
+    public async Task SendFriendRequestSignalRAsync(string toUsername)
+    {
+        if (!IsConnected) return;
+        await _connection.InvokeAsync("SendFriendRequest", Username, toUsername);
     }
 
     public async Task AcceptInviteAsync(string roomId)
