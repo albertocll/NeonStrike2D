@@ -11402,10 +11402,10 @@ MonoBehaviour:
   textInviteFrom: {fileID: 1273804800}
   buttonAccept: {fileID: 1353152537}
   buttonDecline: {fileID: 92186096}
-  friendRequestPanel: {fileID: 0}
-  textFriendRequestFrom: {fileID: 0}
-  buttonAcceptFriend: {fileID: 0}
-  buttonDeclineFriend: {fileID: 0}
+  friendRequestPanel: {fileID: 1546240957}
+  textFriendRequestFrom: {fileID: 1332160748}
+  buttonAcceptFriend: {fileID: 787392036}
+  buttonDeclineFriend: {fileID: 912597963}
   friendListContent: {fileID: 1593611046}
   friendRowPrefab: {fileID: 2377683135949891430, guid: 97118c4fa3bf7ed408002d258fea3f64, type: 3}
   textNoFriends: {fileID: 2054545820}
