@@ -32,6 +32,7 @@ public class MultiplayerUI : MonoBehaviour
     private string _pendingRoomId;
     private string _pendingFromUsername;
     private string _pendingFriendRequestFrom;
+    private System.Threading.CancellationTokenSource _refreshCts;
 
     private void Start()
     {
@@ -60,6 +61,8 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnFriendRequestReceived += OnFriendRequestReceived;
 
         _ = LoadOnlineFriendsAsync();
+        _refreshCts = new System.Threading.CancellationTokenSource();
+        _ = RefreshFriendsLoopAsync(_refreshCts.Token);
     }
 
     private void OnDisable()
@@ -71,6 +74,8 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnInviteDeclined -= OnInviteDeclined;
         NetworkManager.Instance.OnGameStart -= OnGameStart;
         NetworkManager.Instance.OnFriendRequestReceived -= OnFriendRequestReceived;
+
+        _refreshCts?.Cancel();
     }
 
     private async void ShowStatus(string message, int durationMs = 3000)
@@ -207,5 +212,15 @@ public class MultiplayerUI : MonoBehaviour
     private void OnGameStart()
     {
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
+    }
+
+    private async System.Threading.Tasks.Task RefreshFriendsLoopAsync(System.Threading.CancellationToken token)
+    {
+        while (!token.IsCancellationRequested)
+        {
+            await System.Threading.Tasks.Task.Delay(10000, token).ContinueWith(_ => { });
+            if (!token.IsCancellationRequested)
+                _ = LoadOnlineFriendsAsync();
+        }
     }
 }
