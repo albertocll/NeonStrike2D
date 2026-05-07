@@ -4355,6 +4355,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7d15a63d7ffa1a548a3b44c1bb939f9e, type: 2}
   - {fileID: 11400000, guid: d96e81353bdf935409a9572ec6807574, type: 2}
   - {fileID: 11400000, guid: c7626bc9c8265eb48b3dbed961a2bcd9, type: 2}
+  spawnPointLocal: {fileID: 284086549}
+  spawnPointRemote: {fileID: 2123349707}
+  roomId: 
 --- !u!4 &1740853329
 Transform:
   m_ObjectHideFlags: 0
@@ -5210,6 +5213,37 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &2123349706
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2123349707}
+  m_Layer: 0
+  m_Name: SpawnPointRemote
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2123349707
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2123349706}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1672.1617, y: 509.76764, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -5224,3 +5258,4 @@ SceneRoots:
   - {fileID: 44813399}
   - {fileID: 710783553}
   - {fileID: 1740853329}
+  - {fileID: 2123349707}
