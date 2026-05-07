@@ -60,14 +60,13 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    private void SpawnRemotePlayer()
+    private void SpawnRemotePlayer(string character)
     {
-        string selected = GameData.SelectedCharacter;
         Vector3 spawnPos = spawnPointRemote != null ? spawnPointRemote.position : transform.position + Vector3.right * 3f;
 
         foreach (var data in characters)
         {
-            if (data.characterName == selected)
+            if (data.characterName == character)
             {
                 _remotePlayer = Instantiate(data.prefab, spawnPos, Quaternion.identity);
                 _remotePlayer.transform.localScale = data.scale;
@@ -84,10 +83,11 @@ public class PlayerSpawner : MonoBehaviour
         }
     }
 
-    private void OnPlayerJoined(string username, int count)
+    private void OnPlayerJoined(string username, int count, string character)
     {
+        Debug.Log($"[PlayerSpawner] OnPlayerJoined: {username}, count: {count}, character: {character}");
         if (count == 2 && _remotePlayer == null)
-            SpawnRemotePlayer();
+            SpawnRemotePlayer(character);
     }
 
     private void OnReceiveGameState(string stateJson)

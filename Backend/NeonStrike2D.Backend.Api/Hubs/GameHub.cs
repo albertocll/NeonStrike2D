@@ -13,7 +13,7 @@ public class GameHub : Hub
         await Clients.Caller.SendAsync("Registered");
     }
 
-    public async Task JoinRoom(string roomId, string username)
+    public async Task JoinRoom(string roomId, string username, string character = "Violet")
     {
         if (!Rooms.ContainsKey(roomId))
             Rooms[roomId] = new List<string>();
@@ -28,7 +28,7 @@ public class GameHub : Hub
 
         room.Add(Context.ConnectionId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
-        await Clients.Group(roomId).SendAsync("PlayerJoined", username, room.Count);
+        await Clients.Group(roomId).SendAsync("PlayerJoined", username, room.Count, character);
 
         if (room.Count == 2)
             await Clients.Group(roomId).SendAsync("GameStart");
@@ -55,9 +55,9 @@ public class GameHub : Hub
         await Clients.Caller.SendAsync("InviteWaiting", roomId);
     }
 
-    public async Task AcceptInvite(string username, string roomId)
+    public async Task AcceptInvite(string username, string roomId, string character = "Violet")
     {
-        await JoinRoom(roomId, username);
+        await JoinRoom(roomId, username, character);
     }
 
     public async Task DeclineInvite(string fromUsername)
