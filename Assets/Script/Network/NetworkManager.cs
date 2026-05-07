@@ -18,7 +18,7 @@ public class NetworkManager : MonoBehaviour
     public bool IsGuest { get; private set; }
     public bool IsConnected => _connection?.State == HubConnectionState.Connected;
 
-    public event Action<string, int> OnPlayerJoined;
+    public event Action<string, int, string> OnPlayerJoined;
     public event Action OnGameStart;
     public event Action<string> OnPlayerLeft;
     public event Action<string> OnReceiveGameState;
@@ -65,9 +65,12 @@ public class NetworkManager : MonoBehaviour
             .WithAutomaticReconnect()
             .Build();
 
-        _connection.On<string, int>("PlayerJoined", (username, count) =>
+        _connection.On<string, int, string>("PlayerJoined", (username, count, character) =>
+        {
+            Debug.Log($"[NetworkManager] PlayerJoined: {username}, count: {count}, character: {character}");
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerJoined?.Invoke(username, count)));
+                OnPlayerJoined?.Invoke(username, count, character));
+        });
 
         _connection.On("GameStart", () =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
@@ -90,8 +93,11 @@ public class NetworkManager : MonoBehaviour
                 OnInviteReceived?.Invoke(fromUsername, roomId)));
 
         _connection.On<string>("InviteWaiting", (roomId) =>
+        {
+            _ = _connection.InvokeAsync("JoinRoom", roomId, Username, GameData.SelectedCharacter);
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteWaiting?.Invoke(roomId)));
+                OnInviteWaiting?.Invoke(roomId));
+        });
 
         _connection.On<string>("InviteError", (message) =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
@@ -134,7 +140,7 @@ public class NetworkManager : MonoBehaviour
     public async Task AcceptInviteAsync(string roomId)
     {
         if (!IsConnected) return;
-        await _connection.InvokeAsync("AcceptInvite", Username, roomId);
+        await _connection.InvokeAsync("AcceptInvite", Username, roomId, GameData.SelectedCharacter);
     }
 
     public async Task DeclineInviteAsync(string fromUsername)

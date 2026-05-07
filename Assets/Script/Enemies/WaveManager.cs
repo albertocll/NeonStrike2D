@@ -4,6 +4,8 @@ using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
+    [Header("Debug")]
+    [SerializeField] private bool spawnEnemies = true;
     [Header("References")]
     [SerializeField] private EnemySpawner enemySpawner;
     [SerializeField] private TMP_Text waveText;
@@ -29,6 +31,7 @@ public class WaveManager : MonoBehaviour
 
     public void StartNextWave()
     {
+        if (!spawnEnemies) return;
         if (enemySpawner == null)
         {
             Debug.LogError("[WaveManager] EnemySpawner no asignado.");
