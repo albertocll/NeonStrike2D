@@ -168,6 +168,7 @@ public class MultiplayerUI : MonoBehaviour
     private void OnInviteWaiting(string roomId)
     {
         _pendingRoomId = roomId;
+        GameData.RoomId = roomId;
         ShowStatus("Esperando respuesta...", 10000);
     }
 
@@ -194,6 +195,7 @@ public class MultiplayerUI : MonoBehaviour
     private async void OnAcceptClicked()
     {
         receivePanel.SetActive(false);
+        GameData.RoomId = _pendingRoomId;
         await NetworkManager.Instance.AcceptInviteAsync(_pendingRoomId);
     }
 
