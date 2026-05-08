@@ -14,11 +14,11 @@ public class PlayerSpawner : MonoBehaviour
         roomId = GameData.RoomId;
         SpawnLocalPlayer();
 
+        if (!string.IsNullOrEmpty(GameData.RemoteCharacter))
+            SpawnRemotePlayer(GameData.RemoteCharacter);
+
         if (NetworkManager.Instance != null)
-        {
             NetworkManager.Instance.OnReceiveGameState += OnReceiveGameState;
-            NetworkManager.Instance.OnPlayerJoined += OnPlayerJoined;
-        }
     }
 
     private void OnDestroy()
@@ -62,6 +62,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void SpawnRemotePlayer(string character)
     {
+        Debug.Log($"[PlayerSpawner] SpawnRemotePlayer: {character}");
         Vector3 spawnPos = spawnPointRemote != null ? spawnPointRemote.position : transform.position + Vector3.right * 3f;
 
         foreach (var data in characters)
@@ -92,6 +93,7 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnReceiveGameState(string stateJson)
     {
+        Debug.Log($"[PlayerSpawner] stateJson: {stateJson}");
         if (_remotePlayer == null) return;
 
         var state = JsonUtility.FromJson<PlayerState>(stateJson);

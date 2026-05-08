@@ -67,9 +67,9 @@ public class NetworkManager : MonoBehaviour
 
         _connection.On<string, int, string>("PlayerJoined", (username, count, character) =>
         {
-            Debug.Log($"[NetworkManager] PlayerJoined: {username}, count: {count}, character: {character}");
+            if (count == 2) GameData.RemoteCharacter = character;
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerJoined?.Invoke(username, count, character));
+            OnPlayerJoined?.Invoke(username, count, character));
         });
 
         _connection.On("GameStart", () =>

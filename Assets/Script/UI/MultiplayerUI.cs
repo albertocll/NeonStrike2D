@@ -207,6 +207,8 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnGameStart()
     {
+        if (!string.IsNullOrEmpty(_pendingRoomId))
+            GameData.RoomId = _pendingRoomId;
         UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
     }
 
