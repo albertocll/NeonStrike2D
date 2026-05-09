@@ -46,8 +46,8 @@ public class PlayerSync : MonoBehaviour
     {
         if (NetworkManager.Instance == null || !NetworkManager.Instance.IsConnected) return;
         var pos = transform.position;
-        var state = new PlayerState { x = pos.x, y = pos.y };
-        var json = JsonUtility.ToJson(state);
+        var json = string.Format(System.Globalization.CultureInfo.InvariantCulture,
+            "{{\"x\":{0},\"y\":{1}}}", pos.x, pos.y);
         await NetworkManager.Instance.SendGameStateAsync(_roomId, json);
     }
 
