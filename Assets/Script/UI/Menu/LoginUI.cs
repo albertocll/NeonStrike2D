@@ -91,6 +91,7 @@ public class LoginUI : MonoBehaviour
             if (response != null && response.success)
             {
                 NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
+                GameData.Username = response.username;
                 await NetworkManager.Instance.ConnectAsync();
                 textFeedbackLogin.text = $"Bienvenido, {response.username}!";
                 await System.Threading.Tasks.Task.Delay(1000);
@@ -156,6 +157,7 @@ public class LoginUI : MonoBehaviour
     public void OnGuestClicked()
     {
         NetworkManager.Instance.SetGuestData();
+        GameData.Username = "Invitado";
         UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
     }
 }
