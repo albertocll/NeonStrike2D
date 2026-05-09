@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 public class PlayerSpawner : MonoBehaviour
 {
@@ -55,6 +56,9 @@ public class PlayerSpawner : MonoBehaviour
                 var sync = player.AddComponent<PlayerSync>();
                 sync.Init(roomId, true);
 
+                var nameText = player.GetComponentInChildren<TMP_Text>();
+                if (nameText != null) nameText.text = GameData.Username;
+
                 return;
             }
         }
@@ -78,6 +82,9 @@ public class PlayerSpawner : MonoBehaviour
 
                 var sync = _remotePlayer.AddComponent<PlayerSync>();
                 sync.Init(roomId, false);
+
+                var nameText = _remotePlayer.GetComponentInChildren<TMP_Text>();
+                if (nameText != null) nameText.text = GameData.RemoteUsername;
 
                 return;
             }
