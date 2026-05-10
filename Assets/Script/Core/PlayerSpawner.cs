@@ -71,7 +71,6 @@ public class PlayerSpawner : MonoBehaviour
 
     private void SpawnRemotePlayer(string character)
     {
-        Debug.Log($"[PlayerSpawner] SpawnRemotePlayer: {character}");
         Transform remotePoint = GameData.IsHost ? spawnPointRemote : spawnPointLocal;
         Vector3 spawnPos = remotePoint != null ? remotePoint.position : transform.position + Vector3.right * 3f;
 
@@ -99,14 +98,12 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnPlayerJoined(string username, int count, string character)
     {
-        Debug.Log($"[PlayerSpawner] OnPlayerJoined: {username}, count: {count}, character: {character}");
         if (count == 2 && _remotePlayer == null)
             SpawnRemotePlayer(character);
     }
 
     private void OnPlayerLeft(string opponent)
     {
-        Debug.Log($"[PlayerSpawner] OnPlayerLeft: {opponent}");
         if (_remotePlayer != null)
         {
             Destroy(_remotePlayer);
@@ -116,7 +113,6 @@ public class PlayerSpawner : MonoBehaviour
 
     private void OnReceiveGameState(string stateJson)
     {
-        Debug.Log($"[PlayerSpawner] stateJson: {stateJson}");
         if (_remotePlayer == null) return;
 
         var state = JsonUtility.FromJson<PlayerState>(stateJson);

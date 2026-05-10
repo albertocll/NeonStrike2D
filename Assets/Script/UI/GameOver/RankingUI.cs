@@ -77,7 +77,7 @@ public class RankingUI : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"Error cargando ranking: {e.Message}");
+            Debug.LogError($"[RankingUI] Error cargando ranking: {e.Message}");
             if (statusText != null) statusText.text = "Error loading ranking.";
         }
     }

@@ -58,7 +58,6 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        Debug.Log($"[PlayerHealth] Die() — gameOverUI: {gameOverUI}");
         if (anim != null) anim.SetTrigger("Dead");
         StartCoroutine(HandleDeath());
     }
@@ -77,13 +76,11 @@ public class PlayerHealth : MonoBehaviour
         {
             int wave = waveManager != null ? waveManager.CurrentWave : 0;
             int userId = NetworkManager.Instance.UserId;
-            Debug.Log($"Guardando resultado — userId: {userId}, wave: {wave}");
             await ApiManager.Instance.SaveMatchResultAsync(userId, wave);
-            Debug.Log("Resultado guardado correctamente");
         }
         catch (System.Exception e)
         {
-            Debug.LogError($"Error guardando resultado: {e.Message}");
+            Debug.LogError($"[PlayerHealth] Error guardando resultado: {e.Message}");
         }
     }
 

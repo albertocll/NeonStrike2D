@@ -15,11 +15,6 @@ public class EnemyController : MonoBehaviour
     {
         currentHealth = maxHealth;
         animator = GetComponentInChildren<Animator>();
-
-        if (animator == null)
-        {
-            Debug.LogError("[EnemyController] Animator no encontrado en el enemigo.");
-        }
     }
 
     public void TakeDamage(int damage)

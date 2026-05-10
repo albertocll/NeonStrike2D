@@ -92,7 +92,6 @@ public class ApiManager : MonoBehaviour
 
         if (request.result == UnityWebRequest.Result.ConnectionError)
         {
-            Debug.LogError($"Error de conexión en {endpoint}: {request.error}");
             return null;
         }
 
@@ -112,7 +111,6 @@ public class ApiManager : MonoBehaviour
 
         if (request.result != UnityWebRequest.Result.Success)
         {
-            Debug.LogError($"Error en {endpoint}: {request.error}");
             return null;
         }
 

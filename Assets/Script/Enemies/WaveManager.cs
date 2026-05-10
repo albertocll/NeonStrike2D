@@ -32,12 +32,7 @@ public class WaveManager : MonoBehaviour
     public void StartNextWave()
     {
         if (!spawnEnemies) return;
-        if (enemySpawner == null)
-        {
-            Debug.LogError("[WaveManager] EnemySpawner no asignado.");
-            return;
-        }
-
+        
         currentWave++;
         waveInProgress = true;
         enemiesAlive = 0;

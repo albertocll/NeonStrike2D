@@ -30,7 +30,7 @@ public static class ClearPlayerAnimEvents
         }
 
         AssetDatabase.SaveAssets();
-        Debug.Log($"Cleared events: {eventsRemoved} from clips: {clips} in {PATH}");
+        
     }
 }
 #endif

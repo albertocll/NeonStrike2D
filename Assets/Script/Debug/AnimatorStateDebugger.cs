@@ -45,12 +45,6 @@ public class AnimatorStateDebugger : MonoBehaviour
             string curName = GetStateName(curHash);
             string nextName = inTrans ? GetStateName(nextHash) : "-";
 
-            Debug.Log("[ANIM] Cur=" + curName +
-                      " InTransition=" + inTrans +
-                      " Next=" + nextName +
-                      " Moving=" + moving +
-                      " Shoot=" + shoot);
-
             lastStateHash = curHash;
             lastNextHash = nextHash;
             lastInTransition = inTrans;

@@ -32,9 +32,6 @@ public class WardenAI : MonoBehaviour
 
         if (!anim) anim = GetComponent<Animator>();
         if (!anim) anim = GetComponentInChildren<Animator>(true);
-
-        if (!anim)
-            Debug.LogError("WardenAI: No Animator found on Warden prefab or children.", this);
     }
 
     void Start()
