@@ -19,7 +19,10 @@ public class PlayerSpawner : MonoBehaviour
             SpawnRemotePlayer(GameData.RemoteCharacter);
 
         if (NetworkManager.Instance != null)
+        {
             NetworkManager.Instance.OnReceiveGameState += OnReceiveGameState;
+            NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
+        }
     }
 
     private void OnDestroy()
@@ -27,6 +30,7 @@ public class PlayerSpawner : MonoBehaviour
         if (NetworkManager.Instance != null)
         {
             NetworkManager.Instance.OnReceiveGameState -= OnReceiveGameState;
+            NetworkManager.Instance.OnPlayerLeft -= OnPlayerLeft;
             NetworkManager.Instance.OnPlayerJoined -= OnPlayerJoined;
         }
     }
@@ -96,6 +100,16 @@ public class PlayerSpawner : MonoBehaviour
         Debug.Log($"[PlayerSpawner] OnPlayerJoined: {username}, count: {count}, character: {character}");
         if (count == 2 && _remotePlayer == null)
             SpawnRemotePlayer(character);
+    }
+
+    private void OnPlayerLeft(string opponent)
+    {
+        Debug.Log($"[PlayerSpawner] OnPlayerLeft: {opponent}");
+        if (_remotePlayer != null)
+        {
+            Destroy(_remotePlayer);
+            _remotePlayer = null;
+        }
     }
 
     private void OnReceiveGameState(string stateJson)
