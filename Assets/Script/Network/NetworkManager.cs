@@ -67,14 +67,20 @@ public class NetworkManager : MonoBehaviour
 
         _connection.On<string, int, string>("PlayerJoined", (username, count, character) =>
         {
-            if (count == 2) GameData.RemoteCharacter = character;
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-            OnPlayerJoined?.Invoke(username, count, character));
+                OnPlayerJoined?.Invoke(username, count, character));
         });
 
-        _connection.On("GameStart", () =>
+        _connection.On<string, string, string, string>("GameStart", (user1, char1, user2, char2) =>
+        {
+            string remoteUser = user1 == Username ? user2 : user1;
+            string remoteChar = user1 == Username ? char2 : char1;
+            GameData.RemoteUsername = remoteUser;
+            GameData.RemoteCharacter = remoteChar;
+
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnGameStart?.Invoke()));
+                OnGameStart?.Invoke());
+        });
 
         _connection.On("PlayerLeft", () =>
             UnityMainThreadDispatcher.Instance.Enqueue(() =>
@@ -153,6 +159,12 @@ public class NetworkManager : MonoBehaviour
     {
         if (!IsConnected) return;
         await _connection.InvokeAsync("SendGameState", roomId, stateJson);
+    }
+
+    public async Task SendPlayerReadyAsync(string roomId, string character)
+    {
+        if (!IsConnected) return;
+        await _connection.InvokeAsync("PlayerReady", roomId, Username, character);
     }
 
     public async Task DisconnectAsync()

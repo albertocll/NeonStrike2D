@@ -115,6 +115,7 @@ public class MultiplayerUI : MonoBehaviour
                 btn.onClick.AddListener(async () =>
                 {
                     GameData.RemoteUsername = captured;
+                    GameData.IsHost = true;
                     await NetworkManager.Instance.SendInviteAsync(captured);
                 });
             }
@@ -129,6 +130,7 @@ public class MultiplayerUI : MonoBehaviour
         buttonSendInvite.interactable = false;
         ShowStatus("Enviando invitación...");
         GameData.RemoteUsername = toUsername;
+        GameData.IsHost = true;
         await NetworkManager.Instance.SendInviteAsync(toUsername);
         buttonSendInvite.interactable = true;
     }
@@ -199,6 +201,7 @@ public class MultiplayerUI : MonoBehaviour
         receivePanel.SetActive(false);
         GameData.RoomId = _pendingRoomId;
         GameData.RemoteUsername = _pendingFromUsername;
+        GameData.IsHost = false;
         await NetworkManager.Instance.AcceptInviteAsync(_pendingRoomId);
     }
 
