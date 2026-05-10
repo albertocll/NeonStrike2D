@@ -10,6 +10,7 @@ public class PlayerSync : MonoBehaviour
     private string _roomId;
     private Vector2 _targetPosition;
     private float _timer;
+    private bool _hasReceivedFirstState = false;
 
     public void Init(string roomId, bool isLocal)
     {
@@ -54,5 +55,10 @@ public class PlayerSync : MonoBehaviour
     public void SetTargetPosition(Vector2 position)
     {
         _targetPosition = position;
+        if (!_hasReceivedFirstState)
+        {
+            transform.position = position;
+            _hasReceivedFirstState = true;
+        }
     }
 }
