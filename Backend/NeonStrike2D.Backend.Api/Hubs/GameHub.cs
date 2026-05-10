@@ -5,6 +5,7 @@ namespace NeonStrike2D.Backend.Api.Hubs;
 public class GameHub : Hub
 {
     private static readonly Dictionary<string, List<string>> Rooms = new();
+    private static readonly Dictionary<string, Dictionary<string, string>> RoomReady = new();
     public static readonly Dictionary<string, string> ConnectedUsers = new();
 
     public async Task Register(string username)
@@ -29,9 +30,25 @@ public class GameHub : Hub
         room.Add(Context.ConnectionId);
         await Groups.AddToGroupAsync(Context.ConnectionId, roomId);
         await Clients.Group(roomId).SendAsync("PlayerJoined", username, room.Count, character);
+    }
 
-        if (room.Count == 2)
-            await Clients.Group(roomId).SendAsync("GameStart");
+    public async Task PlayerReady(string roomId, string username, string character)
+    {
+        if (!RoomReady.ContainsKey(roomId))
+            RoomReady[roomId] = new Dictionary<string, string>();
+
+        RoomReady[roomId][username] = character;
+
+        if (RoomReady[roomId].Count == 2)
+        {
+            var players = RoomReady[roomId].ToList();
+            await Clients.Group(roomId).SendAsync(
+                "GameStart",
+                players[0].Key, players[0].Value,
+                players[1].Key, players[1].Value
+            );
+            RoomReady.Remove(roomId);
+        }
     }
 
     public async Task SendFriendRequest(string fromUsername, string toUsername)
@@ -90,7 +107,10 @@ public class GameHub : Hub
                 await Clients.Group(room.Key).SendAsync("PlayerLeft");
 
                 if (room.Value.Count == 0)
+                {
                     Rooms.Remove(room.Key);
+                    RoomReady.Remove(room.Key);
+                }
                 break;
             }
         }

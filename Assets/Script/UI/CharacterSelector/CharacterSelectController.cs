@@ -19,18 +19,34 @@ public class CharacterSelectController : MonoBehaviour
     public void DeployNyx()    => Deploy("Nyx");
     public void DeployAtlas()  => Deploy("Atlas");
 
-    private void Deploy(string characterName)
-    {
-        GameData.SelectedCharacter = characterName;
-        SceneManager.LoadScene("Level1");
-    }
-
-    private void ShowPanel(GameObject target)
+    public void CloseAllCharacterPanels()
     {
         SafeSetActive(infoPanel_Violet, false);
         SafeSetActive(infoPanel_Cyrus,  false);
         SafeSetActive(infoPanel_Nyx,    false);
         SafeSetActive(infoPanel_Atlas,  false);
+    }
+
+    private void Deploy(string characterName)
+    {
+        GameData.SelectedCharacter = characterName;
+
+        if (!string.IsNullOrEmpty(GameData.RoomId))
+        {
+            // Multijugador: avisamos al backend que estamos listos.
+            // La escena se carga cuando llegue OnGameStart (cuando el rival también esté listo).
+            _ = NetworkManager.Instance.SendPlayerReadyAsync(GameData.RoomId, characterName);
+        }
+        else
+        {
+            // Single player: cargar directamente.
+            SceneManager.LoadScene("Level1");
+        }
+    }
+
+    private void ShowPanel(GameObject target)
+    {
+        CloseAllCharacterPanels();
         SafeSetActive(target, true);
     }
 

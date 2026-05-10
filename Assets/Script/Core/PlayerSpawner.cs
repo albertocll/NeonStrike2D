@@ -38,7 +38,8 @@ public class PlayerSpawner : MonoBehaviour
     private void SpawnLocalPlayer()
     {
         string selected = GameData.SelectedCharacter;
-        Vector3 spawnPos = spawnPointLocal != null ? spawnPointLocal.position : transform.position;
+        Transform localPoint = GameData.IsHost ? spawnPointLocal : spawnPointRemote;
+        Vector3 spawnPos = localPoint != null ? localPoint.position : transform.position;
 
         foreach (var data in characters)
         {
@@ -71,7 +72,8 @@ public class PlayerSpawner : MonoBehaviour
     private void SpawnRemotePlayer(string character)
     {
         Debug.Log($"[PlayerSpawner] SpawnRemotePlayer: {character}");
-        Vector3 spawnPos = spawnPointRemote != null ? spawnPointRemote.position : transform.position + Vector3.right * 3f;
+        Transform remotePoint = GameData.IsHost ? spawnPointRemote : spawnPointLocal;
+        Vector3 spawnPos = remotePoint != null ? remotePoint.position : transform.position + Vector3.right * 3f;
 
         foreach (var data in characters)
         {
