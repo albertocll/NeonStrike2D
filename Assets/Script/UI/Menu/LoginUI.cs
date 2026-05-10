@@ -105,8 +105,8 @@ public class LoginUI : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.LogError($"[LoginUI] Error en login: {e.Message}");
             textFeedbackLogin.text = "Error de conexión.";
-            Debug.LogError(e.Message);
         }
         finally
         {
@@ -145,8 +145,8 @@ public class LoginUI : MonoBehaviour
         }
         catch (Exception e)
         {
+            Debug.LogError($"[LoginUI] Error en registro: {e.Message}");
             textFeedbackRegister.text = "Error de conexión.";
-            Debug.LogError(e.Message);
         }
         finally
         {

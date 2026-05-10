@@ -11,17 +11,6 @@ public class EnemySpawner : MonoBehaviour
 
     public void SpawnWave(int enemyCount, WaveManager waveManager)
     {
-        if (enemyPrefabs == null || enemyPrefabs.Count == 0)
-        {
-            Debug.LogWarning("[EnemySpawner] No hay prefabs asignados.");
-            return;
-        }
-
-        if (spawnArea == null)
-        {
-            Debug.LogError("[EnemySpawner] No hay spawnArea asignada.");
-            return;
-        }
 
         for (int i = 0; i < enemyCount; i++)
         {
@@ -34,10 +23,6 @@ public class EnemySpawner : MonoBehaviour
             if (waveMember != null)
             {
                 waveMember.Initialize(waveManager);
-            }
-            else
-            {
-                Debug.LogError("[EnemySpawner] El enemigo instanciado no tiene EnemyWaveMember.");
             }
         }
     }

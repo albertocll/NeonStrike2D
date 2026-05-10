@@ -73,7 +73,6 @@ public class Bullet : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log($"[Bullet] NO se encontró EnemyController en: {other.name}");
                 }
             }
         }
