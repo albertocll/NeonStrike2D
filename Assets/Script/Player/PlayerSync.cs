@@ -6,17 +6,21 @@ public class PlayerSync : MonoBehaviour
     [SerializeField] private bool isLocalPlayer = true;
     [SerializeField] private float sendRate = 0.05f;
     [SerializeField] private float interpolationSpeed = 10f;
+    [SerializeField] private float movingThreshold = 0.05f;
+    [SerializeField] private string movingParam = "Moving";
 
     private string _roomId;
     private Vector2 _targetPosition;
     private float _timer;
     private bool _hasReceivedFirstState = false;
+    private Animator _anim;
 
     public void Init(string roomId, bool isLocal)
     {
         _roomId = roomId;
         isLocalPlayer = isLocal;
         _targetPosition = transform.position;
+        _anim = GetComponentInChildren<Animator>();
 
         if (!isLocal)
         {
@@ -40,6 +44,12 @@ public class PlayerSync : MonoBehaviour
         else
         {
             transform.position = Vector2.Lerp(transform.position, _targetPosition, Time.deltaTime * interpolationSpeed);
+
+            if (_anim != null)
+            {
+                bool isMoving = Vector2.Distance(transform.position, _targetPosition) > movingThreshold;
+                _anim.SetBool(movingParam, isMoving);
+            }
         }
     }
 
