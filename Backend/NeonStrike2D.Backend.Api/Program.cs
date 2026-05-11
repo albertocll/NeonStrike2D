@@ -99,12 +99,19 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Email))
-        return Results.BadRequest(new LoginResponse { Success = false, Message = "El email es obligatorio." });
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "El email o usuario es obligatorio." });
 
     if (string.IsNullOrWhiteSpace(request.Password))
         return Results.BadRequest(new LoginResponse { Success = false, Message = "La contraseña es obligatoria." });
 
-    var user = await db.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
+    // Si contiene '@' lo tratamos como email; si no, como username.
+    var input = request.Email.Trim();
+    User? user;
+    if (input.Contains('@'))
+        user = await db.Users.FirstOrDefaultAsync(u => u.Email == input);
+    else
+        user = await db.Users.FirstOrDefaultAsync(u => u.Username == input);
+
     if (user == null)
         return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
 
