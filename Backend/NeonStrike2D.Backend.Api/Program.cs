@@ -43,6 +43,11 @@ builder.Services.AddSignalR();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.ConfigureHttpJsonOptions(options =>
+{
+    options.SerializerOptions.PropertyNameCaseInsensitive = true;
+});
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
