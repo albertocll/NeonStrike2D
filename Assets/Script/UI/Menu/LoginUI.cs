@@ -110,8 +110,8 @@ public class LoginUI : MonoBehaviour
         }
         finally
         {
-            if (this != null && buttonRegister != null)
-                buttonRegister.interactable = true;
+            if (this != null && buttonLogin != null)
+                buttonLogin.interactable = true;
         }
     }
 
