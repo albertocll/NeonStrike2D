@@ -85,13 +85,16 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     if (string.IsNullOrWhiteSpace(request.Password))
         return Results.BadRequest(new RegisterResponse { Success = false, Message = "La contraseña es obligatoria." });
 
-    if (await db.Users.AnyAsync(u => u.Email == request.Email))
+    var username = request.Username.Trim();
+    var email = request.Email.Trim();
+
+    if (await db.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
         return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese email ya está registrado." });
 
-    if (await db.Users.AnyAsync(u => u.Username == request.Username))
+    if (await db.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()))
         return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese username ya está en uso." });
 
-    var user = new User { Username = request.Username, Email = request.Email };
+    var user = new User { Username = username, Email = email };
     var passwordHasher = new PasswordHasher<User>();
     user.PasswordHash = passwordHasher.HashPassword(user, request.Password);
 
@@ -109,13 +112,12 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
     if (string.IsNullOrWhiteSpace(request.Password))
         return Results.BadRequest(new LoginResponse { Success = false, Message = "La contraseña es obligatoria." });
 
-    // Si contiene '@' lo tratamos como email; si no, como username.
-    var input = request.Email.Trim();
+    var input = request.Email.Trim().ToLower();
     User? user;
     if (input.Contains('@'))
-        user = await db.Users.FirstOrDefaultAsync(u => u.Email == input);
+        user = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == input);
     else
-        user = await db.Users.FirstOrDefaultAsync(u => u.Username == input);
+        user = await db.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == input);
 
     if (user == null)
         return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
