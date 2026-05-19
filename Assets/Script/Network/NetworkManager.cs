@@ -150,6 +150,8 @@ public class NetworkManager : MonoBehaviour
 
                 case "InviteWaiting":
                     var iw = JsonUtility.FromJson<WsInviteWaiting>(raw);
+                    GameData.RoomId = iw.roomId;
+                    SendMessage("JoinRoom", iw.roomId, Username, GameData.SelectedCharacter);
                     OnInviteWaiting?.Invoke(iw.roomId);
                     break;
 
