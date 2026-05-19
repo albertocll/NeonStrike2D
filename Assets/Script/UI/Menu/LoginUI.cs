@@ -105,8 +105,10 @@ public class LoginUI : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[LoginUI] Error en login: {e.Message}");
-            textFeedbackLogin.text = "Error de conexión.";
+            Debug.LogError($"[LoginUI] Error en login: {e}");
+            string errorType = e.GetType().Name;
+            string inner = e.InnerException != null ? $" | Inner: {e.InnerException.GetType().Name}: {e.InnerException.Message}" : "";
+            textFeedbackLogin.text = $"[{errorType}] {e.Message}{inner}";
         }
         finally
         {
@@ -146,8 +148,10 @@ public class LoginUI : MonoBehaviour
         }
         catch (Exception e)
         {
-            Debug.LogError($"[LoginUI] Error en registro: {e.Message}");
-            textFeedbackRegister.text = "Error de conexión.";
+            Debug.LogError($"[LoginUI] Error en registro: {e}");
+            string errorType = e.GetType().Name;
+            string inner = e.InnerException != null ? $" | Inner: {e.InnerException.GetType().Name}: {e.InnerException.Message}" : "";
+            textFeedbackRegister.text = $"[{errorType}] {e.Message}{inner}";
         }
         finally
         {
