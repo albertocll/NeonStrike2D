@@ -9,7 +9,7 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager Instance { get; private set; }
 
     [Header("Config")]
-    [SerializeField] private string serverUrl = "wss://neonstrike2d-production.up.railway.app/ws";
+    [SerializeField] private string serverUrl = "https://neonstrike2d-production.up.railway.app";
 
     private WebSocket _ws;
 
