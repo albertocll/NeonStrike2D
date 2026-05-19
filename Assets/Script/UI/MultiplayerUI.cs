@@ -90,7 +90,9 @@ public class MultiplayerUI : MonoBehaviour
                 Destroy(child.gameObject);
         }
 
+        Debug.Log($"[MultiplayerUI] IsConnected: {NetworkManager.Instance.IsConnected}, Username: {GameData.Username}");
         var json = await ApiManager.Instance.GetOnlineFriendsAsync();
+        Debug.Log($"[MultiplayerUI] Online friends response: '{json}'");
         if (string.IsNullOrEmpty(json)) return;
 
         var response = JsonUtility.FromJson<OnlineFriendsResponse>("{\"items\":" + json + "}");
