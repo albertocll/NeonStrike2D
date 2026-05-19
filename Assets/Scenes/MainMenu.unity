@@ -10264,7 +10264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61b234c12f682774c98f41059a277e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NetworkManager
-  serverUrl: https://neonstrike2d-production.up.railway.app
+  serverUrl: wss://neonstrike2d-production.up.railway.app/ws
 --- !u!4 &1611089939
 Transform:
   m_ObjectHideFlags: 0
