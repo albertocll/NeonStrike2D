@@ -221,4 +221,5 @@ public static class WebSocketHandler
     }
 
     public static bool IsUserOnline(string username) => UsernameToId.ContainsKey(username);
+    public static List<string> GetOnlineUsers() => UsernameToId.Keys.ToList();
 }
