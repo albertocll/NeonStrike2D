@@ -64,6 +64,9 @@ public class PlayerSpawner : MonoBehaviour
                 var nameText = player.GetComponentInChildren<TMP_Text>();
                 if (nameText != null) nameText.text = GameData.Username;
 
+                var healthUI = FindFirstObjectByType<PlayerHealthUI>(FindObjectsInactive.Include);
+                if (healthUI != null) healthUI.playerHealth = health;
+
                 return;
             }
         }
@@ -80,6 +83,9 @@ public class PlayerSpawner : MonoBehaviour
             {
                 _remotePlayer = Instantiate(data.prefab, spawnPos, Quaternion.identity);
                 _remotePlayer.transform.localScale = data.scale;
+
+                var remoteHealth = _remotePlayer.GetComponent<PlayerHealth>();
+                if (remoteHealth != null) Destroy(remoteHealth);
 
                 var anim = _remotePlayer.GetComponentInChildren<Animator>();
                 if (anim && data.animatorController)
