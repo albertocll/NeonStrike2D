@@ -59,8 +59,12 @@ public class NetworkManager : MonoBehaviour
         IsGuest = true;
     }
 
+    private TaskCompletionSource<bool> _connectTcs;
+
     public async Task ConnectAsync(string roomId = null)
     {
+        _connectTcs = new TaskCompletionSource<bool>();
+
         _ws = new WebSocket(serverUrl);
 
         _ws.OnOpen += () =>
@@ -69,6 +73,7 @@ public class NetworkManager : MonoBehaviour
             SendMessage("Register", Username);
             if (roomId != null)
                 SendMessage("JoinRoom", roomId, Username, GameData.SelectedCharacter);
+            _connectTcs.TrySetResult(true);
         };
 
         _ws.OnMessage += (bytes) =>
@@ -80,6 +85,7 @@ public class NetworkManager : MonoBehaviour
         _ws.OnError += (error) =>
         {
             Debug.LogError($"[NetworkManager] WebSocket error: {error}");
+            _connectTcs.TrySetException(new Exception(error));
         };
 
         _ws.OnClose += (code) =>
@@ -87,7 +93,8 @@ public class NetworkManager : MonoBehaviour
             Debug.Log($"[NetworkManager] WebSocket cerrado: {code}");
         };
 
-        await _ws.Connect();
+        _ws.Connect();
+        await _connectTcs.Task;
     }
 
     private void Update()
