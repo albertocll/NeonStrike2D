@@ -108,7 +108,9 @@ public class LoginUI : MonoBehaviour
             Debug.LogError($"[LoginUI] Error en login: {e}");
             string errorType = e.GetType().Name;
             string inner = e.InnerException != null ? $" | Inner: {e.InnerException.GetType().Name}: {e.InnerException.Message}" : "";
-            textFeedbackLogin.text = $"[{errorType}] {e.Message}{inner}";
+            string fullError = $"[{errorType}] {e.Message}{inner}";
+Debug.LogError(fullError);
+textFeedbackLogin.text = fullError.Length > 200 ? fullError.Substring(0, 200) : fullError;
         }
         finally
         {

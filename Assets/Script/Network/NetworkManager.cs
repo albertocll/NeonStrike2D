@@ -1,6 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.SignalR.Client;
+using NativeWebSocket;
 using UnityEngine;
 
 public class NetworkManager : MonoBehaviour
@@ -8,15 +9,15 @@ public class NetworkManager : MonoBehaviour
     public static NetworkManager Instance { get; private set; }
 
     [Header("Config")]
-    [SerializeField] private string serverUrl = "https://neonstrike2d-production.up.railway.app";
+    [SerializeField] private string serverUrl = "wss://neonstrike2d-production.up.railway.app/ws";
 
-    private HubConnection _connection;
+    private WebSocket _ws;
 
     public int UserId { get; private set; }
     public string Username { get; private set; }
     public string Token { get; private set; }
     public bool IsGuest { get; private set; }
-    public bool IsConnected => _connection?.State == HubConnectionState.Connected;
+    public bool IsConnected => _ws != null && _ws.State == WebSocketState.Open;
 
     public event Action<string, int, string> OnPlayerJoined;
     public event Action OnGameStart;
@@ -60,117 +61,168 @@ public class NetworkManager : MonoBehaviour
 
     public async Task ConnectAsync(string roomId = null)
     {
-        _connection = new HubConnectionBuilder()
-            .WithUrl($"{serverUrl}/gamehub")
-            .WithAutomaticReconnect()
-            .Build();
+        _ws = new WebSocket(serverUrl);
 
-        _connection.On<string, int, string>("PlayerJoined", (username, count, character) =>
+        _ws.OnOpen += () =>
         {
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerJoined?.Invoke(username, count, character));
-        });
+            Debug.Log("[NetworkManager] WebSocket conectado");
+            SendMessage("Register", Username);
+            if (roomId != null)
+                SendMessage("JoinRoom", roomId, Username, GameData.SelectedCharacter);
+        };
 
-        _connection.On<string, string, string, string>("GameStart", (user1, char1, user2, char2) =>
+        _ws.OnMessage += (bytes) =>
         {
-            string remoteUser = user1 == Username ? user2 : user1;
-            string remoteChar = user1 == Username ? char2 : char1;
-            GameData.RemoteUsername = remoteUser;
-            GameData.RemoteCharacter = remoteChar;
+            string message = System.Text.Encoding.UTF8.GetString(bytes);
+            UnityMainThreadDispatcher.Instance.Enqueue(() => HandleMessage(message));
+        };
 
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnGameStart?.Invoke());
-        });
-
-        _connection.On("PlayerLeft", () =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnPlayerLeft?.Invoke("opponent")));
-
-        _connection.On<string>("ReceiveGameState", (stateJson) =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnReceiveGameState?.Invoke(stateJson)));
-
-        _connection.On<string>("RoundEnded", (winner) =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnRoundEnded?.Invoke(winner)));
-
-        _connection.On<string, string>("InviteReceived", (fromUsername, roomId) =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteReceived?.Invoke(fromUsername, roomId)));
-
-        _connection.On<string>("InviteWaiting", (roomId) =>
+        _ws.OnError += (error) =>
         {
-            _ = _connection.InvokeAsync("JoinRoom", roomId, Username, GameData.SelectedCharacter);
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteWaiting?.Invoke(roomId));
-        });
+            Debug.LogError($"[NetworkManager] WebSocket error: {error}");
+        };
 
-        _connection.On<string>("InviteError", (message) =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteError?.Invoke(message)));
+        _ws.OnClose += (code) =>
+        {
+            Debug.Log($"[NetworkManager] WebSocket cerrado: {code}");
+        };
 
-        _connection.On("InviteDeclined", () =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnInviteDeclined?.Invoke()));
+        await _ws.Connect();
+    }
 
-        _connection.On<string>("FriendRequestReceived", (fromUsername) =>
-            UnityMainThreadDispatcher.Instance.Enqueue(() =>
-                OnFriendRequestReceived?.Invoke(fromUsername)));
+    private void Update()
+    {
+        if (_ws != null)
+            _ws.DispatchMessageQueue();
+    }
 
+    private void HandleMessage(string raw)
+    {
         try
         {
-            await _connection.StartAsync();
-            await _connection.InvokeAsync("Register", Username);
+            var msg = JsonUtility.FromJson<WsMessage>(raw);
 
-            if (roomId != null)
-                await _connection.InvokeAsync("JoinRoom", roomId, Username);
+            switch (msg.type)
+            {
+                case "Registered":
+                    Debug.Log("[NetworkManager] Registrado en servidor");
+                    break;
+
+                case "PlayerJoined":
+                    var pj = JsonUtility.FromJson<WsPlayerJoined>(raw);
+                    OnPlayerJoined?.Invoke(pj.username, pj.count, pj.character);
+                    break;
+
+                case "GameStart":
+                    var gs = JsonUtility.FromJson<WsGameStart>(raw);
+                    string remoteUser = gs.user1 == Username ? gs.user2 : gs.user1;
+                    string remoteChar = gs.user1 == Username ? gs.char2 : gs.char1;
+                    GameData.RemoteUsername = remoteUser;
+                    GameData.RemoteCharacter = remoteChar;
+                    OnGameStart?.Invoke();
+                    break;
+
+                case "PlayerLeft":
+                    OnPlayerLeft?.Invoke("opponent");
+                    break;
+
+                case "ReceiveGameState":
+                    var state = JsonUtility.FromJson<WsGameState>(raw);
+                    OnReceiveGameState?.Invoke(state.stateJson);
+                    break;
+
+                case "RoundEnded":
+                    var re = JsonUtility.FromJson<WsRoundEnded>(raw);
+                    OnRoundEnded?.Invoke(re.winner);
+                    break;
+
+                case "InviteReceived":
+                    var ir = JsonUtility.FromJson<WsInviteReceived>(raw);
+                    OnInviteReceived?.Invoke(ir.fromUsername, ir.roomId);
+                    break;
+
+                case "InviteWaiting":
+                    var iw = JsonUtility.FromJson<WsInviteWaiting>(raw);
+                    OnInviteWaiting?.Invoke(iw.roomId);
+                    break;
+
+                case "InviteError":
+                    var ie = JsonUtility.FromJson<WsInviteError>(raw);
+                    OnInviteError?.Invoke(ie.message);
+                    break;
+
+                case "InviteDeclined":
+                    OnInviteDeclined?.Invoke();
+                    break;
+
+                case "FriendRequestReceived":
+                    var fr = JsonUtility.FromJson<WsFriendRequest>(raw);
+                    OnFriendRequestReceived?.Invoke(fr.fromUsername);
+                    break;
+
+                case "RoomFull":
+                    Debug.LogWarning("[NetworkManager] La sala está llena");
+                    break;
+
+                default:
+                    Debug.LogWarning($"[NetworkManager] Mensaje desconocido: {msg.type}");
+                    break;
+            }
         }
         catch (Exception e)
         {
-            Debug.LogError($"[NetworkManager] Error conectando: {e.Message}");
+            Debug.LogError($"[NetworkManager] Error procesando mensaje: {e.Message}\nRaw: {raw}");
         }
+    }
+
+    private async void SendMessage(string type, params string[] args)
+    {
+        if (!IsConnected) return;
+        var msg = new WsOutgoing { type = type, args = args };
+        string json = JsonUtility.ToJson(msg);
+        await _ws.SendText(json);
     }
 
     public async Task SendInviteAsync(string toUsername)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("SendInvite", Username, toUsername);
+        SendMessage("SendInvite", Username, toUsername);
+        await Task.CompletedTask;
     }
 
     public async Task SendFriendRequestSignalRAsync(string toUsername)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("SendFriendRequest", Username, toUsername);
+        SendMessage("SendFriendRequest", Username, toUsername);
+        await Task.CompletedTask;
     }
 
     public async Task AcceptInviteAsync(string roomId)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("AcceptInvite", Username, roomId, GameData.SelectedCharacter);
+        SendMessage("AcceptInvite", Username, roomId, GameData.SelectedCharacter);
+        await Task.CompletedTask;
     }
 
     public async Task DeclineInviteAsync(string fromUsername)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("DeclineInvite", fromUsername);
+        SendMessage("DeclineInvite", fromUsername);
+        await Task.CompletedTask;
     }
 
     public async Task SendGameStateAsync(string roomId, string stateJson)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("SendGameState", roomId, stateJson);
+        SendMessage("SendGameState", roomId, stateJson);
+        await Task.CompletedTask;
     }
 
     public async Task SendPlayerReadyAsync(string roomId, string character)
     {
-        if (!IsConnected) return;
-        await _connection.InvokeAsync("PlayerReady", roomId, Username, character);
+        SendMessage("PlayerReady", roomId, Username, character);
+        await Task.CompletedTask;
     }
 
     public async Task DisconnectAsync()
     {
-        if (_connection != null)
-            await _connection.StopAsync();
+        if (_ws != null && _ws.State == WebSocketState.Open)
+            await _ws.Close();
     }
 
     private void OnDestroy()
@@ -178,3 +230,16 @@ public class NetworkManager : MonoBehaviour
         _ = DisconnectAsync();
     }
 }
+
+// ── DTOs WebSocket ───────────────────────────────────────────────────────────
+
+[Serializable] public class WsMessage { public string type; }
+[Serializable] public class WsOutgoing { public string type; public string[] args; }
+[Serializable] public class WsPlayerJoined { public string type; public string username; public int count; public string character; }
+[Serializable] public class WsGameStart { public string type; public string user1; public string char1; public string user2; public string char2; }
+[Serializable] public class WsGameState { public string type; public string stateJson; }
+[Serializable] public class WsRoundEnded { public string type; public string winner; }
+[Serializable] public class WsInviteReceived { public string type; public string fromUsername; public string roomId; }
+[Serializable] public class WsInviteWaiting { public string type; public string roomId; }
+[Serializable] public class WsInviteError { public string type; public string message; }
+[Serializable] public class WsFriendRequest { public string type; public string fromUsername; }

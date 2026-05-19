@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.AspNetCore.SignalR;
 
 using NeonStrike2D.Backend.Api.Data;
 using NeonStrike2D.Backend.Api.Dtos;
@@ -38,7 +37,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
-builder.Services.AddSignalR();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -58,6 +56,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseWebSockets();
 
 // ── GENERAL ──────────────────────────────────────────────────────────────────
 
@@ -253,7 +252,7 @@ app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrinc
     return Results.Ok(new { Success = true, Message = "Solicitud aceptada." });
 }).RequireAuthorization();
 
-app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db, IHubContext<GameHub> hubContext) =>
+app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db) =>
 {
     var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
@@ -262,7 +261,7 @@ app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db, IHub
         .Select(f => f.RequesterId == userId ? f.Addressee.Username : f.Requester.Username)
         .ToListAsync();
 
-    var onlineFriends = friends.Where(f => GameHub.ConnectedUsers.ContainsKey(f)).ToList();
+    var onlineFriends = friends.Where(f => WebSocketHandler.IsUserOnline(f)).ToList();
 
     return Results.Ok(onlineFriends);
 }).RequireAuthorization();
@@ -276,8 +275,8 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
     return Results.Ok(new { userId = user.Id, username = user.Username });
 }).RequireAuthorization();
 
-// ── SIGNALR ──────────────────────────────────────────────────────────────────
+// ── WEBSOCKET ────────────────────────────────────────────────────────────────
 
-app.MapHub<GameHub>("/gamehub");
+app.Map("/ws", WebSocketHandler.Handle);
 
 app.Run();
