@@ -71,7 +71,7 @@ public class RankingUI : MonoBehaviour
                 GameObject row = Instantiate(rowPrefab, rowContainer);
                 RankingRow rankingRow = row.GetComponent<RankingRow>();
                 if (rankingRow != null)
-                    rankingRow.Setup(position, entry.username, entry.bestWave);
+                    rankingRow.Setup(position, entry.username, entry.bestWave, entry.score);
                 position++;
             }
         }

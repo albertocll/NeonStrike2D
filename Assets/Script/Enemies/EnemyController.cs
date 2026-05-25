@@ -5,6 +5,7 @@ public class EnemyController : MonoBehaviour
 {
     public int maxHealth = 3;
     [SerializeField] private int currentHealth;
+    [SerializeField] private int scoreValue = 50;
 
     private Animator animator;
     [SerializeField] private bool isDead;
@@ -39,6 +40,9 @@ public class EnemyController : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(scoreValue);
 
         EnemyWaveMember waveMember = GetComponent<EnemyWaveMember>();
         if (waveMember != null)

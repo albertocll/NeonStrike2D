@@ -6,8 +6,9 @@ public class RankingRow : MonoBehaviour
     [SerializeField] private TextMeshProUGUI positionText;
     [SerializeField] private TextMeshProUGUI usernameText;
     [SerializeField] private TextMeshProUGUI bestWaveText;
+    [SerializeField] private TextMeshProUGUI scoreText;
 
-    public void Setup(int position, string username, int bestWave)
+    public void Setup(int position, string username, int bestWave, int score)
     {
         if (positionText != null)
         {
@@ -21,8 +22,13 @@ public class RankingRow : MonoBehaviour
         }
         if (bestWaveText != null)
         {
-            bestWaveText.text = bestWave.ToString();
+            bestWaveText.text = $"Wave {bestWave}";
             bestWaveText.alignment = TextAlignmentOptions.Center;
+        }
+        if (scoreText != null)
+        {
+            scoreText.text = score.ToString();
+            scoreText.alignment = TextAlignmentOptions.Center;
         }
     }
 }

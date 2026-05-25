@@ -179,6 +179,7 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
         Won = false,
         RoundsWon = request.BestWave,
         RoundsLost = 0,
+        Score = request.Score,
         PlayedAt = DateTime.UtcNow
     });
 
@@ -190,16 +191,18 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
 app.MapGet("/ranking", async (AppDbContext db) =>
 {
     var ranking = await db.GameResults
-        .GroupBy(r => r.UserId)
-        .Select(g => new
-        {
-            UserId = g.Key,
-            Username = g.First().User.Username,
-            BestWave = g.Max(r => r.RoundsWon)
-        })
-        .OrderByDescending(r => r.BestWave)
-        .Take(10)
-        .ToListAsync();
+    .GroupBy(r => r.UserId)
+    .Select(g => new
+    {
+        UserId = g.Key,
+        Username = g.First().User.Username,
+        BestWave = g.Max(r => r.RoundsWon),
+        Score = g.Max(r => r.Score)
+    })
+    .OrderByDescending(r => r.Score)
+    .ThenByDescending(r => r.BestWave)
+    .Take(10)
+    .ToListAsync();
 
     return Results.Ok(ranking);
 });

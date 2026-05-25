@@ -42,6 +42,13 @@ public class PlayerHealth : MonoBehaviour
             gameOverUI = FindFirstObjectByType<GameOverUI>(FindObjectsInactive.Include);
     }
 
+    public void Heal(int amount)
+    {
+        if (isDead) return;
+        currentHealth += amount;
+        if (currentHealth > maxHealth)
+            currentHealth = maxHealth;
+    }
 
     public void TakeDamage(int amount)
     {
@@ -75,8 +82,9 @@ public class PlayerHealth : MonoBehaviour
         try
         {
             int wave = waveManager != null ? waveManager.CurrentWave : 0;
+            int score = ScoreManager.Instance != null ? ScoreManager.Instance.CurrentScore : 0;
             int userId = NetworkManager.Instance.UserId;
-            await ApiManager.Instance.SaveMatchResultAsync(userId, wave);
+            await ApiManager.Instance.SaveMatchResultAsync(userId, wave, score);
         }
         catch (System.Exception e)
         {
@@ -97,5 +105,4 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
 }
