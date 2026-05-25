@@ -81,6 +81,7 @@ public class PlayerHealth : MonoBehaviour
     {
         try
         {
+            if (!string.IsNullOrEmpty(GameData.RoomId)) return;
             int wave = waveManager != null ? waveManager.CurrentWave : 0;
             int score = ScoreManager.Instance != null ? ScoreManager.Instance.CurrentScore : 0;
             int userId = NetworkManager.Instance.UserId;
