@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 5505605417920331996}
   - component: {fileID: 3203002496541742315}
   - component: {fileID: 1706273552120154504}
+  - component: {fileID: 1340381717138267537}
+  - component: {fileID: 6249437724239684571}
   m_Layer: 0
   m_Name: Collectible_Star
   m_TagString: Untagged
@@ -28,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -358.15, y: 466.68, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,7 +82,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 7412964198045208254, guid: 34f700f8511a67d4a899f33e3f36c17c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -138,3 +140,39 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 7.8282185, y: 7.828125}
   m_EdgeRadius: 0
+--- !u!114 &1340381717138267537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560019966399942020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097e66f4a1e27a74b8dcb9f7182dd1b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Collectible
+  type: 1
+  value: 200
+  healthAmount: 0
+  rotateSpeed: 90
+  floatAmplitude: 0.15
+  floatSpeed: 2
+--- !u!114 &6249437724239684571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5560019966399942020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097e66f4a1e27a74b8dcb9f7182dd1b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Collectible
+  type: 1
+  value: 200
+  healthAmount: 0
+  rotateSpeed: 90
+  floatAmplitude: 0.15
+  floatSpeed: 2

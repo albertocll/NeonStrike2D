@@ -49,12 +49,13 @@ public class ApiManager : MonoBehaviour
     }
 
     // GUARDAR RESULTADO
-    public async Task SaveMatchResultAsync(int userId, int bestWave)
+    public async Task SaveMatchResultAsync(int userId, int bestWave, int score = 0)
     {
         var body = JsonUtility.ToJson(new MatchResultRequest
         {
             userId = userId,
-            bestWave = bestWave
+            bestWave = bestWave,
+            score = score
         });
         await PostAsync("/match/result", body, NetworkManager.Instance.Token);
     }
@@ -132,9 +133,9 @@ public class ApiManager : MonoBehaviour
 [Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
 [Serializable] public class RegisterResponse { public bool success; public string message; }
-[Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; }
+[Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; public int score; }
 [Serializable] public class RankingList { public RankingEntry[] items; }
-[Serializable] public class MatchResultRequest { public int userId; public int bestWave; }
+[Serializable] public class MatchResultRequest { public int userId; public int bestWave; public int score; }
 [Serializable] public class FriendRequestResponse { public bool success; public string message; }
 [Serializable] public class OnlineFriendsResponse { public string[] items; }
 [Serializable] public class UserResponse { public int userId; public string username; }

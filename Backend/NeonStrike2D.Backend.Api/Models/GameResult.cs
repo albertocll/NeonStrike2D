@@ -8,6 +8,7 @@ public class GameResult
     public bool Won { get; set; }
     public int RoundsWon { get; set; }
     public int RoundsLost { get; set; }
+    public int Score { get; set; }
     public DateTime PlayedAt { get; set; } = DateTime.UtcNow;
 
     // Navegación

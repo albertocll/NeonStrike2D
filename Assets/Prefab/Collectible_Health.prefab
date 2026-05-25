@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7101462583760690971}
   - component: {fileID: 644363114417459205}
   - component: {fileID: 2632084108510067009}
+  - component: {fileID: -6402542382848595467}
   m_Layer: 0
   m_Name: Collectible_Health
   m_TagString: Untagged
@@ -28,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -362.5083, y: 466.8314, z: 0}
-  m_LocalScale: {x: 0.3, y: 0.3, z: 1}
+  m_LocalScale: {x: 0.1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: -1038441421, guid: 34f700f8511a67d4a899f33e3f36c17c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -122,9 +123,27 @@ CircleCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 4.320364
+--- !u!114 &-6402542382848595467
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5166112885131433475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 097e66f4a1e27a74b8dcb9f7182dd1b0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Collectible
+  type: 0
+  value: 0
+  healthAmount: 20
+  rotateSpeed: 90
+  floatAmplitude: 0.15
+  floatSpeed: 2
