@@ -32,7 +32,7 @@ public class WaveManager : MonoBehaviour
     public void StartNextWave()
     {
         if (!spawnEnemies) return;
-        
+
         currentWave++;
         waveInProgress = true;
         enemiesAlive = 0;
@@ -53,6 +53,8 @@ public class WaveManager : MonoBehaviour
         if (enemiesAlive <= 0)
         {
             waveInProgress = false;
+            if (ScoreManager.Instance != null)
+                ScoreManager.Instance.AddScore(50 * currentWave);
             StartCoroutine(StartNextWaveWithDelay());
         }
     }

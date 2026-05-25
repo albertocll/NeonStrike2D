@@ -6,6 +6,7 @@ public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private TMP_Text waveReachedText;
+    [SerializeField] private TMP_Text scoreReachedText;
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private string mainMenuSceneName = "MainMenu";
 
@@ -24,6 +25,9 @@ public class GameOverUI : MonoBehaviour
 
         if (waveReachedText != null && waveManager != null)
             waveReachedText.text = "WAVE " + waveManager.CurrentWave;
+
+        if (scoreReachedText != null && ScoreManager.Instance != null)
+            scoreReachedText.text = "SCORE: " + ScoreManager.Instance.CurrentScore;
 
         if (rankingUI != null)
             rankingUI.Show();
