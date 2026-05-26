@@ -45,3 +45,4 @@ Windows/
 Android/
 
 .utmp/
+*.lscache
