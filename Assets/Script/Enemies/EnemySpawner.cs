@@ -4,18 +4,25 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Prefabs")]
-    [SerializeField] private List<GameObject> enemyPrefabs;
+    [SerializeField] private List<GameObject> basicEnemyPrefabs;
+    [SerializeField] private List<GameObject> advancedEnemyPrefabs;
+    [SerializeField] private int advancedEnemyFromWave = 3;
 
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
 
-    public void SpawnWave(int enemyCount, WaveManager waveManager)
+    public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
     {
-
         for (int i = 0; i < enemyCount; i++)
         {
             Vector2 spawnPosition = GetRandomPosition();
-            GameObject enemyPrefab = enemyPrefabs[Random.Range(0, enemyPrefabs.Count)];
+            GameObject enemyPrefab;
+
+            if (currentWave >= advancedEnemyFromWave && advancedEnemyPrefabs.Count > 0 && Random.value < 0.3f)
+                enemyPrefab = advancedEnemyPrefabs[Random.Range(0, advancedEnemyPrefabs.Count)];
+            else
+                enemyPrefab = basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
+
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
             EnemyWaveMember waveMember = enemyInstance.GetComponent<EnemyWaveMember>();

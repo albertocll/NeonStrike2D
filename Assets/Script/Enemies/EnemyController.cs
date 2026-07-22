@@ -50,8 +50,11 @@ public class EnemyController : MonoBehaviour
             waveMember.NotifyDeath();
         }
 
-        var ai = GetComponent<WardenAI>();
-        if (ai) ai.enabled = false;
+        var wardenAI = GetComponent<WardenAI>();
+        if (wardenAI) wardenAI.enabled = false;
+
+        var strikerAI = GetComponent<StrikerAI>();
+        if (strikerAI) strikerAI.enabled = false;
 
         var movement = GetComponent<EnemyMovement>();
         if (movement) movement.enabled = false;
@@ -70,7 +73,13 @@ public class EnemyController : MonoBehaviour
         {
             animator.ResetTrigger("Hit");
             animator.SetBool("Moving", false);
-            animator.SetBool("Shoot", false);
+
+            foreach (var param in animator.parameters)
+            {
+                if (param.name == "Shoot" && param.type == AnimatorControllerParameterType.Bool)
+                    animator.SetBool("Shoot", false);
+            }
+
             animator.SetTrigger("Dead");
         }
 

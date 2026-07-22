@@ -5058,8 +5058,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adf5a2f2ce1e6bf42ae0cade3a35b367, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
-  enemyPrefabs:
+  basicEnemyPrefabs:
   - {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
+  advancedEnemyPrefabs:
+  - {fileID: 3153298351150200298, guid: e462e59794671cd498d8589dde9b0570, type: 3}
+  advancedEnemyFromWave: 3
   spawnArea: {fileID: 284086550}
 --- !u!4 &1916839832
 Transform:
