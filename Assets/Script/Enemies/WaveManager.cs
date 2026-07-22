@@ -41,7 +41,7 @@ public class WaveManager : MonoBehaviour
             waveText.text = $"WAVE: {currentWave}";
 
         int enemiesToSpawn = baseEnemiesPerWave + ((currentWave - 1) * enemiesAddedPerWave);
-        enemySpawner.SpawnWave(enemiesToSpawn, this);
+        enemySpawner.SpawnWave(enemiesToSpawn, this, currentWave);
     }
 
     public void RegisterEnemy() => enemiesAlive++;
