@@ -48,6 +48,9 @@ public class PlayerHealth : MonoBehaviour
         currentHealth += amount;
         if (currentHealth > maxHealth)
             currentHealth = maxHealth;
+
+        if (DamageOverlay.Instance != null)
+            DamageOverlay.Instance.SetPulsing((float)currentHealth / maxHealth <= 0.25f);
     }
 
     public void TakeDamage(int amount)
@@ -59,6 +62,12 @@ public class PlayerHealth : MonoBehaviour
 #if UNITY_ANDROID && !UNITY_EDITOR
         Handheld.Vibrate();
 #endif
+
+        if (DamageOverlay.Instance != null)
+        {
+            DamageOverlay.Instance.Flash();
+            DamageOverlay.Instance.SetPulsing((float)currentHealth / maxHealth <= 0.25f);
+        }
 
         if (currentHealth <= 0)
         {
@@ -116,4 +125,6 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
+
+    
 }
