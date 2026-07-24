@@ -55,6 +55,11 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
         currentHealth -= amount;
         if (anim != null) anim.SetTrigger("Hit");
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Handheld.Vibrate();
+#endif
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
@@ -66,6 +71,11 @@ public class PlayerHealth : MonoBehaviour
     {
         isDead = true;
         if (anim != null) anim.SetTrigger("Dead");
+
+#if UNITY_ANDROID && !UNITY_EDITOR
+        Handheld.Vibrate();
+#endif
+
         StartCoroutine(HandleDeath());
     }
 
