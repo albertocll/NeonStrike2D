@@ -17,6 +17,9 @@ public class GameOverUI : MonoBehaviour
 
     public void Show()
     {
+        if (DamageOverlay.Instance != null)
+            DamageOverlay.Instance.Hide();
+            
         if (joystickContainer != null)
             joystickContainer.SetActive(false);
 
