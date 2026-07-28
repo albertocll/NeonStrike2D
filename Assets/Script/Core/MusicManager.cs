@@ -9,7 +9,11 @@ public class MusicManager : MonoBehaviour
     [SerializeField] private AudioClip gameMusic;
     [SerializeField] private float volume = 0.5f;
 
+    private const string MutePrefKey = "MusicMuted";
+
     private AudioSource audioSource;
+
+    public bool IsMuted { get; private set; }
 
     private void Awake()
     {
@@ -21,9 +25,11 @@ public class MusicManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        IsMuted = PlayerPrefs.GetInt(MutePrefKey, 0) == 1;
+
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
-        audioSource.volume = volume;
+        audioSource.volume = IsMuted ? 0f : volume;
     }
 
     private void Start()
@@ -54,5 +60,12 @@ public class MusicManager : MonoBehaviour
         if (clip == null || audioSource.clip == clip) return;
         audioSource.clip = clip;
         audioSource.Play();
+    }
+
+    public void SetMuted(bool muted)
+    {
+        IsMuted = muted;
+        PlayerPrefs.SetInt(MutePrefKey, muted ? 1 : 0);
+        audioSource.volume = muted ? 0f : volume;
     }
 }
