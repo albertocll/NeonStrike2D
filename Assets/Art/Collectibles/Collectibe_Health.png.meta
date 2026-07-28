@@ -1,16 +1,10 @@
 fileFormatVersion: 2
-guid: 34f700f8511a67d4a899f33e3f36c17c
+guid: 67c98fb4cc8c7914fb98faafd71bc935
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1985814456277752925
-    second: Coleccionables_Background_0
-  - first:
-      213: -4881853998709771526
-    second: Coleccionables_Background_1
-  - first:
-      213: 7412964198045208254
-    second: Coleccionables_Background_2
+      213: 7947748543311086568
+    second: CollectibeHeart_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -57,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -132,67 +126,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Coleccionables_Background_0
+      name: CollectibeHeart_0
       rect:
         serializedVersion: 2
-        x: 714
-        y: 421
-        width: 468
-        height: 471
+        x: 195
+        y: 58
+        width: 287
+        height: 257
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 3a3aab7f548f074e0800000000000000
-      internalID: -1985814456277752925
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Coleccionables_Background_1
-      rect:
-        serializedVersion: 2
-        x: 1274
-        y: 353
-        width: 373
-        height: 585
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: af2759147ab204cb0800000000000000
-      internalID: -4881853998709771526
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Coleccionables_Background_2
-      rect:
-        serializedVersion: 2
-        x: 1773
-        y: 405
-        width: 501
-        height: 501
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ebe4c2d99a320e660800000000000000
-      internalID: 7412964198045208254
+      spriteID: 8e38f20f0331c4e60800000000000000
+      internalID: 7947748543311086568
       vertices: []
       indices: 
       edges: []
@@ -201,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: cb2b98b87e49e0b46b1b59a7e97121ed
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -211,10 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Coleccionables_Background_0: -1985814456277752925
-      Coleccionables_Background_1: -4881853998709771526
-      Coleccionables_Background_2: 7412964198045208254
-      Coleccionables_Background_3: -1038441421
+      CollectibeHeart_0: 7947748543311086568
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
