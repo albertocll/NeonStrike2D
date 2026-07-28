@@ -1,10 +1,13 @@
 fileFormatVersion: 2
-guid: 25619eba64fee2a46b2354fc70ad3546
+guid: 37f2ce67837a3524ea72967896883b99
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2251163439049121824
-    second: PanelOptionsBackgorund_0
+      213: -2073137460773038770
+    second: PauseIcon_0
+  - first:
+      213: -55275091272315038
+    second: PauseIcon_1
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -126,23 +129,23 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PanelOptionsBackgorund_0
+      name: PauseIcon_1
       rect:
         serializedVersion: 2
-        x: 2
-        y: 0
-        width: 823
-        height: 1343
+        x: 9
+        y: 5
+        width: 46
+        height: 54
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
-      border: {x: 87, y: 81, z: 91, w: 95}
+      border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 0ef512487c242c0e0800000000000000
-      internalID: -2251163439049121824
+      spriteID: 26f49cbe89f9b3ff0800000000000000
+      internalID: -55275091272315038
       vertices: []
       indices: 
       edges: []
@@ -151,7 +154,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 21b248a65f7c2a342924a2cf73396f2e
+    spriteID: 54e2d8a97d322f341bdb9d2473a4b371
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +164,8 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      PanelOptionsBackgorund_0: -2251163439049121824
+      PauseIcon_0: -2073137460773038770
+      PauseIcon_1: -55275091272315038
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
