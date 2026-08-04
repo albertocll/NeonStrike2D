@@ -144,6 +144,7 @@ MonoBehaviour:
   type: 0
   value: 0
   healthAmount: 20
+  enableRotation: 0
   rotateSpeed: 90
   floatAmplitude: 0.15
   floatSpeed: 2
