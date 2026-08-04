@@ -10,6 +10,7 @@ public class Collectible : MonoBehaviour
     public int healthAmount = 20;
 
     [Header("Animation")]
+    [SerializeField] private bool enableRotation = true;
     [SerializeField] private float rotateSpeed = 90f;
     [SerializeField] private float floatAmplitude = 0.15f;
     [SerializeField] private float floatSpeed = 2f;
@@ -23,7 +24,9 @@ public class Collectible : MonoBehaviour
 
     private void Update()
     {
-        transform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+        if (enableRotation)
+            transform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+
         float newY = startPos.y + Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }
