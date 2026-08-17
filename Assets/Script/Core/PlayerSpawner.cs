@@ -52,7 +52,7 @@ public class PlayerSpawner : MonoBehaviour
                 if (health) health.Init(data.maxHealth);
 
                 var controller = player.GetComponent<PlayerController>();
-                if (controller) controller.Init(data.speed, data.damage);
+                if (controller) controller.Init(data.speed, data.damage, data.characterName);
 
                 var anim = player.GetComponentInChildren<Animator>();
                 if (anim && data.animatorController)
