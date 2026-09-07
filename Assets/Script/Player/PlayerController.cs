@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
 
     private int damage = 1;
     private string characterName = "";
+    private float speedMultiplier = 1f;
 
     public bool IsDashing => isDashing;
     public bool IsDashReady => cooldownTimer <= 0f;
@@ -112,7 +113,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate()
     {
         Vector2 moveDir = isDashing ? lastMoveDirection : input;
-        float currentSpeed = isDashing ? dashSpeed : speed;
+        float currentSpeed = isDashing ? dashSpeed : speed * speedMultiplier;
 
         Vector2 newPos = rb.position + moveDir * currentSpeed * Time.fixedDeltaTime;
         newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
@@ -146,6 +147,11 @@ public class PlayerController : MonoBehaviour
             return new Color(0.15f, 0.6f, 1f, 0.8f);    // Azul-cian
 
         return trailColor; // Fallback por si el nombre no coincide con ninguno
+    }
+
+    public void SetSpeedMultiplier(float multiplier)
+    {
+        speedMultiplier = multiplier;
     }
 
     public void Init(float speed, int damage, string characterName)
