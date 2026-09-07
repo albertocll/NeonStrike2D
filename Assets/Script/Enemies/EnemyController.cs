@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class EnemyController : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private bool isDead;
 
     [SerializeField] private float deathDestroyDelay = 0.8f;
+
+    [Header("Power-Up Drop")]
+    [SerializeField] private List<GameObject> powerUpPrefabs;
+    [SerializeField, Range(0f, 1f)] private float powerUpDropChance = 0.05f;
 
     void Awake()
     {
@@ -43,6 +48,8 @@ public class EnemyController : MonoBehaviour
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);
+
+        TryDropPowerUp();
 
         EnemyWaveMember waveMember = GetComponent<EnemyWaveMember>();
         if (waveMember != null)
@@ -90,5 +97,14 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
+    }
+
+    private void TryDropPowerUp()
+    {
+        if (powerUpPrefabs == null || powerUpPrefabs.Count == 0) return;
+        if (Random.value > powerUpDropChance) return;
+
+        GameObject prefab = powerUpPrefabs[Random.Range(0, powerUpPrefabs.Count)];
+        Instantiate(prefab, transform.position, Quaternion.identity);
     }
 }
