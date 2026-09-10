@@ -4700,6 +4700,9 @@ MonoBehaviour:
   mainMenuSceneName: MainMenu
   rankingUI: {fileID: 2103062475}
   joystickContainer: {fileID: 1026122109}
+  dashButton: {fileID: 1260157045}
+  pauseButton: {fileID: 906127720}
+  pausePanel: {fileID: 2026667194}
 --- !u!1 &1434293239
 GameObject:
   m_ObjectHideFlags: 0
