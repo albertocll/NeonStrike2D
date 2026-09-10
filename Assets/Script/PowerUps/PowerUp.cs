@@ -15,6 +15,7 @@ public class PowerUp : MonoBehaviour
     public float duration = 8f;
 
     [Header("Animation")]
+    [SerializeField] private bool enableRotation = true;
     [SerializeField] private float floatAmplitude = 0.15f;
     [SerializeField] private float floatSpeed = 2f;
     [SerializeField] private float rotateSpeed = 60f;
@@ -28,7 +29,9 @@ public class PowerUp : MonoBehaviour
 
     private void Update()
     {
-        transform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+        if (enableRotation)
+            transform.Rotate(0f, 0f, rotateSpeed * Time.deltaTime);
+
         float newY = startPos.y + Mathf.Sin(Time.time * floatSpeed) * floatAmplitude;
         transform.position = new Vector3(transform.position.x, newY, transform.position.z);
     }

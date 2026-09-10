@@ -10,7 +10,7 @@ public class PowerUpSpawner : MonoBehaviour
     [SerializeField] private BoxCollider2D spawnArea;
 
     [Header("Config")]
-    [SerializeField] private float spawnInterval = 15f;
+    [SerializeField] private float spawnInterval = 22.5f; // +50% (era 15s), menos densidad de power-ups en pantalla
     [SerializeField] private int maxPowerUps = 2;
 
     private List<GameObject> activePowerUps = new List<GameObject>();

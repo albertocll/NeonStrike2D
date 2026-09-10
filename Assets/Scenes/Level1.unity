@@ -787,7 +787,7 @@ MonoBehaviour:
   - {fileID: 283920316084373690, guid: 3de08bfd6576690489906292e070c991, type: 3}
   - {fileID: 2669697242935265219, guid: 8ea251b245a17194ea838ce715e36a5b, type: 3}
   spawnArea: {fileID: 284086550}
-  spawnInterval: 15
+  spawnInterval: 22.5
   maxPowerUps: 2
 --- !u!1 &272634628
 GameObject:
@@ -4736,7 +4736,7 @@ MonoBehaviour:
   - {fileID: 5560019966399942020, guid: 6d77b6d1f7e76974caecf4ed4df8f148, type: 3}
   healthPrefab: {fileID: 5166112885131433475, guid: 47986ac723b4c434aba44fbfe4dc6a92, type: 3}
   spawnArea: {fileID: 284086550}
-  spawnInterval: 3
+  spawnInterval: 4.5
   maxCollectibles: 5
   healthSpawnChance: 0.25
 --- !u!4 &1434293241
