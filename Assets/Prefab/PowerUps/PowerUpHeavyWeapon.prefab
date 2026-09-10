@@ -143,6 +143,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PowerUp
   type: 0
   duration: 8
+  enableRotation: 0
   floatAmplitude: 0.15
   floatSpeed: 2
   rotateSpeed: 60

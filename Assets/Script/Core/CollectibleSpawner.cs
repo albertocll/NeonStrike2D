@@ -11,7 +11,7 @@ public class CollectibleSpawner : MonoBehaviour
     [SerializeField] private BoxCollider2D spawnArea;
 
     [Header("Config")]
-    [SerializeField] private float spawnInterval = 8f;
+    [SerializeField] private float spawnInterval = 12f; // +50% (era 8s), menos densidad de coleccionables en pantalla
     [SerializeField] private int maxCollectibles = 5;
     [SerializeField] private float healthSpawnChance = 0.25f;
 
