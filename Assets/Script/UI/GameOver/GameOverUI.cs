@@ -14,14 +14,26 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private RankingUI rankingUI;
 
     [SerializeField] private GameObject joystickContainer;
+    [SerializeField] private GameObject dashButton;
+    [SerializeField] private GameObject pauseButton;
+    [SerializeField] private GameObject pausePanel;
 
     public void Show()
     {
         if (DamageOverlay.Instance != null)
             DamageOverlay.Instance.Hide();
-            
+
         if (joystickContainer != null)
             joystickContainer.SetActive(false);
+
+        if (dashButton != null)
+            dashButton.SetActive(false);
+
+        if (pauseButton != null)
+            pauseButton.SetActive(false);
+
+        if (pausePanel != null)
+            pausePanel.SetActive(false);
 
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);

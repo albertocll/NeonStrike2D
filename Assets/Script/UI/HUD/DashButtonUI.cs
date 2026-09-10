@@ -21,7 +21,7 @@ public class DashButtonUI : MonoBehaviour
     {
         if (player == null || dashIcon == null) return;
 
-        dashIcon.color = player.IsDashReady ? readyColor : cooldownColor;
+        dashIcon.color = Color.Lerp(cooldownColor, readyColor, player.CooldownProgress);
     }
 
     public void OnDashButtonPressed()
