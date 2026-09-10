@@ -5,6 +5,8 @@ public class WeaponController : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private Transform firePoint;
+    [SerializeField] private Transform firePointLeft;
+    [SerializeField] private Transform firePointRight;
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private PlayerAutoOrientation2D autoOrientation;
 
@@ -41,12 +43,12 @@ public class WeaponController : MonoBehaviour
         if (tripleShotActive)
             FireTripleShot();
         else
-            FireSingleShot(autoOrientation.CurrentAimDirection);
+            FireSingleShot(autoOrientation.CurrentAimDirection, firePoint.position);
     }
 
-    private void FireSingleShot(Vector2 direction)
+    private void FireSingleShot(Vector2 direction, Vector3 spawnPos)
     {
-        Bullet bullet = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        Bullet bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
         bullet.IgnoreCollider(ownerCollider);
         bullet.Init(direction);
 
@@ -58,9 +60,9 @@ public class WeaponController : MonoBehaviour
     {
         Vector2 baseDir = autoOrientation.CurrentAimDirection;
 
-        FireSingleShot(RotateDirection(baseDir, -tripleShotSpreadAngle));
-        FireSingleShot(baseDir);
-        FireSingleShot(RotateDirection(baseDir, tripleShotSpreadAngle));
+        FireSingleShot(RotateDirection(baseDir, -tripleShotSpreadAngle), firePointLeft.position);
+        FireSingleShot(baseDir, firePoint.position);
+        FireSingleShot(RotateDirection(baseDir, tripleShotSpreadAngle), firePointRight.position);
     }
 
     private Vector2 RotateDirection(Vector2 direction, float angleDegrees)

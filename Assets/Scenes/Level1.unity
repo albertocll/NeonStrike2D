@@ -737,6 +737,58 @@ Transform:
   - {fileID: 1266285793}
   m_Father: {fileID: 997443157}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &247711157
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 247711158}
+  - component: {fileID: 247711159}
+  m_Layer: 0
+  m_Name: PowerUpSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &247711158
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247711157}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &247711159
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 247711157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de939a513b9ecb242933ee696737d39d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PowerUpSpawner
+  powerUpPrefabs:
+  - {fileID: 132833697044508266, guid: 136f0d9069e86cb44836dc93712e9600, type: 3}
+  - {fileID: 575612571553400741, guid: 497ad2bcc5e40d440a054f4818158290, type: 3}
+  - {fileID: 283920316084373690, guid: 3de08bfd6576690489906292e070c991, type: 3}
+  - {fileID: 2669697242935265219, guid: 8ea251b245a17194ea838ce715e36a5b, type: 3}
+  spawnArea: {fileID: 284086550}
+  spawnInterval: 15
+  maxPowerUps: 2
 --- !u!1 &272634628
 GameObject:
   m_ObjectHideFlags: 0
@@ -7830,3 +7882,4 @@ SceneRoots:
   - {fileID: 1001524930}
   - {fileID: 1434293241}
   - {fileID: 69854637}
+  - {fileID: 247711158}

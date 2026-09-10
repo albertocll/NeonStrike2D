@@ -41,8 +41,8 @@ public class Bullet : MonoBehaviour
 
     public void IgnoreCollider(Collider2D other)
     {
-        //if (myCol != null && other != null)
-            //Physics2D.IgnoreCollision(myCol, other, true);
+        if (myCol != null && other != null)
+            Physics2D.IgnoreCollision(myCol, other, true);
     }
 
     void Update()
@@ -54,10 +54,10 @@ public class Bullet : MonoBehaviour
     {
         if (other.name == "SpawnArea") return;
 
+        bool isWall = other.name.StartsWith("Wall_");
+
         if (owner == BulletOwner.Player)
         {
-            if (other.CompareTag("Player")) return;
-
             if (other.CompareTag("Enemy"))
             {
                 EnemyController enemy = other.GetComponentInParent<EnemyController>();
@@ -68,35 +68,41 @@ public class Bullet : MonoBehaviour
 
                     if (destroyOnHit)
                         Destroy(gameObject);
+                }
 
-                    return;
-                }
-                else
-                {
-                }
+                return;
             }
+
+            if (isWall)
+            {
+                if (destroyOnHit)
+                    Destroy(gameObject);
+            }
+
+            return; // ignora Player, PowerUp, Collectible o cualquier otra cosa que no sea Enemy/pared
         }
         else if (owner == BulletOwner.Enemy)
         {
-            if (other.CompareTag("Enemy")) return;
-
             if (other.CompareTag("Player"))
             {
                 PlayerHealth playerHealth = other.GetComponentInParent<PlayerHealth>();
 
                 if (playerHealth != null)
-                {
                     playerHealth.TakeDamage(damage);
-                }
 
                 if (destroyOnHit)
                     Destroy(gameObject);
 
                 return;
             }
-        }
 
-        if (destroyOnHit)
-            Destroy(gameObject);
+            if (isWall)
+            {
+                if (destroyOnHit)
+                    Destroy(gameObject);
+            }
+
+            return; // ignora Enemy, PowerUp, Collectible o cualquier otra cosa que no sea Player/pared
+        }
     }
 }
