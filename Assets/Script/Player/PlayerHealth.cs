@@ -14,11 +14,13 @@ public class PlayerHealth : MonoBehaviour
 
     private int currentHealth;
     private bool isDead = false;
+    private bool isInvulnerable = false;
     private Animator anim;
 
     public int CurrentHealth => currentHealth;
     public int MaxHealth => maxHealth;
     public bool IsDead => isDead;
+    public bool IsInvulnerable => isInvulnerable;
 
     public void Init(int maxHealth)
     {
@@ -42,6 +44,11 @@ public class PlayerHealth : MonoBehaviour
             gameOverUI = FindFirstObjectByType<GameOverUI>(FindObjectsInactive.Include);
     }
 
+    public void SetInvulnerable(bool value)
+    {
+        isInvulnerable = value;
+    }
+
     public void Heal(int amount)
     {
         if (isDead) return;
@@ -56,6 +63,8 @@ public class PlayerHealth : MonoBehaviour
     public void TakeDamage(int amount)
     {
         if (isDead) return;
+        if (isInvulnerable) return;
+
         currentHealth -= amount;
         if (anim != null) anim.SetTrigger("Hit");
 
@@ -125,6 +134,4 @@ public class PlayerHealth : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    
 }

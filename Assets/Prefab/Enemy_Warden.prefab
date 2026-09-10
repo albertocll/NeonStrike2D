@@ -102,8 +102,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 75
   currentHealth: 0
+  scoreValue: 50
   isDead: 0
   deathDestroyDelay: 1
+  powerUpPrefabs:
+  - {fileID: 132833697044508266, guid: 136f0d9069e86cb44836dc93712e9600, type: 3}
+  - {fileID: 575612571553400741, guid: 497ad2bcc5e40d440a054f4818158290, type: 3}
+  - {fileID: 283920316084373690, guid: 3de08bfd6576690489906292e070c991, type: 3}
+  - {fileID: 2669697242935265219, guid: 8ea251b245a17194ea838ce715e36a5b, type: 3}
+  powerUpDropChance: 0.05
 --- !u!114 &346634447034822126
 MonoBehaviour:
   m_ObjectHideFlags: 0
