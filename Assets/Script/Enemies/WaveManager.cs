@@ -33,6 +33,8 @@ public class WaveManager : MonoBehaviour
     {
         if (!spawnEnemies) return;
 
+        SFXManager.Instance?.PlayWaveStart();
+
         currentWave++;
         waveInProgress = true;
         enemiesAlive = 0;
@@ -53,6 +55,7 @@ public class WaveManager : MonoBehaviour
         if (enemiesAlive <= 0)
         {
             waveInProgress = false;
+            SFXManager.Instance?.PlayWaveBonus();
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.AddScore(50 * currentWave);
             StartCoroutine(StartNextWaveWithDelay());

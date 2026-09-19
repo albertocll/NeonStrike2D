@@ -11061,6 +11061,60 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1793439812}
   m_CullTransparentMesh: 1
+--- !u!1 &1810226855
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1810226856}
+  - component: {fileID: 1810226857}
+  m_Layer: 0
+  m_Name: SFXPlayer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1810226856
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810226855}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1810226857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1810226855}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7cbdb39bf180aff4095c8bb2efc29483, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SFXManager
+  playerShoot: {fileID: 8300000, guid: 4297008030124064a997d5c1cec87bb1, type: 3}
+  enemyHit: {fileID: 8300000, guid: 077ff3f6d8300aa49a9a845d7b9d7ae7, type: 3}
+  enemyDeath: {fileID: 8300000, guid: d837d0355fca9a944979bd9f3cbfef19, type: 3}
+  collectibleScore: {fileID: 8300000, guid: 6e39605bc38ae0341b1ffb0b20505d5a, type: 3}
+  collectibleHealth: {fileID: 8300000, guid: f4e6853b00d1cd64aa8ae41ceb02c3f3, type: 3}
+  playerDamage: {fileID: 8300000, guid: cf78f694b3374224db10de8491fe902c, type: 3}
+  playerDeath: {fileID: 8300000, guid: 105d49cfecbc02f4fb190cea883b2412, type: 3}
+  waveStart: {fileID: 8300000, guid: 91ade205cefd2e3489266be05bd944e0, type: 3}
+  waveBonus: {fileID: 8300000, guid: cdbfa3e43e9a2204c8eff33613f3ab2c, type: 3}
+  volume: 1
 --- !u!1 &1838786417
 GameObject:
   m_ObjectHideFlags: 0
@@ -13287,3 +13341,4 @@ SceneRoots:
   - {fileID: 1352806630}
   - {fileID: 1611089939}
   - {fileID: 159736444}
+  - {fileID: 1810226856}

@@ -65,6 +65,8 @@ public class PlayerHealth : MonoBehaviour
         if (isDead) return;
         if (isInvulnerable) return;
 
+        SFXManager.Instance?.PlayPlayerDamage();
+
         currentHealth -= amount;
         if (anim != null) anim.SetTrigger("Hit");
 
@@ -88,6 +90,7 @@ public class PlayerHealth : MonoBehaviour
     private void Die()
     {
         isDead = true;
+        SFXManager.Instance?.PlayPlayerDeath();
         if (anim != null) anim.SetTrigger("Dead");
 
 #if UNITY_ANDROID && !UNITY_EDITOR
