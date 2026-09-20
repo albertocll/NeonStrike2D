@@ -87,6 +87,8 @@ public class PlayerSpawner : MonoBehaviour
                 var remoteHealth = _remotePlayer.GetComponent<PlayerHealth>();
                 if (remoteHealth != null) Destroy(remoteHealth);
 
+                _remotePlayer.tag = "Untagged";
+
                 var anim = _remotePlayer.GetComponentInChildren<Animator>();
                 if (anim && data.animatorController)
                     anim.runtimeAnimatorController = data.animatorController;
