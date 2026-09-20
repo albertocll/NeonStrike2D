@@ -10,4 +10,5 @@ public class CharacterData : ScriptableObject
     public RuntimeAnimatorController animatorController;
     public GameObject prefab;
     public Vector3 scale = Vector3.one;
+    public Sprite bulletSprite;
 }
