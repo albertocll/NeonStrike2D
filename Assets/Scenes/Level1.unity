@@ -4735,7 +4735,6 @@ MonoBehaviour:
   scorePrefabs:
   - {fileID: 3336703514785891794, guid: 9028a57d2a5921f4b81f9f6f3ee126e9, type: 3}
   - {fileID: 7381271422352312204, guid: 6dc24ef32b520a84baab2c15b1b256b8, type: 3}
-  - {fileID: 5560019966399942020, guid: 6d77b6d1f7e76974caecf4ed4df8f148, type: 3}
   healthPrefab: {fileID: 5166112885131433475, guid: 47986ac723b4c434aba44fbfe4dc6a92, type: 3}
   spawnArea: {fileID: 284086550}
   spawnInterval: 4.5
