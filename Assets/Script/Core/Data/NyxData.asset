@@ -20,3 +20,4 @@ MonoBehaviour:
   prefab: {fileID: 6711650825844994113, guid: 57e7d16327c01d64b979a77ace05d658, type: 3}
   scale: {x: 0.8, y: 0.8, z: 0.8}
   bulletSprite: {fileID: -93472178555172338, guid: b215c4161795c1d45940df16084ec865, type: 3}
+  bulletScale: 0.8
