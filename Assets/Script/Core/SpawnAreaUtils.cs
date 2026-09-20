@@ -4,7 +4,7 @@ public static class SpawnAreaUtils
 {
     public static Vector2 GetRandomPoint(BoxCollider2D area, GameObject prefab)
     {
-        float margin = GetHalfExtent(prefab);
+        float margin = GetHalfExtent(prefab) + GetExtraMargin(area);
         Bounds bounds = area.bounds;
 
         float minX = bounds.min.x + margin;
@@ -16,6 +16,12 @@ public static class SpawnAreaUtils
         if (minY > maxY) minY = maxY = bounds.center.y;
 
         return new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+    }
+
+    private static float GetExtraMargin(BoxCollider2D area)
+    {
+        var margin = area.GetComponent<SpawnAreaMargin>();
+        return margin != null ? margin.ExtraMargin : 0f;
     }
 
     private static float GetHalfExtent(GameObject prefab)
