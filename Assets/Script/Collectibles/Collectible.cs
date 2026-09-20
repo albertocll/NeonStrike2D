@@ -41,12 +41,18 @@ public class Collectible : MonoBehaviour
         {
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.AddScore(value);
+
+            if (other.GetComponent<PlayerHealth>() != null)
+                SFXManager.Instance?.PlayCollectibleScore();
         }
         else if (type == CollectibleType.Health)
         {
             var health = other.GetComponent<PlayerHealth>();
             if (health != null && !health.IsDead)
+            {
                 health.Heal(healthAmount);
+                SFXManager.Instance?.PlayCollectibleHealth();
+            }
         }
 
         Destroy(gameObject);

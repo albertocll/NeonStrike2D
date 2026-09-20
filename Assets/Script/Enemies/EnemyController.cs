@@ -27,6 +27,8 @@ public class EnemyController : MonoBehaviour
     {
         if (isDead) return;
 
+        SFXManager.Instance?.PlayEnemyHit();
+
         currentHealth -= damage;
 
         if (currentHealth <= 0)
@@ -45,6 +47,8 @@ public class EnemyController : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+
+        SFXManager.Instance?.PlayEnemyDeath();
 
         if (ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);

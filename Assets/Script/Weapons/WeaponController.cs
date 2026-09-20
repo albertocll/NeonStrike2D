@@ -52,6 +52,8 @@ public class WeaponController : MonoBehaviour
         bullet.IgnoreCollider(ownerCollider);
         bullet.Init(direction);
 
+        SFXManager.Instance?.PlayPlayerShoot();
+
         if (heavyWeaponActive)
             bullet.damage += heavyWeaponDamageBonus;
     }
