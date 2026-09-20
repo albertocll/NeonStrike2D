@@ -54,6 +54,9 @@ public class PlayerSpawner : MonoBehaviour
                 var controller = player.GetComponent<PlayerController>();
                 if (controller) controller.Init(data.speed, data.damage, data.characterName);
 
+                var weapon = player.GetComponent<WeaponController>();
+                if (weapon) weapon.SetBulletSprite(data.bulletSprite);
+
                 var anim = player.GetComponentInChildren<Animator>();
                 if (anim && data.animatorController)
                     anim.runtimeAnimatorController = data.animatorController;
