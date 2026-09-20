@@ -34,7 +34,6 @@ public class CollectibleSpawner : MonoBehaviour
 
     private void SpawnCollectible()
 {
-    Vector2 pos = GetRandomPosition();
     GameObject prefab;
 
     if (healthPrefab != null && Random.value < healthSpawnChance)
@@ -42,18 +41,12 @@ public class CollectibleSpawner : MonoBehaviour
     else
         prefab = scorePrefabs[Random.Range(0, scorePrefabs.Count)];
 
+    Vector2 pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
+
     GameObject item = Instantiate(prefab, pos, Quaternion.identity);
     activeCollectibles.Add(item);
     Debug.Log($"[CollectibleSpawner] Spawneado {prefab.name} en {pos}");
 }
-
-    private Vector2 GetRandomPosition()
-    {
-        Bounds bounds = spawnArea.bounds;
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
-        return new Vector2(x, y);
-    }
 
     private void CleanDestroyedFromList()
     {
