@@ -15,6 +15,8 @@ public class WeaponController : MonoBehaviour
 
     private float nextShotTime;
     private Collider2D ownerCollider;
+    private Sprite bulletSprite;
+    private float bulletScale = 1f;
 
     private bool heavyWeaponActive;
     private float heavyWeaponFireRateMultiplier = 1f;
@@ -52,6 +54,14 @@ public class WeaponController : MonoBehaviour
         bullet.IgnoreCollider(ownerCollider);
         bullet.Init(direction);
 
+        if (bulletSprite != null)
+        {
+            var spriteRenderer = bullet.GetComponent<SpriteRenderer>();
+            if (spriteRenderer != null) spriteRenderer.sprite = bulletSprite;
+        }
+
+        bullet.transform.localScale = bulletPrefab.transform.localScale * bulletScale;
+
         SFXManager.Instance?.PlayPlayerShoot();
 
         if (heavyWeaponActive)
@@ -76,6 +86,12 @@ public class WeaponController : MonoBehaviour
             direction.x * cos - direction.y * sin,
             direction.x * sin + direction.y * cos
         );
+    }
+
+    public void SetBulletSprite(Sprite sprite, float scale)
+    {
+        if (sprite != null) bulletSprite = sprite;
+        bulletScale = scale;
     }
 
     public void SetHeavyWeapon(bool active, float fireRateMultiplier, int damageBonus)
