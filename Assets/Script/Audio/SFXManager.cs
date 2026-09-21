@@ -15,7 +15,11 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip waveBonus;
     [SerializeField] private float volume = 1f;
 
+    private const string VolumePrefKey = "SfxVolume";
+
     private AudioSource audioSource;
+
+    public float Volume => volume;
 
     private void Awake()
     {
@@ -27,8 +31,16 @@ public class SFXManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        volume = PlayerPrefs.GetFloat(VolumePrefKey, volume);
+
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
+    }
+
+    public void SetVolume(float value)
+    {
+        volume = value;
+        PlayerPrefs.SetFloat(VolumePrefKey, value);
     }
 
     public void PlayPlayerShoot() => Play(playerShoot);
