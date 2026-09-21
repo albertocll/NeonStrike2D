@@ -876,6 +876,7 @@ GameObject:
   m_Component:
   - component: {fileID: 284086549}
   - component: {fileID: 284086550}
+  - component: {fileID: 284086551}
   m_Layer: 0
   m_Name: SpawnArea
   m_TagString: Untagged
@@ -944,6 +945,19 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.0070069, y: 0.9784379}
   m_EdgeRadius: 0
+--- !u!114 &284086551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284086548}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f26548599d1040fd605ce32247fb2077, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnAreaMargin
+  extraMargin: 0.5
 --- !u!1 &377516135
 GameObject:
   m_ObjectHideFlags: 0

@@ -34,20 +34,12 @@ public class PowerUpSpawner : MonoBehaviour
     {
         if (powerUpPrefabs == null || powerUpPrefabs.Count == 0) return;
 
-        Vector2 pos = GetRandomPosition();
         GameObject prefab = powerUpPrefabs[Random.Range(0, powerUpPrefabs.Count)];
+        Vector2 pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
 
         GameObject item = Instantiate(prefab, pos, Quaternion.identity);
         activePowerUps.Add(item);
         Debug.Log($"[PowerUpSpawner] Spawneado {prefab.name} en {pos}");
-    }
-
-    private Vector2 GetRandomPosition()
-    {
-        Bounds bounds = spawnArea.bounds;
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
-        return new Vector2(x, y);
     }
 
     private void CleanDestroyedFromList()
