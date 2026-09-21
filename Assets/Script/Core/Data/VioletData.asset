@@ -18,3 +18,5 @@ MonoBehaviour:
   damage: 1
   animatorController: {fileID: 9100000, guid: 929e9a7bae1876a478a2b125e2b50de8, type: 2}
   prefab: {fileID: 8646312050570444231, guid: 815d0c3e9e3591e41990ae5bb6213cae, type: 3}
+  bulletSprite: {fileID: 2208703988740019828, guid: 28a3c084108f83140a086e111d355b29, type: 3}
+  bulletScale: 1

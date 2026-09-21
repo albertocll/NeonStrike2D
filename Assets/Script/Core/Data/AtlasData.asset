@@ -19,3 +19,5 @@ MonoBehaviour:
   animatorController: {fileID: 22100000, guid: 48d57aaa90de7ca4583f5d8035d6daa1, type: 2}
   prefab: {fileID: 5890237530059719189, guid: b4792e0381f58864bbe8207cc16f375c, type: 3}
   scale: {x: 0.8, y: 0.8, z: 0.8}
+  bulletSprite: {fileID: -6982971723011532995, guid: 15496f5361f22f24ca652cf99766d1ee, type: 3}
+  bulletScale: 0.8
