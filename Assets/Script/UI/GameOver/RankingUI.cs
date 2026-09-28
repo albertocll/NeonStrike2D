@@ -48,6 +48,13 @@ public class RankingUI : MonoBehaviour
             statusText.text = "Loading...";
         }
 
+        if (ApiManager.Instance == null)
+        {
+            Debug.Log("[RankingUI] Ranking no disponible: no hay sesion iniciada (prueba sin login).");
+            if (statusText != null) statusText.text = "Ranking no disponible sin sesión iniciada.";
+            return;
+        }
+
         try
         {
             string json = await ApiManager.Instance.GetRankingAsync();
