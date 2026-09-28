@@ -14,12 +14,15 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip waveStart;
     [SerializeField] private AudioClip waveBonus;
     [SerializeField] private float volume = 1f;
+    [SerializeField] private bool muted = false;
 
     private const string VolumePrefKey = "SfxVolume";
+    private const string MutedPrefKey = "SfxMuted";
 
     private AudioSource audioSource;
 
     public float Volume => volume;
+    public bool Muted => muted;
 
     private void Awake()
     {
@@ -32,15 +35,24 @@ public class SFXManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         volume = PlayerPrefs.GetFloat(VolumePrefKey, volume);
+        muted = PlayerPrefs.GetInt(MutedPrefKey, muted ? 1 : 0) == 1;
 
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.playOnAwake = false;
+        audioSource.mute = muted;
     }
 
     public void SetVolume(float value)
     {
         volume = value;
         PlayerPrefs.SetFloat(VolumePrefKey, value);
+    }
+
+    public void SetMuted(bool value)
+    {
+        muted = value;
+        audioSource.mute = value;
+        PlayerPrefs.SetInt(MutedPrefKey, value ? 1 : 0);
     }
 
     public void PlayPlayerShoot() => Play(playerShoot);
