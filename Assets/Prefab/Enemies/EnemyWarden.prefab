@@ -111,6 +111,7 @@ MonoBehaviour:
   - {fileID: 283920316084373690, guid: 3de08bfd6576690489906292e070c991, type: 3}
   - {fileID: 2669697242935265219, guid: 8ea251b245a17194ea838ce715e36a5b, type: 3}
   powerUpDropChance: 0.05
+  deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
 --- !u!114 &346634447034822126
 MonoBehaviour:
   m_ObjectHideFlags: 0
