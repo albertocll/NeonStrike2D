@@ -96,7 +96,7 @@ public class LoginUI : MonoBehaviour
                 textFeedbackLogin.text = $"Bienvenido, {response.username}!";
                 await System.Threading.Tasks.Task.Delay(1000);
                 menuManager.CerrarPaneles();
-                UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
+                SceneLoader.Load("CharacterSelect");
             }
             else
             {
@@ -165,6 +165,6 @@ textFeedbackLogin.text = fullError.Length > 200 ? fullError.Substring(0, 200) : 
     {
         NetworkManager.Instance.SetGuestData();
         GameData.Username = "Invitado";
-        UnityEngine.SceneManagement.SceneManager.LoadScene("CharacterSelect");
+        SceneLoader.Load("CharacterSelect");
     }
 }

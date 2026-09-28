@@ -49,6 +49,8 @@ public class MusicManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        if (scene.name == "LoadingScreen") return;
+
         if (scene.name == "Level1")
             PlayClip(gameMusic);
         else

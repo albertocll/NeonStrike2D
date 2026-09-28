@@ -217,7 +217,7 @@ public class MultiplayerUI : MonoBehaviour
     {
         if (!string.IsNullOrEmpty(_pendingRoomId))
             GameData.RoomId = _pendingRoomId;
-        UnityEngine.SceneManagement.SceneManager.LoadScene("Level1");
+        SceneLoader.Load("Level1");
     }
 
     private async System.Threading.Tasks.Task RefreshFriendsLoopAsync(System.Threading.CancellationToken token)
