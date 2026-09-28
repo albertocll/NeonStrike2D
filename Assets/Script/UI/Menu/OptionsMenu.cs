@@ -7,6 +7,8 @@ public class OptionsMenu : MonoBehaviour
     public GameObject optionsWindow;
     public Toggle musicToggle;
     public Slider musicSlider;
+    public Slider sfxSlider;
+    public Toggle sfxToggle;
 
     [Header("Audio")]
     public AudioSource musicSource;
@@ -27,6 +29,28 @@ public class OptionsMenu : MonoBehaviour
         // Eventos
         musicSlider.onValueChanged.AddListener(OnMusicSliderChanged);
         musicToggle.onValueChanged.AddListener(OnMusicToggleChanged);
+
+        if (sfxSlider != null && SFXManager.Instance != null)
+        {
+            sfxSlider.value = SFXManager.Instance.Volume;
+            sfxSlider.onValueChanged.AddListener(OnSfxSliderChanged);
+        }
+
+        if (sfxToggle != null && SFXManager.Instance != null)
+        {
+            sfxToggle.isOn = !SFXManager.Instance.Muted;
+            sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
+        }
+    }
+
+    public void OnSfxSliderChanged(float value)
+    {
+        SFXManager.Instance?.SetVolume(value);
+    }
+
+    public void OnSfxToggleChanged(bool isOn)
+    {
+        SFXManager.Instance?.SetMuted(!isOn);
     }
 
     public void OpenOptions()
