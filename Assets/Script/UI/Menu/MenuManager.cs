@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class MenuManager : MonoBehaviour
 {
@@ -20,7 +19,7 @@ public class MenuManager : MonoBehaviour
             AbrirLogin();
             return;
         }
-        SceneManager.LoadScene("CharacterSelect");
+        SceneLoader.Load("CharacterSelect");
     }
 
     public void AbrirLogin()
