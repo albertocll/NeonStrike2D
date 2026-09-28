@@ -17,6 +17,11 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private List<GameObject> powerUpPrefabs;
     [SerializeField, Range(0f, 1f)] private float powerUpDropChance = 0.05f;
 
+    [Header("VFX")]
+    [SerializeField] private GameObject deathVfxPrefab;
+    private static readonly Color WardenDeathVfxColor = new Color(1f, 0.2f, 0.85f);
+    private static readonly Color StrikerDeathVfxColor = new Color(0f, 0.95f, 1f);
+
     void Awake()
     {
         currentHealth = maxHealth;
@@ -67,6 +72,8 @@ public class EnemyController : MonoBehaviour
         var strikerAI = GetComponent<StrikerAI>();
         if (strikerAI) strikerAI.enabled = false;
 
+        SpawnDeathVfx(wardenAI != null, strikerAI != null);
+
         var movement = GetComponent<EnemyMovement>();
         if (movement) movement.enabled = false;
 
@@ -101,6 +108,19 @@ public class EnemyController : MonoBehaviour
     {
         yield return new WaitForSeconds(deathDestroyDelay);
         Destroy(gameObject);
+    }
+
+    private void SpawnDeathVfx(bool isWarden, bool isStriker)
+    {
+        if (deathVfxPrefab == null) return;
+
+        GameObject vfx = Instantiate(deathVfxPrefab, transform.position, Quaternion.identity);
+        ParticleSystem ps = vfx.GetComponent<ParticleSystem>();
+        if (ps == null) return;
+
+        var main = ps.main;
+        if (isWarden) main.startColor = WardenDeathVfxColor;
+        else if (isStriker) main.startColor = StrikerDeathVfxColor;
     }
 
     private void TryDropPowerUp()
