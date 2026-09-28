@@ -110,9 +110,16 @@ public class PlayerHealth : MonoBehaviour
 
     private async System.Threading.Tasks.Task SaveMatchResult()
     {
+        if (!string.IsNullOrEmpty(GameData.RoomId)) return;
+
+        if (NetworkManager.Instance == null || NetworkManager.Instance.IsGuest)
+        {
+            Debug.Log("[PlayerHealth] Resultado no guardado: no hay sesion iniciada (invitado o prueba sin login).");
+            return;
+        }
+
         try
         {
-            if (!string.IsNullOrEmpty(GameData.RoomId)) return;
             int wave = waveManager != null ? waveManager.CurrentWave : 0;
             int score = ScoreManager.Instance != null ? ScoreManager.Instance.CurrentScore : 0;
             int userId = NetworkManager.Instance.UserId;
