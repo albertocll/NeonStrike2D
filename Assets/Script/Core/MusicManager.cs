@@ -105,6 +105,8 @@ public class MusicManager : MonoBehaviour
 
     private void StartIntenseCrossfade()
     {
+        if (crossfadeRoutine != null) return;
+
         intenseActive = true;
         crossfadeRoutine = StartCoroutine(CrossfadeToIntense());
     }
