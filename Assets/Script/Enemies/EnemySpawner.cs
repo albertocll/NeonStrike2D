@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,6 +13,14 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private BoxCollider2D spawnArea;
 
     public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
+    {
+        StartCoroutine(SpawnWaveRoutine(enemyCount, waveManager, currentWave));
+    }
+
+    // ponytail: 1 Instantiate por frame evita el hitch de spawnear toda la oleada
+    // de golpe. Si una oleada gigante (p.ej. 30+) tardara demasiado en completarse,
+    // subir a 2-3 por frame en vez de 1.
+    private IEnumerator SpawnWaveRoutine(int enemyCount, WaveManager waveManager, int currentWave)
     {
         for (int i = 0; i < enemyCount; i++)
         {
@@ -31,6 +40,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 waveMember.Initialize(waveManager);
             }
+
+            yield return null;
         }
     }
 
