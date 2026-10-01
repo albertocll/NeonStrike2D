@@ -41,12 +41,14 @@ public class MusicManager : MonoBehaviour
         audioSource = gameObject.AddComponent<AudioSource>();
         audioSource.loop = true;
         audioSource.volume = IsMuted ? 0f : volume;
+        audioSource.priority = 0;
 
         var crossfadeLayer = new GameObject("MusicCrossfadeLayer");
         crossfadeLayer.transform.SetParent(transform);
         crossfadeSource = crossfadeLayer.AddComponent<AudioSource>();
         crossfadeSource.loop = true;
         crossfadeSource.volume = 0f;
+        crossfadeSource.priority = 0;
     }
 
     private void Start()
