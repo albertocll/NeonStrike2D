@@ -9,6 +9,7 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private int scoreValue = 50;
 
     private Animator animator;
+    private SpriteRenderer spriteRenderer;
     [SerializeField] private bool isDead;
 
     [SerializeField] private float deathDestroyDelay = 0.8f;
@@ -19,13 +20,14 @@ public class EnemyController : MonoBehaviour
 
     [Header("VFX")]
     [SerializeField] private GameObject deathVfxPrefab;
-    private static readonly Color WardenDeathVfxColor = new Color(1f, 0.2f, 0.85f);
+    private static readonly Color WardenDeathVfxColor = new Color32(0x80, 0x1D, 0x43, 0xFF);
     private static readonly Color StrikerDeathVfxColor = new Color(0f, 0.95f, 1f);
 
     void Awake()
     {
         currentHealth = maxHealth;
         animator = GetComponentInChildren<Animator>();
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
     public void TakeDamage(int damage)
@@ -73,6 +75,8 @@ public class EnemyController : MonoBehaviour
         if (strikerAI) strikerAI.enabled = false;
 
         SpawnDeathVfx(wardenAI != null, strikerAI != null);
+
+        if (spriteRenderer != null) spriteRenderer.enabled = false;
 
         var movement = GetComponent<EnemyMovement>();
         if (movement) movement.enabled = false;
