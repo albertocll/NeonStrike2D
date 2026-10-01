@@ -16,12 +16,7 @@ public class EnemySpawner : MonoBehaviour
         for (int i = 0; i < enemyCount; i++)
         {
             Vector2 spawnPosition = GetRandomPosition();
-            GameObject enemyPrefab;
-
-            if (currentWave >= advancedEnemyFromWave && advancedEnemyPrefabs.Count > 0 && Random.value < 0.3f)
-                enemyPrefab = advancedEnemyPrefabs[Random.Range(0, advancedEnemyPrefabs.Count)];
-            else
-                enemyPrefab = basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
+            GameObject enemyPrefab = ChooseEnemyPrefab(currentWave);
 
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
@@ -32,6 +27,13 @@ public class EnemySpawner : MonoBehaviour
                 waveMember.Initialize(waveManager);
             }
         }
+    }
+
+    public GameObject ChooseEnemyPrefab(int currentWave)
+    {
+        if (currentWave >= advancedEnemyFromWave && advancedEnemyPrefabs.Count > 0 && Random.value < 0.3f)
+            return advancedEnemyPrefabs[Random.Range(0, advancedEnemyPrefabs.Count)];
+        return basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
     }
 
     private Vector2 GetRandomPosition()
