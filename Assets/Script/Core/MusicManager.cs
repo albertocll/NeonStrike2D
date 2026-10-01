@@ -14,6 +14,7 @@ public class MusicManager : MonoBehaviour
     [Header("Intensidad de partida")]
     [SerializeField] private int intenseWaveThreshold = 5;
     [SerializeField] private float crossfadeDuration = 2f;
+    [SerializeField] private float gameMusicIntenseStartOffset = 0f;
 
     private const string MutePrefKey = "MusicMuted";
 
@@ -122,12 +123,14 @@ public class MusicManager : MonoBehaviour
         crossfadeSource.clip = gameMusicIntense;
         crossfadeSource.mute = audioSource.mute;
         crossfadeSource.volume = 0f;
+        crossfadeSource.time = gameMusicIntenseStartOffset;
         crossfadeSource.Play();
 
         float t = 0f;
         while (t < crossfadeDuration)
         {
-            t += Time.deltaTime;
+            float step = Mathf.Min(Time.deltaTime, 0.1f);
+            t += step;
             float ratio = crossfadeDuration > 0f ? t / crossfadeDuration : 1f;
             crossfadeSource.mute = audioSource.mute;
             audioSource.volume = Mathf.Lerp(targetVolume, 0f, ratio);

@@ -1345,6 +1345,7 @@ MonoBehaviour:
   volume: 0.5
   intenseWaveThreshold: 5
   crossfadeDuration: 2
+  gameMusicIntenseStartOffset: 0
 --- !u!1 &210358041
 GameObject:
   m_ObjectHideFlags: 0
