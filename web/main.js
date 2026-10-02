@@ -38,6 +38,7 @@ const revealSelectors = [
   '.nexus-desc',
   '.char-card',
   '.zone-card',
+  '.collectible-card',
   '.classified-tag',
 ];
 
@@ -197,7 +198,7 @@ function animateRing() {
 animateRing();
 
 // Hover sobre elementos interactivos
-document.querySelectorAll('a, button, .char-card, .zone-card').forEach(el => {
+document.querySelectorAll('a, button, .char-card, .zone-card, .collectible-card').forEach(el => {
   el.addEventListener('mouseenter', () => {
     cursor.style.width  = '12px';
     cursor.style.height = '12px';
@@ -216,7 +217,7 @@ document.querySelectorAll('a, button, .char-card, .zone-card').forEach(el => {
 
 // Ocultar cursor nativo
 document.body.style.cursor = 'none';
-document.querySelectorAll('a, button, .char-card, .zone-card').forEach(el => {
+document.querySelectorAll('a, button, .char-card, .zone-card, .collectible-card').forEach(el => {
   el.style.cursor = 'none';
 });
 
