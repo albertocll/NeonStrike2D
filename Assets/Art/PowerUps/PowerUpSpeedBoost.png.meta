@@ -141,10 +141,10 @@ TextureImporter:
       name: PowerUpSpeedBoost_1
       rect:
         serializedVersion: 2
-        x: 98
-        y: 148
-        width: 304
-        height: 203
+        x: 19
+        y: 73
+        width: 445
+        height: 354
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}

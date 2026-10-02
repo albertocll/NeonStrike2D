@@ -14,10 +14,10 @@ public class PlayerPowerUps : MonoBehaviour
     [SerializeField] private float speedBoostMultiplier = 1.6f;
 
     [Header("Visual Feedback")]
-    [SerializeField] private Color shieldTintColor = new Color(0.4f, 0.9f, 1f, 1f);
-    [SerializeField] private Color heavyWeaponTintColor = new Color(1f, 0.5f, 0.2f, 1f);
-    [SerializeField] private Color tripleShotTintColor = new Color(1f, 0.9f, 0.2f, 1f);
-    [SerializeField] private Color speedBoostTintColor = new Color(0.4f, 1f, 0.5f, 1f);
+    [SerializeField] private Color shieldTintColor = new Color(0.27f, 0.63f, 1f, 1f);
+    [SerializeField] private Color heavyWeaponTintColor = new Color(1f, 0.45f, 0.35f, 1f);
+    [SerializeField] private Color tripleShotTintColor = new Color(0.66f, 0.27f, 1f, 1f);
+    [SerializeField] private Color speedBoostTintColor = new Color(0.8f, 1f, 0.2f, 1f);
 
     private PlayerController controller;
     private WeaponController weapon;

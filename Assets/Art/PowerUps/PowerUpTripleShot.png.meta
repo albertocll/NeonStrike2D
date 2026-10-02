@@ -129,10 +129,10 @@ TextureImporter:
       name: PowerUpTripleShot_0
       rect:
         serializedVersion: 2
-        x: 184
-        y: 74
-        width: 308
-        height: 223
+        x: 67
+        y: 55
+        width: 543
+        height: 272
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
