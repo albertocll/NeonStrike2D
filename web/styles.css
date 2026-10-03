@@ -763,6 +763,58 @@ img {
 }
 
 /* ============================================
+   COLLECTIBLES
+   ============================================ */
+.collectibles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.collectible-card {
+  padding: 36px 32px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  transition: background 0.3s, border-color 0.3s;
+  text-align: center;
+}
+
+.collectible-card:hover {
+  background: rgba(0, 229, 255, 0.03);
+  border-color: rgba(0, 229, 255, 0.15);
+}
+
+.collectible-icon {
+  width: 96px;
+  height: 96px;
+  object-fit: contain;
+  margin: 0 auto 20px;
+  filter: drop-shadow(0 0 14px rgba(0, 229, 255, 0.25));
+}
+
+.collectible-card h3 {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.collectible-card p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+/* ============================================
+   POWER-UPS (reutiliza .collectible-card)
+   ============================================ */
+.powerups-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 .footer {
@@ -857,6 +909,10 @@ img {
     border-bottom: 1px solid var(--border-lit);
   }
 
+  .powerups-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .lore-block {
     grid-template-columns: 1fr;
     gap: 32px;
@@ -885,6 +941,10 @@ img {
   }
 
   .zones-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .collectibles-grid {
     grid-template-columns: 1fr;
   }
 
