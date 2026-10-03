@@ -17,6 +17,24 @@ TextureImporter:
   - first:
       213: 4428338884536127100
     second: PowerUpSpeedBoost_4
+  - first:
+      213: 6213219707801347555
+    second: PowerUpSpeedBoost_5
+  - first:
+      213: 1903345935065268923
+    second: PowerUpSpeedBoost_6
+  - first:
+      213: 3876945341041920416
+    second: PowerUpSpeedBoost_7
+  - first:
+      213: -2970199454433355811
+    second: PowerUpSpeedBoost_8
+  - first:
+      213: -4228063114534762713
+    second: PowerUpSpeedBoost_9
+  - first:
+      213: -3357018031423264754
+    second: PowerUpSpeedBoost_10
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -138,13 +156,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: PowerUpSpeedBoost_1
+      name: PowerUpSpeedBoost_0
       rect:
         serializedVersion: 2
-        x: 19
-        y: 73
-        width: 445
-        height: 354
+        x: 0
+        y: 0
+        width: 2048
+        height: 2048
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,8 +171,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 72f8aa627803ce100800000000000000
-      internalID: 138539045569072935
+      spriteID: 2c6a87e60cc40b820800000000000000
+      internalID: 2931927746789025474
       vertices: []
       indices: 
       edges: []
@@ -163,7 +181,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 12c9f648966a67d4b8d2214909924e74
+    spriteID: 0b3a29b325985804f82e024e7549a6e2
     internalID: 0
     vertices: []
     indices: 
@@ -175,9 +193,15 @@ TextureImporter:
     nameFileIdTable:
       PowerUpSpeedBoost_0: 2931927746789025474
       PowerUpSpeedBoost_1: 138539045569072935
+      PowerUpSpeedBoost_10: -3357018031423264754
       PowerUpSpeedBoost_2: -984030127590055382
       PowerUpSpeedBoost_3: -6973835496417185806
       PowerUpSpeedBoost_4: 4428338884536127100
+      PowerUpSpeedBoost_5: 6213219707801347555
+      PowerUpSpeedBoost_6: 1903345935065268923
+      PowerUpSpeedBoost_7: 3876945341041920416
+      PowerUpSpeedBoost_8: -2970199454433355811
+      PowerUpSpeedBoost_9: -4228063114534762713
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
