@@ -808,6 +808,13 @@ img {
 }
 
 /* ============================================
+   POWER-UPS (reutiliza .collectible-card)
+   ============================================ */
+.powerups-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 .footer {
@@ -900,6 +907,10 @@ img {
 
   .nexus-stat {
     border-bottom: 1px solid var(--border-lit);
+  }
+
+  .powerups-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
   .lore-block {
