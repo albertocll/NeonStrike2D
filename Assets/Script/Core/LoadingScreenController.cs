@@ -7,8 +7,11 @@ public class LoadingScreenController : MonoBehaviour
     [Tooltip("Tiempo minimo (segundos) que se muestra la pantalla de carga, para dar tiempo a leer el tip aunque la carga real sea mas rapida.")]
     [SerializeField] private float minDisplayTime = 3f;
 
-    [Tooltip("Paneles de leyenda a rotar durante la carga (CollectiblesLegend, PowerUpsLegend, DashLegend). Se reparten a partes iguales dentro de minDisplayTime, en bucle mientras dure la pantalla.")]
+    [Tooltip("Paneles de leyenda a rotar durante la carga (CollectiblesLegend, PowerUpsLegend, DashLegend), en bucle mientras dure la pantalla.")]
     [SerializeField] private GameObject[] legendPanels;
+
+    [Tooltip("Segundos que se muestra cada panel antes de pasar al siguiente.")]
+    [SerializeField] private float timePerPanel = 3f;
 
     private void Start()
     {
@@ -52,10 +55,10 @@ public class LoadingScreenController : MonoBehaviour
 
     private IEnumerator RotateLegendPanels()
     {
-        // Reparte minDisplayTime a partes iguales entre los paneles; si la carga
-        // real tarda mas, el bucle sigue rotando hasta que la escena cambie
+        // timePerPanel es independiente de minDisplayTime; si la carga real
+        // tarda mas, el bucle sigue rotando hasta que la escena cambie
         // (este objeto se destruye y la corutina se detiene sola).
-        float interval = Mathf.Max(minDisplayTime / legendPanels.Length, 0.1f);
+        float interval = Mathf.Max(timePerPanel, 0.1f);
 
         int current = 0;
         for (int i = 0; i < legendPanels.Length; i++)
