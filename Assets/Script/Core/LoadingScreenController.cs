@@ -7,9 +7,15 @@ public class LoadingScreenController : MonoBehaviour
     [Tooltip("Tiempo minimo (segundos) que se muestra la pantalla de carga, para dar tiempo a leer el tip aunque la carga real sea mas rapida.")]
     [SerializeField] private float minDisplayTime = 3f;
 
+    [Tooltip("Paneles de leyenda a rotar durante la carga (CollectiblesLegend, PowerUpsLegend, DashLegend). Se reparten a partes iguales dentro de minDisplayTime, en bucle mientras dure la pantalla.")]
+    [SerializeField] private GameObject[] legendPanels;
+
     private void Start()
     {
         StartCoroutine(LoadTargetScene());
+
+        if (legendPanels != null && legendPanels.Length > 0)
+            StartCoroutine(RotateLegendPanels());
     }
 
     private IEnumerator LoadTargetScene()
@@ -42,5 +48,26 @@ public class LoadingScreenController : MonoBehaviour
             yield return new WaitForSeconds(remaining);
 
         operation.allowSceneActivation = true;
+    }
+
+    private IEnumerator RotateLegendPanels()
+    {
+        // Reparte minDisplayTime a partes iguales entre los paneles; si la carga
+        // real tarda mas, el bucle sigue rotando hasta que la escena cambie
+        // (este objeto se destruye y la corutina se detiene sola).
+        float interval = Mathf.Max(minDisplayTime / legendPanels.Length, 0.1f);
+
+        int current = 0;
+        for (int i = 0; i < legendPanels.Length; i++)
+            if (legendPanels[i] != null) legendPanels[i].SetActive(i == current);
+
+        while (true)
+        {
+            yield return new WaitForSeconds(interval);
+
+            if (legendPanels[current] != null) legendPanels[current].SetActive(false);
+            current = (current + 1) % legendPanels.Length;
+            if (legendPanels[current] != null) legendPanels[current].SetActive(true);
+        }
     }
 }
