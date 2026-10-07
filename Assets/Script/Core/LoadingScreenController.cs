@@ -4,6 +4,9 @@ using UnityEngine.SceneManagement;
 
 public class LoadingScreenController : MonoBehaviour
 {
+    [Tooltip("Tiempo minimo (segundos) que se muestra la pantalla de carga, para dar tiempo a leer el tip aunque la carga real sea mas rapida.")]
+    [SerializeField] private float minDisplayTime = 3f;
+
     private void Start()
     {
         StartCoroutine(LoadTargetScene());
@@ -11,6 +14,8 @@ public class LoadingScreenController : MonoBehaviour
 
     private IEnumerator LoadTargetScene()
     {
+        float startTime = Time.time;
+
         string targetScene = SceneLoader.TargetScene;
         if (string.IsNullOrEmpty(targetScene))
         {
@@ -29,6 +34,12 @@ public class LoadingScreenController : MonoBehaviour
 
         while (operation.progress < 0.9f)
             yield return null;
+
+        // Esperar al mayor entre el tiempo real de carga y el minimo configurado,
+        // sin bloquear el hilo (la carga real ya termino, solo retrasamos la activacion).
+        float remaining = minDisplayTime - (Time.time - startTime);
+        if (remaining > 0f)
+            yield return new WaitForSeconds(remaining);
 
         operation.allowSceneActivation = true;
     }
