@@ -4013,7 +4013,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1260157048}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1260157050}
+        m_TargetAssemblyTypeName: DashButtonUI, Assembly-CSharp
+        m_MethodName: OnDashButtonPressed
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument:
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1260157048
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4065,7 +4077,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DashButtonUI
   player: {fileID: 0}
-  dashIcon: {fileID: 0}
+  dashIcon: {fileID: 1260157048}
   readyColor: {r: 1, g: 1, b: 1, a: 1}
   cooldownColor: {r: 0.16470589, g: 0.16470589, b: 0.16470589, a: 1}
 --- !u!1 &1266285792
