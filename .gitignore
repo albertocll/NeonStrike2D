@@ -25,6 +25,7 @@ Recordings/
 # OS junk
 .DS_Store
 Thumbs.db
+desktop.ini
 
 Assets/_Recovery
 Assets/_Recovery.meta
