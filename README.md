@@ -313,7 +313,10 @@ Además, el backend expone un Hub de SignalR en `/gamehub` para multijugador en 
 
 ## 📄 Licencia
 
-Proyecto académico privado. Todos los derechos reservados.
+Código visible públicamente con fines de consulta, evaluación académica y
+portfolio, pero no es software de código abierto: no se concede ningún
+permiso de uso, copia, modificación o redistribución. Todos los derechos
+reservados — ver [LICENSE](./LICENSE).
 
 ---
 
