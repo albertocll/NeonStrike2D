@@ -1,0 +1,313 @@
+fileFormatVersion: 2
+guid: f46630b8633bb6543a663f5d960cefc6
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -4911493168712206933
+    second: BossHivemindDie_0
+  - first:
+      213: 3806712254135808077
+    second: BossHivemindDie_1
+  - first:
+      213: -1602569281957144228
+    second: BossHivemindDie_2
+  - first:
+      213: -8473261442626417984
+    second: BossHivemindDie_3
+  - first:
+      213: -9077935276817237145
+    second: BossHivemindDie_4
+  - first:
+      213: -6403809469585707178
+    second: BossHivemindDie_5
+  - first:
+      213: -4966260209507613270
+    second: BossHivemindDie_6
+  - first:
+      213: 1438151923084343954
+    second: BossHivemindDie_7
+  - first:
+      213: -5990703907878482503
+    second: BossHivemindDie_8
+  - first:
+      213: -1440805272381896162
+    second: BossHivemindDie_9
+  - first:
+      213: 3956846274004016683
+    second: BossHivemindDie_10
+  - first:
+      213: -2955322193005796364
+    second: BossHivemindDie_11
+  - first:
+      213: -1869532164486782903
+    second: BossHivemindDie_12
+  - first:
+      213: -7026359109215747623
+    second: BossHivemindDie_13
+  - first:
+      213: 5021793629836646500
+    second: BossHivemindDie_14
+  - first:
+      213: -5539610758451004014
+    second: BossHivemindDie_15
+  - first:
+      213: 8591030012480564145
+    second: BossHivemindDie_16
+  - first:
+      213: -5099517614061019394
+    second: BossHivemindDie_17
+  - first:
+      213: 1125629192031678203
+    second: BossHivemindDie_18
+  - first:
+      213: -2041451381997765877
+    second: BossHivemindDie_19
+  - first:
+      213: -223597792796712269
+    second: BossHivemindDie_20
+  - first:
+      213: -2953587629797901560
+    second: BossHivemindDie_21
+  - first:
+      213: -6443891522125794258
+    second: BossHivemindDie_22
+  - first:
+      213: 7909344496554006293
+    second: BossHivemindDie_23
+  - first:
+      213: 4220834975685231949
+    second: BossHivemindDie_24
+  - first:
+      213: 8364441630545587802
+    second: BossHivemindDie_25
+  - first:
+      213: 4286770294282707420
+    second: BossHivemindDie_26
+  - first:
+      213: -2719828578345191096
+    second: BossHivemindDie_27
+  - first:
+      213: 786548367416239716
+    second: BossHivemindDie_28
+  - first:
+      213: -3056116391377362924
+    second: BossHivemindDie_29
+  - first:
+      213: -658511945663318315
+    second: BossHivemindDie_30
+  - first:
+      213: 8430499325297421368
+    second: BossHivemindDie_31
+  - first:
+      213: -1201661380269985291
+    second: BossHivemindDie_32
+  - first:
+      213: -8832314922288015099
+    second: BossHivemindDie_33
+  - first:
+      213: 5440296875272941807
+    second: BossHivemindDie_34
+  - first:
+      213: 8677981609152097638
+    second: BossHivemindDie_35
+  - first:
+      213: -2424706425303152825
+    second: BossHivemindDie_36
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: iOS
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BossHivemindDie_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 1408
+        height: 768
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ba5b62a3cfed6dbb0800000000000000
+      internalID: -4911493168712206933
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 9aeb9a5d60dbc4e4498b502e95362af8
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      BossHivemindDie_0: -4911493168712206933
+      BossHivemindDie_1: 3806712254135808077
+      BossHivemindDie_10: 3956846274004016683
+      BossHivemindDie_11: -2955322193005796364
+      BossHivemindDie_12: -1869532164486782903
+      BossHivemindDie_13: -7026359109215747623
+      BossHivemindDie_14: 5021793629836646500
+      BossHivemindDie_15: -5539610758451004014
+      BossHivemindDie_16: 8591030012480564145
+      BossHivemindDie_17: -5099517614061019394
+      BossHivemindDie_18: 1125629192031678203
+      BossHivemindDie_19: -2041451381997765877
+      BossHivemindDie_2: -1602569281957144228
+      BossHivemindDie_20: -223597792796712269
+      BossHivemindDie_21: -2953587629797901560
+      BossHivemindDie_22: -6443891522125794258
+      BossHivemindDie_23: 7909344496554006293
+      BossHivemindDie_24: 4220834975685231949
+      BossHivemindDie_25: 8364441630545587802
+      BossHivemindDie_26: 4286770294282707420
+      BossHivemindDie_27: -2719828578345191096
+      BossHivemindDie_28: 786548367416239716
+      BossHivemindDie_29: -3056116391377362924
+      BossHivemindDie_3: -8473261442626417984
+      BossHivemindDie_30: -658511945663318315
+      BossHivemindDie_31: 8430499325297421368
+      BossHivemindDie_32: -1201661380269985291
+      BossHivemindDie_33: -8832314922288015099
+      BossHivemindDie_34: 5440296875272941807
+      BossHivemindDie_35: 8677981609152097638
+      BossHivemindDie_36: -2424706425303152825
+      BossHivemindDie_4: -9077935276817237145
+      BossHivemindDie_5: -6403809469585707178
+      BossHivemindDie_6: -4966260209507613270
+      BossHivemindDie_7: 1438151923084343954
+      BossHivemindDie_8: -5990703907878482503
+      BossHivemindDie_9: -1440805272381896162
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
