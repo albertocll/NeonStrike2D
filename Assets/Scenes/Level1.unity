@@ -955,7 +955,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f26548599d1040fd605ce32247fb2077, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpawnAreaMargin
   extraMargin: 0.5
 --- !u!1 &377516135
@@ -4023,7 +4023,7 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument:
+          m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1260157048
@@ -6743,6 +6743,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemySpawner
   basicEnemyPrefabs:
   - {fileID: 3860212357805156523, guid: 9887b472b80be744f9a144c34ecc8d81, type: 3}
+  - {fileID: 9017135314714469954, guid: 623b09aebeae2114fb34de5e37eb5066, type: 3}
   advancedEnemyPrefabs:
   - {fileID: 3153298351150200298, guid: e462e59794671cd498d8589dde9b0570, type: 3}
   advancedEnemyFromWave: 3
