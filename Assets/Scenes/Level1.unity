@@ -6748,6 +6748,10 @@ MonoBehaviour:
   - {fileID: 3153298351150200298, guid: e462e59794671cd498d8589dde9b0570, type: 3}
   advancedEnemyFromWave: 3
   spawnArea: {fileID: 284086550}
+  spawnMargin: 1
+  uiExclusionZones:
+  - {fileID: 1260157046}
+  - {fileID: 906127721}
 --- !u!4 &1916839832
 Transform:
   m_ObjectHideFlags: 0

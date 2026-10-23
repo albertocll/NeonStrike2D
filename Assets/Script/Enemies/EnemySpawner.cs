@@ -11,6 +11,11 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
+    [SerializeField] private float spawnMargin = 1f;
+    [SerializeField] private RectTransform[] uiExclusionZones;
+
+    private const int MaxSpawnAttempts = 10;
+    private const float ExclusionPadding = 0.5f;
 
     public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
     {
@@ -51,9 +56,50 @@ public class EnemySpawner : MonoBehaviour
     {
         Bounds bounds = spawnArea.bounds;
 
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
+        float minX = bounds.min.x + spawnMargin;
+        float maxX = bounds.max.x - spawnMargin;
+        float minY = bounds.min.y + spawnMargin;
+        float maxY = bounds.max.y - spawnMargin;
 
-        return new Vector2(x, y);
+        if (minX > maxX) minX = maxX = bounds.center.x;
+        if (minY > maxY) minY = maxY = bounds.center.y;
+
+        Vector2 candidate = Vector2.zero;
+        for (int attempt = 0; attempt < MaxSpawnAttempts; attempt++)
+        {
+            candidate = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            if (!IsInsideExclusionZone(candidate))
+                return candidate;
+        }
+
+        return candidate;
+    }
+
+    private bool IsInsideExclusionZone(Vector2 point)
+    {
+        if (uiExclusionZones == null || uiExclusionZones.Length == 0) return false;
+
+        Camera cam = Camera.main;
+        if (cam == null) return false;
+
+        float z = -cam.transform.position.z;
+        Vector3[] corners = new Vector3[4];
+
+        foreach (RectTransform zone in uiExclusionZones)
+        {
+            if (zone == null) continue;
+
+            zone.GetWorldCorners(corners);
+            Vector3 min = cam.ScreenToWorldPoint(new Vector3(corners[0].x, corners[0].y, z));
+            Vector3 max = cam.ScreenToWorldPoint(new Vector3(corners[2].x, corners[2].y, z));
+
+            if (point.x >= min.x - ExclusionPadding && point.x <= max.x + ExclusionPadding &&
+                point.y >= min.y - ExclusionPadding && point.y <= max.y + ExclusionPadding)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
