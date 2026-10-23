@@ -11,10 +11,8 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
-    [SerializeField] private float spawnMargin = 1f;
     [SerializeField] private RectTransform[] uiExclusionZones;
 
-    private const int MaxSpawnAttempts = 10;
     private const float ExclusionPadding = 0.5f;
 
     public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
@@ -54,54 +52,15 @@ public class EnemySpawner : MonoBehaviour
 
     private Vector2 GetRandomPosition(GameObject enemyPrefab)
     {
-        Bounds bounds = spawnArea.bounds;
-
-        float minX = bounds.min.x + spawnMargin;
-        float maxX = bounds.max.x - spawnMargin;
-        float minY = bounds.min.y + spawnMargin;
-        float maxY = bounds.max.y - spawnMargin;
-
-        if (minX > maxX) minX = maxX = bounds.center.x;
-        if (minY > maxY) minY = maxY = bounds.center.y;
-
-        float overlapRadius = GetEnemyRadius(enemyPrefab);
-
         Vector2 candidate = Vector2.zero;
-        for (int attempt = 0; attempt < MaxSpawnAttempts; attempt++)
+        for (int attempt = 0; attempt < SpawnAreaUtils.MaxSpawnAttempts; attempt++)
         {
-            candidate = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
-            if (!IsInsideExclusionZone(candidate) && !OverlapsEnemy(candidate, overlapRadius))
+            candidate = SpawnAreaUtils.GetRandomPoint(spawnArea, enemyPrefab);
+            if (!IsInsideExclusionZone(candidate) && !SpawnAreaUtils.OverlapsSpawnable(candidate, enemyPrefab))
                 return candidate;
         }
 
         return candidate;
-    }
-
-    // ponytail: Collider2D.bounds da 0 en un prefab sin instanciar (no hay
-    // mundo de fisica detras). Se lee el tamano serializado del collider y se
-    // escala a mano con el lossyScale del prefab en su lugar.
-    private static float GetEnemyRadius(GameObject enemyPrefab)
-    {
-        Collider2D col = enemyPrefab != null ? enemyPrefab.GetComponent<Collider2D>() : null;
-        if (col == null) return 0.5f;
-
-        float localSize = col is BoxCollider2D box ? Mathf.Max(box.size.x, box.size.y)
-            : col is CircleCollider2D circle ? circle.radius * 2f
-            : 1f;
-
-        Vector2 scale = enemyPrefab.transform.lossyScale;
-        float halfSize = localSize * Mathf.Max(scale.x, scale.y) * 0.5f;
-        return halfSize + 0.3f;
-    }
-
-    private static bool OverlapsEnemy(Vector2 point, float radius)
-    {
-        Collider2D[] hits = Physics2D.OverlapCircleAll(point, radius);
-        foreach (Collider2D hit in hits)
-        {
-            if (hit.CompareTag("Enemy")) return true;
-        }
-        return false;
     }
 
     private bool IsInsideExclusionZone(Vector2 point)

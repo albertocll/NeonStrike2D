@@ -41,7 +41,13 @@ public class CollectibleSpawner : MonoBehaviour
     else
         prefab = scorePrefabs[Random.Range(0, scorePrefabs.Count)];
 
-    Vector2 pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
+    Vector2 pos = Vector2.zero;
+    for (int attempt = 0; attempt < SpawnAreaUtils.MaxSpawnAttempts; attempt++)
+    {
+        pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
+        if (!SpawnAreaUtils.OverlapsSpawnable(pos, prefab))
+            break;
+    }
 
     GameObject item = Instantiate(prefab, pos, Quaternion.identity);
     activeCollectibles.Add(item);
