@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,6 +17,8 @@ public class ChatUI : MonoBehaviour
 
     public static event Action<string> OnUnreadMessageFrom;
 
+    // Historial en memoria por amigo, solo de esta sesion (sin persistencia).
+    private readonly Dictionary<string, string> _history = new Dictionary<string, string>();
     private string _currentPartner;
 
     private void Awake()
@@ -47,8 +50,10 @@ public class ChatUI : MonoBehaviour
     {
         _currentPartner = username;
         chatWithText.text = $"Chat con {username}";
-        messagesText.text = "";
+        messagesText.text = _history.TryGetValue(username, out var history) ? history : "";
         panelRoot.SetActive(true);
+        Canvas.ForceUpdateCanvases();
+        scrollRect.verticalNormalizedPosition = 0f;
     }
 
     public void Close()
@@ -62,34 +67,36 @@ public class ChatUI : MonoBehaviour
         string message = inputMessage.text.Trim();
         if (string.IsNullOrEmpty(message) || string.IsNullOrEmpty(_currentPartner)) return;
 
-        AppendLine($"Yo: {message}");
+        AppendHistoryLine(_currentPartner, $"Yo: {message}");
         inputMessage.text = "";
         await NetworkManager.Instance.SendChatMessageAsync(_currentPartner, message);
     }
 
     private void OnChatMessageReceived(string fromUsername, string message, string timestamp)
     {
-        bool isOpenWithSender = panelRoot.activeSelf && fromUsername == _currentPartner;
+        AppendHistoryLine(fromUsername, $"{fromUsername}: {message}");
 
-        if (isOpenWithSender)
-        {
-            AppendLine($"{fromUsername}: {message}");
-        }
-        else
-        {
+        if (!(panelRoot.activeSelf && fromUsername == _currentPartner))
             OnUnreadMessageFrom?.Invoke(fromUsername);
-        }
     }
 
     private void OnChatError(string message)
     {
-        AppendLine($"[Sistema] {message}");
+        if (string.IsNullOrEmpty(_currentPartner)) return;
+        AppendHistoryLine(_currentPartner, $"[Sistema] {message}");
     }
 
-    private void AppendLine(string line)
+    private void AppendHistoryLine(string username, string line)
     {
-        messagesText.text += (messagesText.text.Length > 0 ? "\n" : "") + line;
-        Canvas.ForceUpdateCanvases();
-        scrollRect.verticalNormalizedPosition = 0f;
+        string existing = _history.TryGetValue(username, out var history) ? history : "";
+        string updated = existing + (existing.Length > 0 ? "\n" : "") + line;
+        _history[username] = updated;
+
+        if (username == _currentPartner)
+        {
+            messagesText.text = updated;
+            Canvas.ForceUpdateCanvases();
+            scrollRect.verticalNormalizedPosition = 0f;
+        }
     }
 }
