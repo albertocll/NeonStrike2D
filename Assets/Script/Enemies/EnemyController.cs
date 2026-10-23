@@ -22,6 +22,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     [SerializeField] private GameObject deathVfxPrefab;
     private static readonly Color WardenDeathVfxColor = new Color32(0x80, 0x1D, 0x43, 0xFF);
     private static readonly Color StrikerDeathVfxColor = new Color(0f, 0.95f, 1f);
+    private static readonly Color FuseDeathVfxColor = new Color(1f, 0.5f, 0.1f);
 
     void Awake()
     {
@@ -74,7 +75,10 @@ public class EnemyController : MonoBehaviour, IDamageable
         var strikerAI = GetComponent<StrikerAI>();
         if (strikerAI) strikerAI.enabled = false;
 
-        SpawnDeathVfx(wardenAI != null, strikerAI != null);
+        var fuseAI = GetComponent<FuseAI>();
+        if (fuseAI) fuseAI.Detonate();
+
+        SpawnDeathVfx(wardenAI != null, strikerAI != null, fuseAI != null);
 
         if (spriteRenderer != null) spriteRenderer.enabled = false;
 
@@ -114,7 +118,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    private void SpawnDeathVfx(bool isWarden, bool isStriker)
+    private void SpawnDeathVfx(bool isWarden, bool isStriker, bool isFuse)
     {
         if (deathVfxPrefab == null) return;
 
@@ -125,6 +129,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         var main = ps.main;
         if (isWarden) main.startColor = WardenDeathVfxColor;
         else if (isStriker) main.startColor = StrikerDeathVfxColor;
+        else if (isFuse) main.startColor = FuseDeathVfxColor;
     }
 
     private void TryDropPowerUp()

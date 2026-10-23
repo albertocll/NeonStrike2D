@@ -35,7 +35,14 @@ public class PowerUpSpawner : MonoBehaviour
         if (powerUpPrefabs == null || powerUpPrefabs.Count == 0) return;
 
         GameObject prefab = powerUpPrefabs[Random.Range(0, powerUpPrefabs.Count)];
-        Vector2 pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
+
+        Vector2 pos = Vector2.zero;
+        for (int attempt = 0; attempt < SpawnAreaUtils.MaxSpawnAttempts; attempt++)
+        {
+            pos = SpawnAreaUtils.GetRandomPoint(spawnArea, prefab);
+            if (!SpawnAreaUtils.OverlapsSpawnable(pos, prefab))
+                break;
+        }
 
         GameObject item = Instantiate(prefab, pos, Quaternion.identity);
         activePowerUps.Add(item);
