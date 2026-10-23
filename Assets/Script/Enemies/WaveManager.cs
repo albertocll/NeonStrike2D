@@ -17,6 +17,9 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float timeBetweenWaves = 2f;
     [SerializeField] private float initialDelay = 3f;
 
+    [Header("Boss")]
+    [SerializeField] private int bossWave = 10;
+
     private int currentWave;
     private int enemiesAlive;
     private bool waveInProgress;
@@ -42,7 +45,10 @@ public class WaveManager : MonoBehaviour
         if (waveText != null)
             waveText.text = $"WAVE: {currentWave}";
 
-        enemySpawner.SpawnWave(EnemiesForWave(currentWave), this, currentWave);
+        if (currentWave == bossWave)
+            enemySpawner.SpawnBoss(this);
+        else
+            enemySpawner.SpawnWave(EnemiesForWave(currentWave), this, currentWave);
     }
 
     public int EnemiesForWave(int wave) => baseEnemiesPerWave + ((wave - 1) * enemiesAddedPerWave);

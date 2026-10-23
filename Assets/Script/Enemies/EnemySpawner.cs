@@ -12,6 +12,21 @@ public class EnemySpawner : MonoBehaviour
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
 
+    [Header("Boss")]
+    [SerializeField] private GameObject bossCentinelaPrefab;
+
+    public void SpawnBoss(WaveManager waveManager)
+    {
+        if (bossCentinelaPrefab == null) return;
+
+        Vector2 spawnPosition = spawnArea.bounds.center;
+        GameObject bossInstance = Instantiate(bossCentinelaPrefab, spawnPosition, Quaternion.identity);
+
+        EnemyWaveMember waveMember = bossInstance.GetComponent<EnemyWaveMember>();
+        if (waveMember != null)
+            waveMember.Initialize(waveManager);
+    }
+
     public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
     {
         StartCoroutine(SpawnWaveRoutine(enemyCount, waveManager, currentWave));
