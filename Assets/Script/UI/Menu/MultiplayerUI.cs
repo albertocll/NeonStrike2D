@@ -29,10 +29,15 @@ public class MultiplayerUI : MonoBehaviour
     [SerializeField] private GameObject friendRowPrefab;
     [SerializeField] private TMP_Text textNoFriends;
 
+    [Header("Chat")]
+    [SerializeField] private GameObject chatPanelPrefab;
+
     private string _pendingRoomId;
     private string _pendingFromUsername;
     private string _pendingFriendRequestFrom;
     private System.Threading.CancellationTokenSource _refreshCts;
+    private ChatUI _chatUI;
+    private readonly Dictionary<string, FriendRowUI> _friendRows = new Dictionary<string, FriendRowUI>();
 
     private void Start()
     {
@@ -42,6 +47,12 @@ public class MultiplayerUI : MonoBehaviour
         buttonDecline.onClick.AddListener(OnDeclineClicked);
         buttonAcceptFriend.onClick.AddListener(OnAcceptFriendClicked);
         buttonDeclineFriend.onClick.AddListener(OnDeclineFriendClicked);
+
+        if (chatPanelPrefab != null && _chatUI == null)
+        {
+            var chatInstance = Instantiate(chatPanelPrefab, transform);
+            _chatUI = chatInstance.GetComponent<ChatUI>();
+        }
     }
 
     private void OnEnable()
@@ -54,6 +65,7 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnInviteDeclined += OnInviteDeclined;
         NetworkManager.Instance.OnGameStart += OnGameStart;
         NetworkManager.Instance.OnFriendRequestReceived += OnFriendRequestReceived;
+        ChatUI.OnUnreadMessageFrom += OnUnreadMessageFrom;
 
         _ = LoadOnlineFriendsAsync();
         _refreshCts = new System.Threading.CancellationTokenSource();
@@ -62,6 +74,8 @@ public class MultiplayerUI : MonoBehaviour
 
     private void OnDisable()
     {
+        ChatUI.OnUnreadMessageFrom -= OnUnreadMessageFrom;
+
         if (NetworkManager.Instance == null) return;
         NetworkManager.Instance.OnInviteReceived -= OnInviteReceived;
         NetworkManager.Instance.OnInviteWaiting -= OnInviteWaiting;
@@ -71,6 +85,12 @@ public class MultiplayerUI : MonoBehaviour
         NetworkManager.Instance.OnFriendRequestReceived -= OnFriendRequestReceived;
 
         _refreshCts?.Cancel();
+    }
+
+    private void OnUnreadMessageFrom(string fromUsername)
+    {
+        if (_friendRows.TryGetValue(fromUsername, out var row))
+            row.SetUnread(true);
     }
 
     private async void ShowStatus(string message, int durationMs = 3000)
@@ -103,24 +123,30 @@ public class MultiplayerUI : MonoBehaviour
         }
 
         textNoFriends.gameObject.SetActive(false);
+        _friendRows.Clear();
 
         foreach (var username in response.items)
         {
             var row = Instantiate(friendRowPrefab, friendListContent);
-            var nameText = row.GetComponentInChildren<TMP_Text>();
-            if (nameText != null) nameText.text = username;
+            var friendRowUI = row.GetComponent<FriendRowUI>();
+            if (friendRowUI == null) continue;
 
-            var btn = row.GetComponentInChildren<Button>();
-            if (btn != null)
+            string captured = username;
+            friendRowUI.Setup(captured);
+            _friendRows[captured] = friendRowUI;
+
+            friendRowUI.ChallengeButton.onClick.AddListener(async () =>
             {
-                string captured = username;
-                btn.onClick.AddListener(async () =>
-                {
-                    GameData.RemoteUsername = captured;
-                    GameData.IsHost = true;
-                    await NetworkManager.Instance.SendInviteAsync(captured);
-                });
-            }
+                GameData.RemoteUsername = captured;
+                GameData.IsHost = true;
+                await NetworkManager.Instance.SendInviteAsync(captured);
+            });
+
+            friendRowUI.ChatButton.onClick.AddListener(() =>
+            {
+                friendRowUI.SetUnread(false);
+                _chatUI?.OpenChatWith(captured);
+            });
         }
     }
 
