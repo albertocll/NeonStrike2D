@@ -11,6 +11,9 @@ public class EnemySpawner : MonoBehaviour
 
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
+    [SerializeField] private RectTransform[] uiExclusionZones;
+
+    private const float ExclusionPadding = 0.5f;
 
     public void SpawnWave(int enemyCount, WaveManager waveManager, int currentWave)
     {
@@ -24,8 +27,8 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < enemyCount; i++)
         {
-            Vector2 spawnPosition = GetRandomPosition();
             GameObject enemyPrefab = ChooseEnemyPrefab(currentWave);
+            Vector2 spawnPosition = GetRandomPosition(enemyPrefab);
 
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
@@ -47,13 +50,44 @@ public class EnemySpawner : MonoBehaviour
         return basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
     }
 
-    private Vector2 GetRandomPosition()
+    private Vector2 GetRandomPosition(GameObject enemyPrefab)
     {
-        Bounds bounds = spawnArea.bounds;
+        Vector2 candidate = Vector2.zero;
+        for (int attempt = 0; attempt < SpawnAreaUtils.MaxSpawnAttempts; attempt++)
+        {
+            candidate = SpawnAreaUtils.GetRandomPoint(spawnArea, enemyPrefab);
+            if (!IsInsideExclusionZone(candidate) && !SpawnAreaUtils.OverlapsSpawnable(candidate, enemyPrefab))
+                return candidate;
+        }
 
-        float x = Random.Range(bounds.min.x, bounds.max.x);
-        float y = Random.Range(bounds.min.y, bounds.max.y);
+        return candidate;
+    }
 
-        return new Vector2(x, y);
+    private bool IsInsideExclusionZone(Vector2 point)
+    {
+        if (uiExclusionZones == null || uiExclusionZones.Length == 0) return false;
+
+        Camera cam = Camera.main;
+        if (cam == null) return false;
+
+        float z = -cam.transform.position.z;
+        Vector3[] corners = new Vector3[4];
+
+        foreach (RectTransform zone in uiExclusionZones)
+        {
+            if (zone == null) continue;
+
+            zone.GetWorldCorners(corners);
+            Vector3 min = cam.ScreenToWorldPoint(new Vector3(corners[0].x, corners[0].y, z));
+            Vector3 max = cam.ScreenToWorldPoint(new Vector3(corners[2].x, corners[2].y, z));
+
+            if (point.x >= min.x - ExclusionPadding && point.x <= max.x + ExclusionPadding &&
+                point.y >= min.y - ExclusionPadding && point.y <= max.y + ExclusionPadding)
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
