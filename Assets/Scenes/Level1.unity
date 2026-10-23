@@ -748,7 +748,6 @@ GameObject:
   - component: {fileID: 227816533}
   - component: {fileID: 227816535}
   - component: {fileID: 227816534}
-  - component: {fileID: 227816536}
   m_Layer: 0
   m_Name: BossHealthBarPanel
   m_TagString: Untagged
@@ -815,22 +814,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 227816532}
   m_CullTransparentMesh: 1
---- !u!114 &227816536
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 227816532}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6cb9959c77aa134489421293580676ec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: NeonStrike2D::BossHealthBarUI
-  panel: {fileID: 227816532}
-  healthSlider: {fileID: 1783142269}
-  bannerText: {fileID: 625080253}
-  bannerLabel: "\xA1CENTINELA!"
 --- !u!1 &247711157
 GameObject:
   m_ObjectHideFlags: 0
@@ -2848,6 +2831,7 @@ GameObject:
   - component: {fileID: 897082325}
   - component: {fileID: 897082324}
   - component: {fileID: 897082323}
+  - component: {fileID: 897082327}
   m_Layer: 5
   m_Name: UI_Canvas
   m_TagString: Untagged
@@ -2949,6 +2933,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &897082327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897082322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb9959c77aa134489421293580676ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::BossHealthBarUI
+  panel: {fileID: 227816532}
+  healthSlider: {fileID: 1783142269}
+  bannerText: {fileID: 625080253}
+  bannerLabel: "\xA1CENTINELA!"
 --- !u!1 &906127720
 GameObject:
   m_ObjectHideFlags: 0
