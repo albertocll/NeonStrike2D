@@ -83,6 +83,9 @@ public static class WebSocketHandler
                 case "SendFriendRequest":
                     await OnSendFriendRequest(connectionId, args[0], args[1]);
                     break;
+                case "SendChatMessage":
+                    await OnSendChatMessage(connectionId, args[0], args[1], args[2]);
+                    break;
             }
         }
         catch (Exception e)
@@ -175,6 +178,18 @@ public static class WebSocketHandler
     {
         if (UsernameToId.TryGetValue(toUsername, out var targetId))
             await Send(targetId, new { type = "FriendRequestReceived", fromUsername });
+    }
+
+    private static async Task OnSendChatMessage(string connectionId, string fromUsername, string toUsername, string message)
+    {
+        if (!UsernameToId.TryGetValue(toUsername, out var targetId))
+        {
+            await Send(connectionId, new { type = "ChatError", message = "El jugador no está conectado." });
+            return;
+        }
+
+        var timestamp = DateTime.UtcNow.ToString("o");
+        await Send(targetId, new { type = "ChatMessageReceived", fromUsername, message, timestamp });
     }
 
     private static async Task HandleDisconnect(string connectionId)

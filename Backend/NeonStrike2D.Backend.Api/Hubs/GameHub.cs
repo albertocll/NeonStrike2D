@@ -59,6 +59,17 @@ public class GameHub : Hub
         await Clients.Client(targetConnectionId).SendAsync("FriendRequestReceived", fromUsername);
     }
 
+    public async Task SendChatMessage(string fromUsername, string toUsername, string message)
+    {
+        if (!ConnectedUsers.TryGetValue(toUsername, out var targetConnectionId))
+        {
+            await Clients.Caller.SendAsync("ChatError", "El jugador no está conectado.");
+            return;
+        }
+
+        await Clients.Client(targetConnectionId).SendAsync("ChatMessageReceived", fromUsername, message, DateTime.UtcNow.ToString("o"));
+    }
+
     public async Task SendInvite(string fromUsername, string toUsername)
     {
         if (!ConnectedUsers.TryGetValue(toUsername, out var targetConnectionId))
