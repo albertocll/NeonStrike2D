@@ -30,6 +30,8 @@ public class NetworkManager : MonoBehaviour
     public event Action<string> OnInviteError;
     public event Action OnInviteDeclined;
     public event Action<string> OnFriendRequestReceived;
+    public event Action<string, string, string> OnChatMessageReceived;
+    public event Action<string> OnChatError;
 
     private void Awake()
     {
@@ -169,6 +171,16 @@ public class NetworkManager : MonoBehaviour
                     OnFriendRequestReceived?.Invoke(fr.fromUsername);
                     break;
 
+                case "ChatMessageReceived":
+                    var cm = JsonUtility.FromJson<WsChatMessage>(raw);
+                    OnChatMessageReceived?.Invoke(cm.fromUsername, cm.message, cm.timestamp);
+                    break;
+
+                case "ChatError":
+                    var ce = JsonUtility.FromJson<WsChatError>(raw);
+                    OnChatError?.Invoke(ce.message);
+                    break;
+
                 case "RoomFull":
                     Debug.LogWarning("[NetworkManager] La sala está llena");
                     break;
@@ -228,6 +240,12 @@ public class NetworkManager : MonoBehaviour
         await Task.CompletedTask;
     }
 
+    public async Task SendChatMessageAsync(string toUsername, string message)
+    {
+        SendMessage("SendChatMessage", Username, toUsername, message);
+        await Task.CompletedTask;
+    }
+
     public async Task DisconnectAsync()
     {
         if (_ws != null && _ws.State == WebSocketState.Open)
@@ -252,3 +270,5 @@ public class NetworkManager : MonoBehaviour
 [Serializable] public class WsInviteWaiting { public string type; public string roomId; }
 [Serializable] public class WsInviteError { public string type; public string message; }
 [Serializable] public class WsFriendRequest { public string type; public string fromUsername; }
+[Serializable] public class WsChatMessage { public string type; public string fromUsername; public string message; public string timestamp; }
+[Serializable] public class WsChatError { public string type; public string message; }
