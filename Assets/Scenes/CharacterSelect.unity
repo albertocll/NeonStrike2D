@@ -12505,6 +12505,7 @@ MonoBehaviour:
   friendListContent: {fileID: 1593611046}
   friendRowPrefab: {fileID: 2377683135949891430, guid: 97118c4fa3bf7ed408002d258fea3f64, type: 3}
   textNoFriends: {fileID: 2054545820}
+  chatPanelPrefab: {fileID: 7924725841058076244, guid: 225f1873b7d91434292298062ec52773, type: 3}
 --- !u!4 &1957541352
 Transform:
   m_ObjectHideFlags: 0
