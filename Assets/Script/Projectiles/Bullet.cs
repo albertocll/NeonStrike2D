@@ -60,7 +60,7 @@ public class Bullet : MonoBehaviour
         {
             if (other.CompareTag("Enemy"))
             {
-                EnemyController enemy = other.GetComponentInParent<EnemyController>();
+                IDamageable enemy = other.GetComponentInParent<IDamageable>();
 
                 if (enemy != null)
                 {
