@@ -12,8 +12,8 @@ public class BossCentinelaController : MonoBehaviour, IDamageable
     [SerializeField] private Transform target;
 
     [Header("Vida")]
-    [SerializeField] private int maxHealth = 30;
-    [SerializeField] private int scoreValue = 1000;
+    [SerializeField] private int maxHealth = 750; // ~10x EnemyWarden (enemigo basico, 75 HP)
+    [SerializeField] private int scoreValue = 500;
     [SerializeField, Range(0f, 1f)] private float phase2HealthThreshold = 0.5f;
 
     [Header("Embestida")]
