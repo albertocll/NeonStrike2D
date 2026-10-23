@@ -29,8 +29,8 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = 0; i < enemyCount; i++)
         {
-            Vector2 spawnPosition = GetRandomPosition();
             GameObject enemyPrefab = ChooseEnemyPrefab(currentWave);
+            Vector2 spawnPosition = GetRandomPosition(enemyPrefab);
 
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
 
@@ -52,7 +52,7 @@ public class EnemySpawner : MonoBehaviour
         return basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
     }
 
-    private Vector2 GetRandomPosition()
+    private Vector2 GetRandomPosition(GameObject enemyPrefab)
     {
         Bounds bounds = spawnArea.bounds;
 
@@ -64,15 +64,44 @@ public class EnemySpawner : MonoBehaviour
         if (minX > maxX) minX = maxX = bounds.center.x;
         if (minY > maxY) minY = maxY = bounds.center.y;
 
+        float overlapRadius = GetEnemyRadius(enemyPrefab);
+
         Vector2 candidate = Vector2.zero;
         for (int attempt = 0; attempt < MaxSpawnAttempts; attempt++)
         {
             candidate = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
-            if (!IsInsideExclusionZone(candidate))
+            if (!IsInsideExclusionZone(candidate) && !OverlapsEnemy(candidate, overlapRadius))
                 return candidate;
         }
 
         return candidate;
+    }
+
+    // ponytail: Collider2D.bounds da 0 en un prefab sin instanciar (no hay
+    // mundo de fisica detras). Se lee el tamano serializado del collider y se
+    // escala a mano con el lossyScale del prefab en su lugar.
+    private static float GetEnemyRadius(GameObject enemyPrefab)
+    {
+        Collider2D col = enemyPrefab != null ? enemyPrefab.GetComponent<Collider2D>() : null;
+        if (col == null) return 0.5f;
+
+        float localSize = col is BoxCollider2D box ? Mathf.Max(box.size.x, box.size.y)
+            : col is CircleCollider2D circle ? circle.radius * 2f
+            : 1f;
+
+        Vector2 scale = enemyPrefab.transform.lossyScale;
+        float halfSize = localSize * Mathf.Max(scale.x, scale.y) * 0.5f;
+        return halfSize + 0.3f;
+    }
+
+    private static bool OverlapsEnemy(Vector2 point, float radius)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(point, radius);
+        foreach (Collider2D hit in hits)
+        {
+            if (hit.CompareTag("Enemy")) return true;
+        }
+        return false;
     }
 
     private bool IsInsideExclusionZone(Vector2 point)
