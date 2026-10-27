@@ -15,6 +15,7 @@ public class SFXManager : MonoBehaviour
     [SerializeField] private AudioClip playerDeath;
     [SerializeField] private AudioClip waveStart;
     [SerializeField] private AudioClip waveBonus;
+    [SerializeField] private AudioClip bossAppear;
     [SerializeField] private float volume = 1f;
     [SerializeField] private bool muted = false;
 
@@ -81,6 +82,7 @@ public class SFXManager : MonoBehaviour
     public void PlayPlayerDeath() => Play(playerDeath, RelevantPriority);
     public void PlayWaveStart() => Play(waveStart, RelevantPriority);
     public void PlayWaveBonus() => Play(waveBonus, RelevantPriority);
+    public void PlayBossAppear() => Play(bossAppear, RelevantPriority);
 
     private void Play(AudioClip clip, int priority)
     {

@@ -1,0 +1,362 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[RequireComponent(typeof(Rigidbody2D))]
+public class BossSentinelController : MonoBehaviour, IDamageable
+{
+    public static event Action<BossSentinelController> OnAnyBossSpawned;
+
+    [Header("Target")]
+    [SerializeField] private Transform target;
+
+    [Header("Identidad")]
+    [SerializeField] private string displayName = "Sentinel";
+
+    [Header("Vida")]
+    [SerializeField] private int maxHealth = 3000; // ~40x EnemyWarden (enemigo basico, 75 HP)
+    [SerializeField] private int scoreValue = 500;
+    [SerializeField, Range(0f, 1f)] private float phase2HealthThreshold = 0.5f;
+
+    [Header("Entrada")]
+    [SerializeField] private float entrySpeed = 2.5f;
+
+    [Header("Ritmo de combate")]
+    [SerializeField] private float idleDuration = 0.8f;        // pausa entre ataques en fase 1
+    [SerializeField] private float phase2IdleDuration = 0.45f; // pausa entre ataques en fase 2
+
+    [Header("Embestida")]
+    [SerializeField] private float telegraphDuration = 0.5f;
+    [SerializeField] private float telegraphBlinkInterval = 0.1f;
+    [SerializeField] private float chargeSpeed = 15f;
+    [SerializeField] private float chargeDuration = 0.6f;
+    [SerializeField] private float arenaWallMargin = 0.5f; // separacion minima con las paredes al embestir
+
+    [Header("Rafaga circular (alterna con la embestida; en fase 2 tambien tras cada embestida)")]
+    [SerializeField] private Bullet burstBulletPrefab;
+    [SerializeField] private int burstBulletCount = 12;
+    [SerializeField] private int burstBulletDamage = 5; // solo estas balas; BulletEnemy lo comparte el Warden
+    [SerializeField] private float burstSpawnPadding = 0.2f; // las balas salen del borde, no del centro
+    [SerializeField] private float burstAnimDuration = 0.3f;
+
+    [Header("Dano de contacto")]
+    [SerializeField] private int contactDamage = 2;
+    [SerializeField] private float contactDamageCooldown = 1f;
+
+    [Header("Recompensa al morir")]
+    [SerializeField] private List<GameObject> guaranteedDropPrefabs;
+    [SerializeField] private float deathDestroyDelay = 1f;
+
+    [Header("Animator")]
+    [SerializeField] private Animator anim;
+    [SerializeField] private string movingParam = "Moving";
+
+    public event Action<float> OnHealthChanged;
+    public event Action OnDefeated;
+    public event Action OnCombatStarted;
+
+    public string DisplayName => displayName;
+    public int MaxHealth => maxHealth;
+    public int CurrentHealth { get; private set; }
+    public bool IsDead { get; private set; }
+    // Invulnerable y sin dano de contacto desde que aparece hasta que lanza su primer ataque
+    // (entrada + pausa + parpadeo previo a la primera embestida).
+    public bool IsInvulnerable { get; private set; }
+    private bool IsPhase2 => CurrentHealth <= maxHealth * phase2HealthThreshold;
+
+    private Rigidbody2D rb;
+    private Collider2D myCol;
+    private SpriteRenderer spriteRenderer;
+    private Color baseColor;
+    private float lastContactDamageTime;
+    private Bounds? arena;
+
+    // El collider es trigger y no choca con las paredes: la arena limita la embestida.
+    public void SetArena(Bounds bounds) => arena = bounds;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+        myCol = GetComponent<Collider2D>();
+        if (!anim) anim = GetComponent<Animator>();
+        if (!anim) anim = GetComponentInChildren<Animator>(true);
+        spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (spriteRenderer != null) baseColor = spriteRenderer.color;
+
+        CurrentHealth = maxHealth;
+        IsInvulnerable = true; // desde que se instancia, antes incluso de Start
+    }
+
+    private void Start()
+    {
+        if (!target)
+        {
+            GameObject p = GameObject.FindGameObjectWithTag("Player");
+            if (p) target = p.transform;
+        }
+
+        SFXManager.Instance?.PlayBossAppear();
+        OnAnyBossSpawned?.Invoke(this);
+
+        StartCoroutine(EntryThenFight());
+    }
+
+    private IEnumerator EntryThenFight()
+    {
+        yield return Entry();
+        if (IsDead) yield break;
+
+        OnCombatStarted?.Invoke();
+        yield return AttackLoop();
+    }
+
+    // Entra despacio desde el borde derecho de la camara hasta su posicion de spawn.
+    private IEnumerator Entry()
+    {
+        Camera cam = Camera.main;
+
+        if (cam != null && rb != null)
+        {
+            Vector2 destination = rb.position;
+            float halfWidth = spriteRenderer != null ? spriteRenderer.bounds.extents.x : 0f;
+            float rightEdge = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, Mathf.Abs(cam.transform.position.z))).x;
+
+            Vector2 start = new Vector2(rightEdge + halfWidth, destination.y);
+            rb.position = start;
+            transform.position = start;
+
+            SetMoving(true);
+            while (!IsDead && rb.position != destination)
+            {
+                rb.MovePosition(Vector2.MoveTowards(rb.position, destination, entrySpeed * Time.fixedDeltaTime));
+                yield return new WaitForFixedUpdate();
+            }
+            rb.linearVelocity = Vector2.zero;
+            SetMoving(false);
+        }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        if (IsDead || IsInvulnerable) return;
+
+        SFXManager.Instance?.PlayEnemyHit();
+
+        CurrentHealth -= damage;
+        OnHealthChanged?.Invoke((float)Mathf.Max(CurrentHealth, 0) / maxHealth);
+
+        if (CurrentHealth <= 0)
+        {
+            Die();
+            return;
+        }
+
+        if (anim != null) anim.SetTrigger("Hit");
+    }
+
+    private void Die()
+    {
+        if (IsDead) return;
+        IsDead = true;
+
+        StopAllCoroutines();
+
+        SFXManager.Instance?.PlayEnemyDeath();
+
+        if (ScoreManager.Instance != null)
+            ScoreManager.Instance.AddScore(scoreValue);
+
+        DropRewards();
+
+        GetComponent<EnemyWaveMember>()?.NotifyDeath();
+        OnDefeated?.Invoke();
+
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector2.zero;
+            rb.angularVelocity = 0f;
+        }
+        if (myCol != null) myCol.enabled = false;
+
+        if (anim != null)
+        {
+            anim.SetBool(movingParam, false);
+            anim.ResetTrigger("Hit");
+            anim.SetTrigger("Dead");
+        }
+
+        StartCoroutine(DestroyAfterDeath());
+    }
+
+    private void DropRewards()
+    {
+        foreach (var prefab in guaranteedDropPrefabs)
+        {
+            if (prefab == null) continue;
+            Vector3 offset = (Vector3)(UnityEngine.Random.insideUnitCircle * 0.5f);
+            Instantiate(prefab, transform.position + offset, Quaternion.identity);
+        }
+    }
+
+    private IEnumerator DestroyAfterDeath()
+    {
+        yield return new WaitForSeconds(deathDestroyDelay);
+        Destroy(gameObject);
+    }
+
+    private IEnumerator AttackLoop()
+    {
+        // Alterna embestida y rafaga. En fase 2 las pausas son mas cortas y
+        // tambien dispara rafaga tras cada embestida.
+        bool chargeNext = true;
+
+        while (!IsDead)
+        {
+            SetMoving(false);
+            yield return new WaitForSeconds(IsPhase2 ? phase2IdleDuration : idleDuration);
+            if (IsDead) yield break;
+
+            if (chargeNext || burstBulletPrefab == null)
+            {
+                yield return Telegraph();
+                if (IsDead) yield break;
+
+                IsInvulnerable = false;
+                Vector2 chargeDir = target != null
+                    ? ((Vector2)target.position - (Vector2)transform.position).normalized
+                    : Vector2.right;
+                yield return Charge(chargeDir);
+                if (IsDead) yield break;
+
+                if (IsPhase2)
+                    yield return FireCircularBurst();
+            }
+            else
+            {
+                IsInvulnerable = false;
+                yield return FireCircularBurst();
+            }
+
+            chargeNext = !chargeNext;
+        }
+    }
+
+    private IEnumerator Telegraph()
+    {
+        float elapsed = 0f;
+        bool flashOn = false;
+
+        while (elapsed < telegraphDuration)
+        {
+            if (spriteRenderer != null)
+            {
+                flashOn = !flashOn;
+                spriteRenderer.color = flashOn ? Color.white : baseColor;
+            }
+
+            yield return new WaitForSeconds(telegraphBlinkInterval);
+            elapsed += telegraphBlinkInterval;
+        }
+
+        if (spriteRenderer != null) spriteRenderer.color = baseColor;
+    }
+
+    private IEnumerator Charge(Vector2 direction)
+    {
+        SetMoving(true);
+
+        for (float elapsed = 0f; elapsed < chargeDuration; elapsed += Time.fixedDeltaTime)
+        {
+            if (rb != null) rb.linearVelocity = direction * chargeSpeed;
+            yield return new WaitForFixedUpdate();
+            if (ClampToArena()) break;
+        }
+
+        if (rb != null) rb.linearVelocity = Vector2.zero;
+        SetMoving(false);
+    }
+
+    // Devuelve true si ha tenido que frenar al jefe contra el borde de la arena.
+    private bool ClampToArena()
+    {
+        if (!arena.HasValue || rb == null) return false;
+
+        Vector2 half = spriteRenderer != null ? (Vector2)spriteRenderer.bounds.extents : Vector2.zero;
+        if (myCol != null) half = Vector2.Max(half, myCol.bounds.extents);
+        half += Vector2.one * arenaWallMargin;
+
+        Bounds b = arena.Value;
+        Vector2 min = (Vector2)b.min + half;
+        Vector2 max = (Vector2)b.max - half;
+        Vector2 pos = rb.position;
+        Vector2 clamped = new Vector2(
+            min.x <= max.x ? Mathf.Clamp(pos.x, min.x, max.x) : b.center.x,
+            min.y <= max.y ? Mathf.Clamp(pos.y, min.y, max.y) : b.center.y);
+
+        if (clamped == pos) return false;
+        rb.position = clamped;
+        return true;
+    }
+
+    private IEnumerator FireCircularBurst()
+    {
+        if (burstBulletPrefab != null)
+        {
+            SetMoving(true);
+
+            for (int i = 0; i < burstBulletCount; i++)
+            {
+                float angle = i * (360f / burstBulletCount) * Mathf.Deg2Rad;
+                Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+
+                Vector3 spawnPos = transform.position + (Vector3)(dir * (EdgeDistance(dir) + burstSpawnPadding));
+                Bullet b = Instantiate(burstBulletPrefab, spawnPos, Quaternion.identity);
+                b.damage = burstBulletDamage;
+                b.Init(dir);
+                if (myCol != null) b.IgnoreCollider(myCol);
+            }
+        }
+
+        yield return new WaitForSeconds(burstAnimDuration);
+        SetMoving(false);
+    }
+
+    // Distancia del centro al borde del collider en la direccion dada.
+    private float EdgeDistance(Vector2 dir)
+    {
+        if (myCol == null) return 0f;
+        Vector2 ext = myCol.bounds.extents;
+        float tx = Mathf.Abs(dir.x) > 0.0001f ? ext.x / Mathf.Abs(dir.x) : float.MaxValue;
+        float ty = Mathf.Abs(dir.y) > 0.0001f ? ext.y / Mathf.Abs(dir.y) : float.MaxValue;
+        return Mathf.Min(tx, ty);
+    }
+
+    private void SetMoving(bool moving)
+    {
+        if (anim != null) anim.SetBool(movingParam, moving);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        TryDamagePlayer(other);
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (!other.CompareTag("Player")) return;
+        TryDamagePlayer(other);
+    }
+
+    private void TryDamagePlayer(Collider2D other)
+    {
+        if (IsInvulnerable || IsDead) return;
+        if (Time.time - lastContactDamageTime < contactDamageCooldown) return;
+        lastContactDamageTime = Time.time;
+
+        var health = other.GetComponentInParent<PlayerHealth>();
+        if (health != null && !health.IsDead)
+            health.TakeDamage(contactDamage);
+    }
+}
