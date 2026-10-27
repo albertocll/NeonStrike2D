@@ -36,6 +36,8 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     [Header("Rafaga circular (alterna con la embestida; en fase 2 tambien tras cada embestida)")]
     [SerializeField] private Bullet burstBulletPrefab;
     [SerializeField] private int burstBulletCount = 12;
+    [SerializeField] private int burstBulletDamage = 5; // solo estas balas; BulletEnemy lo comparte el Warden
+    [SerializeField] private float burstSpawnPadding = 0.2f; // las balas salen del borde, no del centro
     [SerializeField] private float burstAnimDuration = 0.3f;
 
     [Header("Dano de contacto")]
@@ -308,7 +310,9 @@ public class BossSentinelController : MonoBehaviour, IDamageable
                 float angle = i * (360f / burstBulletCount) * Mathf.Deg2Rad;
                 Vector2 dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
 
-                Bullet b = Instantiate(burstBulletPrefab, transform.position, Quaternion.identity);
+                Vector3 spawnPos = transform.position + (Vector3)(dir * (EdgeDistance(dir) + burstSpawnPadding));
+                Bullet b = Instantiate(burstBulletPrefab, spawnPos, Quaternion.identity);
+                b.damage = burstBulletDamage;
                 b.Init(dir);
                 if (myCol != null) b.IgnoreCollider(myCol);
             }
@@ -316,6 +320,16 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
         yield return new WaitForSeconds(burstAnimDuration);
         SetMoving(false);
+    }
+
+    // Distancia del centro al borde del collider en la direccion dada.
+    private float EdgeDistance(Vector2 dir)
+    {
+        if (myCol == null) return 0f;
+        Vector2 ext = myCol.bounds.extents;
+        float tx = Mathf.Abs(dir.x) > 0.0001f ? ext.x / Mathf.Abs(dir.x) : float.MaxValue;
+        float ty = Mathf.Abs(dir.y) > 0.0001f ? ext.y / Mathf.Abs(dir.y) : float.MaxValue;
+        return Mathf.Min(tx, ty);
     }
 
     private void SetMoving(bool moving)
