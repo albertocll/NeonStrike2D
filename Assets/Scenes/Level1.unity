@@ -2953,10 +2953,13 @@ MonoBehaviour:
   panelHeight: 80
   barHeight: 24
   nameFontSize: 30
+  introFont: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   introFontSize: 140
-  introColor: {r: 0, g: 0.9, b: 1, a: 1}
+  introColor: {r: 0.85, g: 1, b: 1, a: 1}
+  introOutlineColor: {r: 0, g: 0, b: 0, a: 1}
+  introOutlineWidth: 0.3
+  introBandColor: {r: 0, g: 0, b: 0, a: 0.6}
   introSlideDuration: 0.35
-  introHoldDuration: 2
   introFadeDuration: 0.4
 --- !u!1 &906127720
 GameObject:

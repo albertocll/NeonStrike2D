@@ -143,6 +143,7 @@ MonoBehaviour:
   telegraphBlinkInterval: 0.1
   chargeSpeed: 10
   chargeDuration: 0.8
+  arenaWallMargin: 0.5
   burstBulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   burstBulletCount: 12
   burstAnimDuration: 0.3
@@ -237,7 +238,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 1
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 849cb9f3b917ceb488756a5a6bb1311c, type: 3}
+  m_Sprite: {fileID: -480556683564100543, guid: 849cb9f3b917ceb488756a5a6bb1311c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

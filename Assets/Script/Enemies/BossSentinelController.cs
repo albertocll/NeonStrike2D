@@ -19,6 +19,9 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     [SerializeField] private int scoreValue = 500;
     [SerializeField, Range(0f, 1f)] private float phase2HealthThreshold = 0.5f;
 
+    [Header("Entrada")]
+    [SerializeField] private float entrySpeed = 2.5f;
+
     [Header("Embestida")]
     [SerializeField] private float idleDuration = 1.5f;
     [SerializeField] private float telegraphDuration = 0.6f;
@@ -46,11 +49,13 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
     public event Action<float> OnHealthChanged;
     public event Action OnDefeated;
+    public event Action OnCombatStarted;
 
     public string DisplayName => displayName;
     public int MaxHealth => maxHealth;
     public int CurrentHealth { get; private set; }
     public bool IsDead { get; private set; }
+    public bool IsEntering { get; private set; }
     private bool IsPhase2 => CurrentHealth <= maxHealth * phase2HealthThreshold;
 
     private Rigidbody2D rb;
@@ -73,6 +78,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
         CurrentHealth = maxHealth;
+        IsEntering = true; // invulnerable desde que se instancia hasta acabar la entrada
     }
 
     private void Start()
@@ -86,12 +92,51 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         SFXManager.Instance?.PlayBossAppear();
         OnAnyBossSpawned?.Invoke(this);
 
-        StartCoroutine(AttackLoop());
+        StartCoroutine(EntryThenFight());
+    }
+
+    private IEnumerator EntryThenFight()
+    {
+        yield return Entry();
+        if (IsDead) yield break;
+
+        OnCombatStarted?.Invoke();
+        yield return AttackLoop();
+    }
+
+    // Entra despacio desde el borde derecho de la camara hasta su posicion de spawn.
+    // Mientras entra no ataca, no hace dano de contacto y no recibe dano.
+    private IEnumerator Entry()
+    {
+        IsEntering = true;
+        Camera cam = Camera.main;
+
+        if (cam != null && rb != null)
+        {
+            Vector2 destination = rb.position;
+            float halfWidth = spriteRenderer != null ? spriteRenderer.bounds.extents.x : 0f;
+            float rightEdge = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, Mathf.Abs(cam.transform.position.z))).x;
+
+            Vector2 start = new Vector2(rightEdge + halfWidth, destination.y);
+            rb.position = start;
+            transform.position = start;
+
+            SetMoving(true);
+            while (!IsDead && rb.position != destination)
+            {
+                rb.MovePosition(Vector2.MoveTowards(rb.position, destination, entrySpeed * Time.fixedDeltaTime));
+                yield return new WaitForFixedUpdate();
+            }
+            rb.linearVelocity = Vector2.zero;
+            SetMoving(false);
+        }
+
+        IsEntering = false;
     }
 
     public void TakeDamage(int damage)
     {
-        if (IsDead) return;
+        if (IsDead || IsEntering) return;
 
         SFXManager.Instance?.PlayEnemyHit();
 
@@ -276,6 +321,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
     private void TryDamagePlayer(Collider2D other)
     {
+        if (IsEntering || IsDead) return;
         if (Time.time - lastContactDamageTime < contactDamageCooldown) return;
         lastContactDamageTime = Time.time;
 

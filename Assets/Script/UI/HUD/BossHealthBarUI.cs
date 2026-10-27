@@ -17,13 +17,17 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private float nameFontSize = 30f;
 
     [Header("Presentacion")]
+    [SerializeField] private TMP_FontAsset introFont;
     [SerializeField] private float introFontSize = 140f;
-    [SerializeField] private Color introColor = new Color(0f, 0.9f, 1f, 1f);
+    [SerializeField] private Color introColor = new Color(0.85f, 1f, 1f, 1f);
+    [SerializeField] private Color introOutlineColor = Color.black;
+    [SerializeField, Range(0f, 1f)] private float introOutlineWidth = 0.3f;
+    [SerializeField] private Color introBandColor = new Color(0f, 0f, 0f, 0.6f);
     [SerializeField] private float introSlideDuration = 0.35f;
-    [SerializeField] private float introHoldDuration = 2f;
     [SerializeField] private float introFadeDuration = 0.4f;
 
     private BossSentinelController boss;
+    private CanvasGroup introGroup;
     private TextMeshProUGUI introText;
     private Coroutine introRoutine;
 
@@ -56,6 +60,7 @@ public class BossHealthBarUI : MonoBehaviour
         boss = spawnedBoss;
         boss.OnHealthChanged += HandleHealthChanged;
         boss.OnDefeated += HandleDefeated;
+        boss.OnCombatStarted += HandleCombatStarted;
 
         if (bannerText != null) bannerText.text = boss.DisplayName;
         if (healthSlider != null) healthSlider.value = 1f;
@@ -69,9 +74,15 @@ public class BossHealthBarUI : MonoBehaviour
         if (healthSlider != null) healthSlider.value = normalized;
     }
 
+    private void HandleCombatStarted()
+    {
+        HideIntro();
+    }
+
     private void HandleDefeated()
     {
         if (panel != null) panel.SetActive(false);
+        HideIntro();
         Unsubscribe();
     }
 
@@ -80,6 +91,7 @@ public class BossHealthBarUI : MonoBehaviour
         if (boss == null) return;
         boss.OnHealthChanged -= HandleHealthChanged;
         boss.OnDefeated -= HandleDefeated;
+        boss.OnCombatStarted -= HandleCombatStarted;
         boss = null;
     }
 
@@ -119,18 +131,38 @@ public class BossHealthBarUI : MonoBehaviour
         }
     }
 
-    // Texto grande de presentacion, creado por codigo (sin assets nuevos).
+    // Franja negra semitransparente con el nombre grande encima, creada por codigo (sin assets nuevos).
     private void CreateIntroText()
     {
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas == null) return;
 
-        var go = new GameObject("BossIntroText", typeof(RectTransform));
-        go.transform.SetParent(canvas.transform, false);
-        go.transform.SetAsLastSibling();
+        float bandHeight = introFontSize * 1.6f;
 
-        introText = go.AddComponent<TextMeshProUGUI>();
-        if (bannerText != null) introText.font = bannerText.font;
+        var band = new GameObject("BossIntroBand", typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
+        band.transform.SetParent(canvas.transform, false);
+        band.transform.SetAsLastSibling();
+
+        var bandRt = (RectTransform)band.transform;
+        bandRt.anchorMin = new Vector2(0f, 0.5f);
+        bandRt.anchorMax = new Vector2(1f, 0.5f);
+        bandRt.pivot = new Vector2(0.5f, 0.5f);
+        bandRt.sizeDelta = new Vector2(0f, bandHeight);
+        bandRt.anchoredPosition = new Vector2(0f, 120f);
+
+        var bandImage = band.GetComponent<Image>();
+        bandImage.color = introBandColor;
+        bandImage.raycastTarget = false;
+
+        introGroup = band.GetComponent<CanvasGroup>();
+        introGroup.blocksRaycasts = false;
+        introGroup.interactable = false;
+
+        var textGo = new GameObject("BossIntroText", typeof(RectTransform));
+        textGo.transform.SetParent(band.transform, false);
+
+        introText = textGo.AddComponent<TextMeshProUGUI>();
+        introText.font = introFont != null ? introFont : (bannerText != null ? bannerText.font : introText.font);
         introText.fontSize = introFontSize;
         introText.fontStyle = FontStyles.Bold | FontStyles.UpperCase;
         introText.color = introColor;
@@ -138,51 +170,69 @@ public class BossHealthBarUI : MonoBehaviour
         introText.textWrappingMode = TextWrappingModes.NoWrap;
         introText.raycastTarget = false;
 
-        var rt = introText.rectTransform;
-        rt.anchorMin = new Vector2(0f, 0.5f);
-        rt.anchorMax = new Vector2(1f, 0.5f);
-        rt.pivot = new Vector2(0.5f, 0.5f);
-        rt.sizeDelta = new Vector2(0f, introFontSize * 1.5f);
-        rt.anchoredPosition = new Vector2(0f, 120f);
+        // fontMaterial crea una instancia: el contorno no toca el material compartido de la fuente.
+        Material mat = introText.fontMaterial;
+        mat.EnableKeyword(ShaderUtilities.Keyword_Outline);
+        mat.SetColor(ShaderUtilities.ID_OutlineColor, introOutlineColor);
+        mat.SetFloat(ShaderUtilities.ID_OutlineWidth, introOutlineWidth);
+        introText.outlineColor = introOutlineColor;
+        introText.outlineWidth = introOutlineWidth;
 
-        go.SetActive(false);
+        var rt = introText.rectTransform;
+        rt.anchorMin = Vector2.zero;
+        rt.anchorMax = Vector2.one;
+        rt.pivot = new Vector2(0.5f, 0.5f);
+        rt.sizeDelta = Vector2.zero;
+        rt.anchoredPosition = Vector2.zero;
+
+        band.SetActive(false);
     }
 
     private void PlayIntro(string bossName)
     {
         if (introText == null) return;
         if (introRoutine != null) StopCoroutine(introRoutine);
-        introRoutine = StartCoroutine(IntroRoutine(bossName));
+        introRoutine = StartCoroutine(IntroInRoutine(bossName));
     }
 
-    private IEnumerator IntroRoutine(string bossName)
+    private void HideIntro()
+    {
+        if (introGroup == null || !introGroup.gameObject.activeSelf) return;
+        if (introRoutine != null) StopCoroutine(introRoutine);
+        introRoutine = StartCoroutine(IntroOutRoutine());
+    }
+
+    // Entra desde la izquierda con frenada al final y se queda hasta que empieza el combate.
+    private IEnumerator IntroInRoutine(string bossName)
     {
         var rt = introText.rectTransform;
-        float y = rt.anchoredPosition.y;
         float startX = -((RectTransform)introText.canvas.transform).rect.width;
 
         introText.text = bossName;
-        introText.alpha = 1f;
-        introText.gameObject.SetActive(true);
+        introGroup.alpha = 1f;
+        introGroup.gameObject.SetActive(true);
 
-        // Entra desde la izquierda con frenada al final.
         for (float t = 0f; t < introSlideDuration; t += Time.deltaTime)
         {
             float k = 1f - Mathf.Pow(1f - t / introSlideDuration, 3f);
-            rt.anchoredPosition = new Vector2(Mathf.Lerp(startX, 0f, k), y);
+            rt.anchoredPosition = new Vector2(Mathf.Lerp(startX, 0f, k), 0f);
             yield return null;
         }
-        rt.anchoredPosition = new Vector2(0f, y);
+        rt.anchoredPosition = Vector2.zero;
+        introRoutine = null;
+    }
 
-        yield return new WaitForSeconds(introHoldDuration);
-
+    private IEnumerator IntroOutRoutine()
+    {
+        float startAlpha = introGroup.alpha;
         for (float t = 0f; t < introFadeDuration; t += Time.deltaTime)
         {
-            introText.alpha = 1f - t / introFadeDuration;
+            introGroup.alpha = Mathf.Lerp(startAlpha, 0f, t / introFadeDuration);
             yield return null;
         }
 
-        introText.gameObject.SetActive(false);
+        introGroup.gameObject.SetActive(false);
+        introText.rectTransform.anchoredPosition = Vector2.zero;
         introRoutine = null;
     }
 }
