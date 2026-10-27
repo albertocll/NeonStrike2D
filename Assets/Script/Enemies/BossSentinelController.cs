@@ -15,7 +15,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     [SerializeField] private string displayName = "Sentinel";
 
     [Header("Vida")]
-    [SerializeField] private int maxHealth = 750; // ~10x EnemyWarden (enemigo basico, 75 HP)
+    [SerializeField] private int maxHealth = 3000; // ~40x EnemyWarden (enemigo basico, 75 HP)
     [SerializeField] private int scoreValue = 500;
     [SerializeField, Range(0f, 1f)] private float phase2HealthThreshold = 0.5f;
 

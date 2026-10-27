@@ -135,7 +135,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::BossSentinelController
   target: {fileID: 0}
   displayName: Sentinel
-  maxHealth: 750
+  maxHealth: 3000
   scoreValue: 500
   phase2HealthThreshold: 0.5
   idleDuration: 1.5
