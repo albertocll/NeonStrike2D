@@ -4,12 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BossCentinelaController : MonoBehaviour, IDamageable
+public class BossSentinelController : MonoBehaviour, IDamageable
 {
-    public static event Action<BossCentinelaController> OnAnyBossSpawned;
+    public static event Action<BossSentinelController> OnAnyBossSpawned;
 
     [Header("Target")]
     [SerializeField] private Transform target;
+
+    [Header("Identidad")]
+    [SerializeField] private string displayName = "Sentinel";
 
     [Header("Vida")]
     [SerializeField] private int maxHealth = 750; // ~10x EnemyWarden (enemigo basico, 75 HP)
@@ -43,6 +46,7 @@ public class BossCentinelaController : MonoBehaviour, IDamageable
     public event Action<float> OnHealthChanged;
     public event Action OnDefeated;
 
+    public string DisplayName => displayName;
     public int MaxHealth => maxHealth;
     public int CurrentHealth { get; private set; }
     public bool IsDead { get; private set; }

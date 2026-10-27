@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4166714158388791516}
   - component: {fileID: 6420257777620001882}
   m_Layer: 6
-  m_Name: BossCentinela
+  m_Name: BossSentinel
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,7 +132,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3f70213fde94d26429866bf9c75e4367, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: NeonStrike2D::BossCentinelaController
+  m_EditorClassIdentifier: NeonStrike2D::BossSentinelController
   target: {fileID: 0}
   maxHealth: 750
   scoreValue: 500
@@ -234,7 +234,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 849cb9f3b917ceb488756a5a6bb1311c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

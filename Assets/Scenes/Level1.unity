@@ -1891,10 +1891,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\xA1CENTINELA!"
+  m_text: Sentinel
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
+  m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2948,7 +2948,16 @@ MonoBehaviour:
   panel: {fileID: 227816532}
   healthSlider: {fileID: 1783142269}
   bannerText: {fileID: 625080253}
-  bannerLabel: "\xA1CENTINELA!"
+  barSideMargin: 0.2
+  barBottomOffset: 24
+  panelHeight: 80
+  barHeight: 24
+  nameFontSize: 30
+  introFontSize: 140
+  introColor: {r: 0, g: 0.9, b: 1, a: 1}
+  introSlideDuration: 0.35
+  introHoldDuration: 2
+  introFadeDuration: 0.4
 --- !u!1 &906127720
 GameObject:
   m_ObjectHideFlags: 0
@@ -7223,7 +7232,7 @@ MonoBehaviour:
   uiExclusionZones:
   - {fileID: 906127721}
   - {fileID: 1260157046}
-  bossCentinelaPrefab: {fileID: 2085037830857136681, guid: 10299d137a1141a41a77df4da8e891f5, type: 3}
+  bossSentinelPrefab: {fileID: 2085037830857136681, guid: 10299d137a1141a41a77df4da8e891f5, type: 3}
 --- !u!4 &1916839832
 Transform:
   m_ObjectHideFlags: 0

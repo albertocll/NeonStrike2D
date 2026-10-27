@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class EnemySpawner : MonoBehaviour
 {
@@ -16,14 +17,15 @@ public class EnemySpawner : MonoBehaviour
     private const float ExclusionPadding = 0.5f;
 
     [Header("Boss")]
-    [SerializeField] private GameObject bossCentinelaPrefab;
+    [FormerlySerializedAs("bossCentinelaPrefab")]
+    [SerializeField] private GameObject bossSentinelPrefab;
 
     public void SpawnBoss(WaveManager waveManager)
     {
-        if (bossCentinelaPrefab == null) return;
+        if (bossSentinelPrefab == null) return;
 
         Vector2 spawnPosition = spawnArea.bounds.center;
-        GameObject bossInstance = Instantiate(bossCentinelaPrefab, spawnPosition, Quaternion.identity);
+        GameObject bossInstance = Instantiate(bossSentinelPrefab, spawnPosition, Quaternion.identity);
 
         EnemyWaveMember waveMember = bossInstance.GetComponent<EnemyWaveMember>();
         if (waveMember != null)
