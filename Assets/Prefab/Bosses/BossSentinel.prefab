@@ -138,11 +138,12 @@ MonoBehaviour:
   maxHealth: 3000
   scoreValue: 500
   phase2HealthThreshold: 0.5
-  idleDuration: 1.5
-  telegraphDuration: 0.6
+  idleDuration: 0.8
+  phase2IdleDuration: 0.45
+  telegraphDuration: 0.5
   telegraphBlinkInterval: 0.1
-  chargeSpeed: 10
-  chargeDuration: 0.8
+  chargeSpeed: 15
+  chargeDuration: 0.6
   arenaWallMargin: 0.5
   burstBulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   burstBulletCount: 12

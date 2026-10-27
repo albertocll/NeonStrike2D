@@ -11,7 +11,7 @@ public class BossHealthBarUI : MonoBehaviour
 
     [Header("Barra (abajo, ancha)")]
     [SerializeField, Range(0f, 0.5f)] private float barSideMargin = 0.2f;
-    [SerializeField] private float barBottomOffset = 24f;
+    [SerializeField] private float barBottomOffset = 70f;
     [SerializeField] private float panelHeight = 80f;
     [SerializeField] private float barHeight = 24f;
     [SerializeField] private float nameFontSize = 30f;
@@ -22,7 +22,6 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private Color introColor = new Color(0.85f, 1f, 1f, 1f);
     [SerializeField] private Color introOutlineColor = Color.black;
     [SerializeField, Range(0f, 1f)] private float introOutlineWidth = 0.3f;
-    [SerializeField] private Color introBandColor = new Color(0f, 0f, 0f, 0.6f);
     [SerializeField] private float introSlideDuration = 0.35f;
     [SerializeField] private float introFadeDuration = 0.4f;
 
@@ -131,15 +130,13 @@ public class BossHealthBarUI : MonoBehaviour
         }
     }
 
-    // Franja negra semitransparente con el nombre grande encima, creada por codigo (sin assets nuevos).
+    // Nombre grande de presentacion, creado por codigo (sin assets nuevos).
     private void CreateIntroText()
     {
         Canvas canvas = GetComponentInParent<Canvas>();
         if (canvas == null) return;
 
-        float bandHeight = introFontSize * 1.6f;
-
-        var band = new GameObject("BossIntroBand", typeof(RectTransform), typeof(Image), typeof(CanvasGroup));
+        var band = new GameObject("BossIntro", typeof(RectTransform), typeof(CanvasGroup));
         band.transform.SetParent(canvas.transform, false);
         band.transform.SetAsLastSibling();
 
@@ -147,12 +144,8 @@ public class BossHealthBarUI : MonoBehaviour
         bandRt.anchorMin = new Vector2(0f, 0.5f);
         bandRt.anchorMax = new Vector2(1f, 0.5f);
         bandRt.pivot = new Vector2(0.5f, 0.5f);
-        bandRt.sizeDelta = new Vector2(0f, bandHeight);
+        bandRt.sizeDelta = new Vector2(0f, introFontSize * 1.6f);
         bandRt.anchoredPosition = new Vector2(0f, 120f);
-
-        var bandImage = band.GetComponent<Image>();
-        bandImage.color = introBandColor;
-        bandImage.raycastTarget = false;
 
         introGroup = band.GetComponent<CanvasGroup>();
         introGroup.blocksRaycasts = false;
@@ -164,7 +157,7 @@ public class BossHealthBarUI : MonoBehaviour
         introText = textGo.AddComponent<TextMeshProUGUI>();
         introText.font = introFont != null ? introFont : (bannerText != null ? bannerText.font : introText.font);
         introText.fontSize = introFontSize;
-        introText.fontStyle = FontStyles.Bold | FontStyles.UpperCase;
+        introText.fontStyle = FontStyles.Bold;
         introText.color = introColor;
         introText.alignment = TextAlignmentOptions.Center;
         introText.textWrappingMode = TextWrappingModes.NoWrap;

@@ -2949,7 +2949,7 @@ MonoBehaviour:
   healthSlider: {fileID: 1783142269}
   bannerText: {fileID: 625080253}
   barSideMargin: 0.2
-  barBottomOffset: 24
+  barBottomOffset: 70
   panelHeight: 80
   barHeight: 24
   nameFontSize: 30
@@ -2958,7 +2958,6 @@ MonoBehaviour:
   introColor: {r: 0.85, g: 1, b: 1, a: 1}
   introOutlineColor: {r: 0, g: 0, b: 0, a: 1}
   introOutlineWidth: 0.3
-  introBandColor: {r: 0, g: 0, b: 0, a: 0.6}
   introSlideDuration: 0.35
   introFadeDuration: 0.4
 --- !u!1 &906127720

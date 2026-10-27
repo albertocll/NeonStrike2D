@@ -22,15 +22,18 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     [Header("Entrada")]
     [SerializeField] private float entrySpeed = 2.5f;
 
+    [Header("Ritmo de combate")]
+    [SerializeField] private float idleDuration = 0.8f;        // pausa entre ataques en fase 1
+    [SerializeField] private float phase2IdleDuration = 0.45f; // pausa entre ataques en fase 2
+
     [Header("Embestida")]
-    [SerializeField] private float idleDuration = 1.5f;
-    [SerializeField] private float telegraphDuration = 0.6f;
+    [SerializeField] private float telegraphDuration = 0.5f;
     [SerializeField] private float telegraphBlinkInterval = 0.1f;
-    [SerializeField] private float chargeSpeed = 10f;
-    [SerializeField] private float chargeDuration = 0.8f;
+    [SerializeField] private float chargeSpeed = 15f;
+    [SerializeField] private float chargeDuration = 0.6f;
     [SerializeField] private float arenaWallMargin = 0.5f; // separacion minima con las paredes al embestir
 
-    [Header("Rafaga circular (fase 2, vida <50%)")]
+    [Header("Rafaga circular (alterna con la embestida; en fase 2 tambien tras cada embestida)")]
     [SerializeField] private Bullet burstBulletPrefab;
     [SerializeField] private int burstBulletCount = 12;
     [SerializeField] private float burstAnimDuration = 0.3f;
@@ -55,7 +58,9 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     public int MaxHealth => maxHealth;
     public int CurrentHealth { get; private set; }
     public bool IsDead { get; private set; }
-    public bool IsEntering { get; private set; }
+    // Invulnerable y sin dano de contacto desde que aparece hasta que lanza su primer ataque
+    // (entrada + pausa + parpadeo previo a la primera embestida).
+    public bool IsInvulnerable { get; private set; }
     private bool IsPhase2 => CurrentHealth <= maxHealth * phase2HealthThreshold;
 
     private Rigidbody2D rb;
@@ -78,7 +83,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         if (spriteRenderer != null) baseColor = spriteRenderer.color;
 
         CurrentHealth = maxHealth;
-        IsEntering = true; // invulnerable desde que se instancia hasta acabar la entrada
+        IsInvulnerable = true; // desde que se instancia, antes incluso de Start
     }
 
     private void Start()
@@ -105,10 +110,8 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     }
 
     // Entra despacio desde el borde derecho de la camara hasta su posicion de spawn.
-    // Mientras entra no ataca, no hace dano de contacto y no recibe dano.
     private IEnumerator Entry()
     {
-        IsEntering = true;
         Camera cam = Camera.main;
 
         if (cam != null && rb != null)
@@ -130,13 +133,11 @@ public class BossSentinelController : MonoBehaviour, IDamageable
             rb.linearVelocity = Vector2.zero;
             SetMoving(false);
         }
-
-        IsEntering = false;
     }
 
     public void TakeDamage(int damage)
     {
-        if (IsDead || IsEntering) return;
+        if (IsDead || IsInvulnerable) return;
 
         SFXManager.Instance?.PlayEnemyHit();
 
@@ -204,23 +205,38 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
     private IEnumerator AttackLoop()
     {
+        // Alterna embestida y rafaga. En fase 2 las pausas son mas cortas y
+        // tambien dispara rafaga tras cada embestida.
+        bool chargeNext = true;
+
         while (!IsDead)
         {
             SetMoving(false);
-            yield return new WaitForSeconds(idleDuration);
+            yield return new WaitForSeconds(IsPhase2 ? phase2IdleDuration : idleDuration);
             if (IsDead) yield break;
 
-            yield return Telegraph();
-            if (IsDead) yield break;
+            if (chargeNext || burstBulletPrefab == null)
+            {
+                yield return Telegraph();
+                if (IsDead) yield break;
 
-            Vector2 chargeDir = target != null
-                ? ((Vector2)target.position - (Vector2)transform.position).normalized
-                : Vector2.right;
-            yield return Charge(chargeDir);
-            if (IsDead) yield break;
+                IsInvulnerable = false;
+                Vector2 chargeDir = target != null
+                    ? ((Vector2)target.position - (Vector2)transform.position).normalized
+                    : Vector2.right;
+                yield return Charge(chargeDir);
+                if (IsDead) yield break;
 
-            if (IsPhase2)
+                if (IsPhase2)
+                    yield return FireCircularBurst();
+            }
+            else
+            {
+                IsInvulnerable = false;
                 yield return FireCircularBurst();
+            }
+
+            chargeNext = !chargeNext;
         }
     }
 
@@ -321,7 +337,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
     private void TryDamagePlayer(Collider2D other)
     {
-        if (IsEntering || IsDead) return;
+        if (IsInvulnerable || IsDead) return;
         if (Time.time - lastContactDamageTime < contactDamageCooldown) return;
         lastContactDamageTime = Time.time;
 
