@@ -25,6 +25,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     [SerializeField] private float telegraphBlinkInterval = 0.1f;
     [SerializeField] private float chargeSpeed = 10f;
     [SerializeField] private float chargeDuration = 0.8f;
+    [SerializeField] private float arenaWallMargin = 0.5f; // separacion minima con las paredes al embestir
 
     [Header("Rafaga circular (fase 2, vida <50%)")]
     [SerializeField] private Bullet burstBulletPrefab;
@@ -57,6 +58,10 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     private SpriteRenderer spriteRenderer;
     private Color baseColor;
     private float lastContactDamageTime;
+    private Bounds? arena;
+
+    // El collider es trigger y no choca con las paredes: la arena limita la embestida.
+    public void SetArena(Bounds bounds) => arena = bounds;
 
     private void Awake()
     {
@@ -197,12 +202,38 @@ public class BossSentinelController : MonoBehaviour, IDamageable
     private IEnumerator Charge(Vector2 direction)
     {
         SetMoving(true);
-        if (rb != null) rb.linearVelocity = direction * chargeSpeed;
 
-        yield return new WaitForSeconds(chargeDuration);
+        for (float elapsed = 0f; elapsed < chargeDuration; elapsed += Time.fixedDeltaTime)
+        {
+            if (rb != null) rb.linearVelocity = direction * chargeSpeed;
+            yield return new WaitForFixedUpdate();
+            if (ClampToArena()) break;
+        }
 
         if (rb != null) rb.linearVelocity = Vector2.zero;
         SetMoving(false);
+    }
+
+    // Devuelve true si ha tenido que frenar al jefe contra el borde de la arena.
+    private bool ClampToArena()
+    {
+        if (!arena.HasValue || rb == null) return false;
+
+        Vector2 half = spriteRenderer != null ? (Vector2)spriteRenderer.bounds.extents : Vector2.zero;
+        if (myCol != null) half = Vector2.Max(half, myCol.bounds.extents);
+        half += Vector2.one * arenaWallMargin;
+
+        Bounds b = arena.Value;
+        Vector2 min = (Vector2)b.min + half;
+        Vector2 max = (Vector2)b.max - half;
+        Vector2 pos = rb.position;
+        Vector2 clamped = new Vector2(
+            min.x <= max.x ? Mathf.Clamp(pos.x, min.x, max.x) : b.center.x,
+            min.y <= max.y ? Mathf.Clamp(pos.y, min.y, max.y) : b.center.y);
+
+        if (clamped == pos) return false;
+        rb.position = clamped;
+        return true;
     }
 
     private IEnumerator FireCircularBurst()

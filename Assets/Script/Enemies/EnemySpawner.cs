@@ -26,6 +26,7 @@ public class EnemySpawner : MonoBehaviour
 
         Vector2 spawnPosition = spawnArea.bounds.center;
         GameObject bossInstance = Instantiate(bossSentinelPrefab, spawnPosition, Quaternion.identity);
+        bossInstance.GetComponent<BossSentinelController>()?.SetArena(spawnArea.bounds);
 
         EnemyWaveMember waveMember = bossInstance.GetComponent<EnemyWaveMember>();
         if (waveMember != null)
