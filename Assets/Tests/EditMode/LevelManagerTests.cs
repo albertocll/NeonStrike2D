@@ -22,12 +22,12 @@ public class LevelManagerTests
     }
 
     [Test]
-    public void Levels_StartInSector7_ThenTheGrid()
+    public void Levels_StartInLevel1_ThenTheGrid()
     {
         // Los LevelData reales de Resources/Levels: reiniciar siempre lleva al primero.
-        Assert.AreEqual("Sector7", LevelManager.FirstLevel.sceneName);
+        Assert.AreEqual("Level1", LevelManager.FirstLevel.sceneName);
         Assert.AreEqual("TheGrid", LevelManager.LevelForWave(11).sceneName);
-        Assert.IsTrue(LevelManager.IsLevelScene("Sector7"));
+        Assert.IsTrue(LevelManager.IsLevelScene("Level1"));
         Assert.IsTrue(LevelManager.IsLevelScene("TheGrid"));
         Assert.IsFalse(LevelManager.IsLevelScene("MainMenu"));
     }
