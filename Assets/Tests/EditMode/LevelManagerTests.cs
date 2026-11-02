@@ -10,20 +10,25 @@ public class LevelManagerTests
         level1.firstWave = 1;
         var level2 = ScriptableObject.CreateInstance<LevelData>();
         level2.firstWave = 11;
+        var levels = new[] { level1, level2 };
 
-        var go = new GameObject("LevelManagerUnderTest");
-        var lm = go.AddComponent<LevelManager>();
-        typeof(LevelManager)
-            .GetField("levels", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-            .SetValue(lm, new[] { level1, level2 });
+        Assert.AreSame(level1, LevelManager.LevelForWave(levels, 1));
+        Assert.AreSame(level1, LevelManager.LevelForWave(levels, 10));
+        Assert.AreSame(level2, LevelManager.LevelForWave(levels, 11));
+        Assert.AreSame(level2, LevelManager.LevelForWave(levels, 45));
 
-        Assert.AreSame(level1, lm.LevelForWave(1));
-        Assert.AreSame(level1, lm.LevelForWave(10));
-        Assert.AreSame(level2, lm.LevelForWave(11));
-        Assert.AreSame(level2, lm.LevelForWave(45));
-
-        Object.DestroyImmediate(go);
         Object.DestroyImmediate(level1);
         Object.DestroyImmediate(level2);
+    }
+
+    [Test]
+    public void Levels_StartInSector7_ThenTheGrid()
+    {
+        // Los LevelData reales de Resources/Levels: reiniciar siempre lleva al primero.
+        Assert.AreEqual("Sector7", LevelManager.FirstLevel.sceneName);
+        Assert.AreEqual("TheGrid", LevelManager.LevelForWave(11).sceneName);
+        Assert.IsTrue(LevelManager.IsLevelScene("Sector7"));
+        Assert.IsTrue(LevelManager.IsLevelScene("TheGrid"));
+        Assert.IsFalse(LevelManager.IsLevelScene("MainMenu"));
     }
 }

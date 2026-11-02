@@ -1,34 +1,20 @@
-using System.Collections;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
 
-public class LevelManager : MonoBehaviour
+// Lista de niveles: todos los LevelData de Resources/Levels, ordenados por primera oleada.
+public static class LevelManager
 {
-    [Header("Niveles (ordenados por primera oleada)")]
-    [SerializeField] private LevelData[] levels;
-    [SerializeField] private GameObject currentMap;
+    private const string LevelsFolder = "Levels";
 
-    [Header("Transicion")]
-    [SerializeField] private Canvas canvas;
-    [SerializeField] private TMP_FontAsset font;
-    [SerializeField] private float fontSize = 120f;
-    [SerializeField] private Color textColor = new Color(0.85f, 1f, 1f, 1f);
-    [SerializeField] private float fadeDuration = 0.5f;
-    [SerializeField] private float holdDuration = 1.5f;
+    private static LevelData[] levels;
 
-    private CanvasGroup overlayGroup;
-    private TextMeshProUGUI overlayText;
+    public static LevelData[] Levels => levels ??= LoadLevels();
 
-    public LevelData CurrentLevel { get; private set; }
+    public static LevelData FirstLevel => Levels.Length > 0 ? Levels[0] : null;
 
-    private void Awake()
-    {
-        CreateOverlay();
-    }
+    public static LevelData LevelForWave(int wave) => LevelForWave(Levels, wave);
 
     // El ultimo nivel cuya primera oleada ya se ha alcanzado; pasado el ultimo, se queda en el.
-    public LevelData LevelForWave(int wave)
+    public static LevelData LevelForWave(LevelData[] levels, int wave)
     {
         LevelData result = levels.Length > 0 ? levels[0] : null;
         foreach (LevelData level in levels)
@@ -39,98 +25,29 @@ public class LevelManager : MonoBehaviour
         return result;
     }
 
-    // Sustituye el mapa actual (tambien el que viene colocado en la escena) por el del nivel.
-    public void ShowLevel(LevelData level)
+    public static LevelData ForScene(string sceneName)
     {
-        if (level == null || level == CurrentLevel) return;
-
-        CurrentLevel = level;
-        if (currentMap != null) Destroy(currentMap);
-        currentMap = level.mapPrefab != null ? Instantiate(level.mapPrefab) : null;
-    }
-
-    public IEnumerator TransitionTo(LevelData level)
-    {
-        overlayText.text = level.displayName;
-        overlayGroup.gameObject.SetActive(true);
-        yield return Fade(0f, 1f);
-
-        ShowLevel(level);
-        MoveLocalPlayerToSpawn();
-
-        yield return new WaitForSeconds(holdDuration);
-        yield return Fade(1f, 0f);
-        overlayGroup.gameObject.SetActive(false);
-    }
-
-    // Solo se mueve el jugador local: el remoto llega por PlayerSync desde su propio cliente.
-    private void MoveLocalPlayerToSpawn()
-    {
-        if (currentMap == null) return;
-
-        GameObject player = GameObject.FindWithTag("Player");
-        Transform point = currentMap.transform.Find(GameData.IsHost ? "SpawnPointLocal" : "SpawnPointRemote");
-        if (player == null || point == null) return;
-
-        player.transform.position = point.position;
-        Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        if (rb != null)
+        foreach (LevelData level in Levels)
         {
-            rb.position = point.position;
-            rb.linearVelocity = Vector2.zero;
+            if (level != null && level.sceneName == sceneName)
+                return level;
         }
+        return null;
     }
 
-    private IEnumerator Fade(float from, float to)
+    public static bool IsLevelScene(string sceneName) => ForScene(sceneName) != null;
+
+    // Partida nueva o reinicio: se borra el estado de la partida y se empieza en el primer nivel.
+    public static void StartNewRun()
     {
-        for (float t = 0f; t < fadeDuration; t += Time.deltaTime)
-        {
-            overlayGroup.alpha = Mathf.Lerp(from, to, t / fadeDuration);
-            yield return null;
-        }
-        overlayGroup.alpha = to;
+        RunState.Clear();
+        SceneLoader.Load(FirstLevel.sceneName);
     }
 
-    // Pantalla negra con el nombre del nivel, creada por codigo. Va la primera del canvas
-    // para que el HUD y los paneles de pausa/game over queden por encima.
-    private void CreateOverlay()
+    private static LevelData[] LoadLevels()
     {
-        if (canvas == null) return;
-
-        var overlay = new GameObject("LevelTransition", typeof(RectTransform), typeof(CanvasGroup), typeof(Image));
-        overlay.transform.SetParent(canvas.transform, false);
-        overlay.transform.SetAsFirstSibling();
-
-        var rt = (RectTransform)overlay.transform;
-        rt.anchorMin = Vector2.zero;
-        rt.anchorMax = Vector2.one;
-        rt.sizeDelta = Vector2.zero;
-
-        var image = overlay.GetComponent<Image>();
-        image.color = Color.black;
-        image.raycastTarget = false;
-
-        overlayGroup = overlay.GetComponent<CanvasGroup>();
-        overlayGroup.blocksRaycasts = false;
-        overlayGroup.interactable = false;
-
-        var textGo = new GameObject("LevelTransitionText", typeof(RectTransform));
-        textGo.transform.SetParent(overlay.transform, false);
-
-        overlayText = textGo.AddComponent<TextMeshProUGUI>();
-        if (font != null) overlayText.font = font;
-        overlayText.fontSize = fontSize;
-        overlayText.fontStyle = FontStyles.Bold;
-        overlayText.color = textColor;
-        overlayText.alignment = TextAlignmentOptions.Center;
-        overlayText.textWrappingMode = TextWrappingModes.NoWrap;
-        overlayText.raycastTarget = false;
-
-        var textRt = overlayText.rectTransform;
-        textRt.anchorMin = Vector2.zero;
-        textRt.anchorMax = Vector2.one;
-        textRt.sizeDelta = Vector2.zero;
-
-        overlay.SetActive(false);
+        LevelData[] loaded = Resources.LoadAll<LevelData>(LevelsFolder);
+        System.Array.Sort(loaded, (a, b) => a.firstWave.CompareTo(b.firstWave));
+        return loaded;
     }
 }

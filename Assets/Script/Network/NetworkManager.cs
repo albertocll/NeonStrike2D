@@ -24,6 +24,8 @@ public class NetworkManager : MonoBehaviour
     public event Action<string> OnPlayerLeft;
     public event Action<string> OnReceiveGameState;
     public event Action<string> OnRoundEnded;
+    public event Action<string> OnLoadLevel;
+    public event Action<string> OnLevelStart;
 
     public event Action<string, string> OnInviteReceived;
     public event Action<string> OnInviteWaiting;
@@ -143,6 +145,16 @@ public class NetworkManager : MonoBehaviour
                     OnRoundEnded?.Invoke(re.winner);
                     break;
 
+                case "LoadLevel":
+                    var ll = JsonUtility.FromJson<WsLevel>(raw);
+                    OnLoadLevel?.Invoke(ll.scene);
+                    break;
+
+                case "LevelStart":
+                    var ls = JsonUtility.FromJson<WsLevel>(raw);
+                    OnLevelStart?.Invoke(ls.scene);
+                    break;
+
                 case "InviteReceived":
                     var ir = JsonUtility.FromJson<WsInviteReceived>(raw);
                     OnInviteReceived?.Invoke(ir.fromUsername, ir.roomId);
@@ -228,6 +240,20 @@ public class NetworkManager : MonoBehaviour
         await Task.CompletedTask;
     }
 
+    // Anfitrion: ha muerto su jefe; el servidor manda LoadLevel a los dos.
+    public async Task SendLevelCompleteAsync(string roomId, string sceneName)
+    {
+        SendMessage("LevelComplete", roomId, sceneName);
+        await Task.CompletedTask;
+    }
+
+    // Cada cliente al terminar de cargar el nivel; con los dos avisos el servidor manda LevelStart.
+    public async Task SendLevelLoadedAsync(string roomId, string sceneName)
+    {
+        SendMessage("LevelLoaded", roomId, sceneName);
+        await Task.CompletedTask;
+    }
+
     public async Task DisconnectAsync()
     {
         if (_ws != null && _ws.State == WebSocketState.Open)
@@ -248,6 +274,7 @@ public class NetworkManager : MonoBehaviour
 [Serializable] public class WsGameStart { public string type; public string user1; public string char1; public string user2; public string char2; }
 [Serializable] public class WsGameState { public string type; public string stateJson; }
 [Serializable] public class WsRoundEnded { public string type; public string winner; }
+[Serializable] public class WsLevel { public string type; public string scene; }
 [Serializable] public class WsInviteReceived { public string type; public string fromUsername; public string roomId; }
 [Serializable] public class WsInviteWaiting { public string type; public string roomId; }
 [Serializable] public class WsInviteError { public string type; public string message; }

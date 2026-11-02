@@ -23,6 +23,7 @@ public class MusicManager : MonoBehaviour
     private WaveManager waveManager;
     private Coroutine crossfadeRoutine;
     private bool intenseActive;
+    private bool inLevel;
 
     public bool IsMuted { get; private set; }
 
@@ -76,7 +77,24 @@ public class MusicManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "LoadingScreen") return;
+        // La pantalla de carga solo se usa al empezar o reiniciar partida y al ir al menu:
+        // la musica sigue sonando, pero el nivel al que se llegue empieza de cero.
+        if (scene.name == "LoadingScreen")
+        {
+            inLevel = false;
+            return;
+        }
+
+        bool isLevel = LevelManager.IsLevelScene(scene.name);
+
+        // Paso de un nivel al siguiente: la musica (normal o intensa) no se corta.
+        if (isLevel && inLevel)
+        {
+            waveManager = FindFirstObjectByType<WaveManager>();
+            return;
+        }
+
+        inLevel = isLevel;
 
         if (crossfadeRoutine != null)
         {
@@ -87,7 +105,7 @@ public class MusicManager : MonoBehaviour
         crossfadeSource.volume = 0f;
         intenseActive = false;
 
-        if (scene.name == "Gameplay")
+        if (isLevel)
         {
             waveManager = FindFirstObjectByType<WaveManager>();
             PlayClip(gameMusic);

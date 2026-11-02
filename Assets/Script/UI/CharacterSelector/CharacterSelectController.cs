@@ -40,7 +40,7 @@ public class CharacterSelectController : MonoBehaviour
         else
         {
             // Single player: cargar directamente.
-            SceneLoader.Load("Gameplay");
+            LevelManager.StartNewRun();
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class WaveManager : MonoBehaviour
@@ -8,7 +9,6 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private bool spawnEnemies = true;
     [Header("References")]
     [SerializeField] private EnemySpawner enemySpawner;
-    [SerializeField] private LevelManager levelManager;
     [SerializeField] private TMP_Text waveText;
 
     [Header("Wave Settings")]
@@ -18,21 +18,34 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float timeBetweenWaves = 2f;
     [SerializeField] private float initialDelay = 3f;
 
+    private LevelData level;
     private int currentWave;
     private int enemiesAlive;
     private bool waveInProgress;
 
     public int CurrentWave => currentWave;
 
-    private void Awake()
-    {
-        levelManager.ShowLevel(levelManager.LevelForWave(startingWave));
-    }
-
     private void Start()
     {
-        currentWave = startingWave - 1;
+        level = LevelManager.ForScene(SceneManager.GetActiveScene().name);
+
+        // Viniendo de otro nivel se sigue por donde iba la partida; si no, por startingWave
+        // (o por la primera oleada del nivel, si se abre su escena directamente).
+        if (RunState.Active)
+            currentWave = RunState.Wave;
+        else
+            currentWave = Mathf.Max(startingWave, level != null ? level.firstWave : 1) - 1;
+
+        if (NetworkManager.Instance != null)
+            NetworkManager.Instance.OnLoadLevel += HandleLoadLevel;
+
         StartCoroutine(StartWithDelay());
+    }
+
+    private void OnDestroy()
+    {
+        if (NetworkManager.Instance != null)
+            NetworkManager.Instance.OnLoadLevel -= HandleLoadLevel;
     }
 
     public void StartNextWave()
@@ -42,13 +55,13 @@ public class WaveManager : MonoBehaviour
         SFXManager.Instance?.PlayWaveStart();
 
         currentWave++;
+        RunState.Wave = currentWave;
         waveInProgress = true;
         enemiesAlive = 0;
 
         if (waveText != null)
             waveText.text = $"WAVE: {currentWave}";
 
-        LevelData level = levelManager.CurrentLevel;
         if (level != null && currentWave == level.bossWave && level.bossPrefab != null)
             enemySpawner.SpawnBoss(level.bossPrefab, this);
         else
@@ -77,16 +90,33 @@ public class WaveManager : MonoBehaviour
     {
         yield return new WaitForSeconds(timeBetweenWaves);
 
-        // Si la siguiente oleada es de otro nivel (se acaba de matar al jefe), se cambia de mapa antes.
-        LevelData nextLevel = levelManager.LevelForWave(currentWave + 1);
-        if (nextLevel != levelManager.CurrentLevel)
-            yield return levelManager.TransitionTo(nextLevel);
+        // La siguiente oleada es de otro nivel: se acaba de limpiar la ultima de este.
+        LevelData nextLevel = LevelManager.LevelForWave(currentWave + 1);
+        if (nextLevel != null && nextLevel != level)
+        {
+            if (!GameData.IsCoop)
+                LevelTransition.Begin(nextLevel);
+            else if (GameData.IsHost)
+                _ = NetworkManager.Instance.SendLevelCompleteAsync(GameData.RoomId, nextLevel.sceneName);
+            // El invitado se queda sin enemigos nuevos hasta que el anfitrion de la orden (HandleLoadLevel).
+            yield break;
+        }
 
         StartNextWave();
     }
 
+    // Orden del servidor en cooperativo: los dos jugadores cargan el nivel siguiente.
+    private void HandleLoadLevel(string sceneName)
+    {
+        LevelTransition.Begin(LevelManager.ForScene(sceneName));
+    }
+
     private IEnumerator StartWithDelay()
     {
+        // Al llegar de otro nivel, se espera a que termine la transicion (en cooperativo, a los dos jugadores).
+        while (LevelTransition.IsRunning)
+            yield return null;
+
         yield return new WaitForSeconds(initialDelay);
         StartNextWave();
     }

@@ -1,6 +1,5 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -8,9 +7,6 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private int maxHealth = 100;
     [SerializeField] private float deathFreezeDelay = 0.6f;
     [SerializeField] private GameOverUI gameOverUI;
-
-    [Header("Refs")]
-    [SerializeField] private WaveManager waveManager;
 
     private int currentHealth;
     private bool isDead = false;
@@ -25,7 +21,8 @@ public class PlayerHealth : MonoBehaviour
     public void Init(int maxHealth)
     {
         this.maxHealth = maxHealth;
-        currentHealth = maxHealth;
+        // Viniendo de otro nivel se conserva la vida que se tenia.
+        currentHealth = RunState.Active && RunState.Health > 0 ? Mathf.Min(RunState.Health, maxHealth) : maxHealth;
     }
 
     private void Awake()
@@ -37,9 +34,6 @@ public class PlayerHealth : MonoBehaviour
 
     private void Start()
     {
-        if (waveManager == null)
-            waveManager = FindFirstObjectByType<WaveManager>();
-
         if (gameOverUI == null)
             gameOverUI = FindFirstObjectByType<GameOverUI>(FindObjectsInactive.Include);
     }
@@ -120,10 +114,8 @@ public class PlayerHealth : MonoBehaviour
 
         try
         {
-            int wave = waveManager != null ? waveManager.CurrentWave : 0;
-            int score = ScoreManager.Instance != null ? ScoreManager.Instance.CurrentScore : 0;
             int userId = NetworkManager.Instance.UserId;
-            await ApiManager.Instance.SaveMatchResultAsync(userId, wave, score);
+            await ApiManager.Instance.SaveMatchResultAsync(userId, RunState.Wave, RunState.Score);
         }
         catch (System.Exception e)
         {
@@ -142,6 +134,6 @@ public class PlayerHealth : MonoBehaviour
     private void RestartScene()
     {
         Time.timeScale = 1f;
-        SceneLoader.Load(SceneManager.GetActiveScene().name);
+        LevelManager.StartNewRun();
     }
 }

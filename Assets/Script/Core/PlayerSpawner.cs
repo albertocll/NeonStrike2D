@@ -127,6 +127,8 @@ public class PlayerSpawner : MonoBehaviour
         if (_remotePlayer == null) return;
 
         var state = JsonUtility.FromJson<PlayerState>(stateJson);
+        if (state.kind != PlayerState.PositionKind) return;
+
         var sync = _remotePlayer.GetComponent<PlayerSync>();
         if (sync != null)
             sync.SetTargetPosition(new Vector2(state.x, state.y));
@@ -136,6 +138,9 @@ public class PlayerSpawner : MonoBehaviour
 [System.Serializable]
 public class PlayerState
 {
+    public const string PositionKind = "pos";
+
+    public string kind;
     public float x;
     public float y;
 }

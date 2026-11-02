@@ -24,13 +24,16 @@ public class ScoreManager : MonoBehaviour
 
     private void Start()
     {
-        currentScore = 0;
+        // Viniendo de otro nivel se conserva la puntuacion de la partida.
+        currentScore = RunState.Active ? RunState.Score : 0;
+        RunState.Score = currentScore;
         UpdateUI();
     }
 
     public void AddScore(int points)
     {
         currentScore += points;
+        RunState.Score = currentScore;
         UpdateUI();
     }
 

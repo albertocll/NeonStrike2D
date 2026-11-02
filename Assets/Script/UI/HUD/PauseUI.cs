@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PauseUI : MonoBehaviour
@@ -83,7 +82,7 @@ public class PauseUI : MonoBehaviour
     public void RestartScene()
     {
         Time.timeScale = 1f;
-        SceneLoader.Load(SceneManager.GetActiveScene().name);
+        LevelManager.StartNewRun();
     }
 
     public void LoadMainMenu()

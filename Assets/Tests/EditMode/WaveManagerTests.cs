@@ -19,9 +19,9 @@ public class WaveManagerTests
     [TestCase(1, ExpectedResult = 3)]
     [TestCase(5, ExpectedResult = 7)]
     [TestCase(9, ExpectedResult = 11)]
-    public int EnemiesForWave_UsesGameplayDefaultValues(int wave)
+    public int EnemiesForWave_UsesSector7DefaultValues(int wave)
     {
-        // base=3, added=1: los valores reales configurados en Gameplay.unity (ver #165).
+        // base=3, added=1: los valores reales configurados en Sector7.unity (ver #165).
         var wm = CreateWaveManager(basePerWave: 3, addedPerWave: 1);
         int result = wm.EnemiesForWave(wave);
         Object.DestroyImmediate(wm.gameObject);

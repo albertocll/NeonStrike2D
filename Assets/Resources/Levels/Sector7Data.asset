@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d227e4f48755cc145ac21e1f89e73624, type: 3}
-  m_Name: Level2Data
+  m_Name: Sector7Data
   m_EditorClassIdentifier: NeonStrike2D::LevelData
-  displayName: Nivel 2
-  mapPrefab: {fileID: 905452182613881286, guid: e8c632556cb3a6e45a5e2cbd76fce419, type: 3}
-  firstWave: 11
-  bossWave: 20
+  sceneName: Sector7
+  displayName: Sector 7
+  firstWave: 1
+  bossWave: 10
   bossPrefab: {fileID: 2085037830857136681, guid: 10299d137a1141a41a77df4da8e891f5, type: 3}
