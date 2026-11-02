@@ -87,7 +87,7 @@ public class MusicManager : MonoBehaviour
         crossfadeSource.volume = 0f;
         intenseActive = false;
 
-        if (scene.name == "Level1")
+        if (scene.name == "Gameplay")
         {
             waveManager = FindFirstObjectByType<WaveManager>();
             PlayClip(gameMusic);

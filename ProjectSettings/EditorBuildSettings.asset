@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/CharacterSelect.unity
     guid: 54247cb995ad1224f9094f546681444a
   - enabled: 1
-    path: Assets/Scenes/Level1.unity
+    path: Assets/Scenes/Gameplay.unity
     guid: 57ff53a58d428634cb10afca04c6b2bc
   - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity

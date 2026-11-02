@@ -8,6 +8,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private bool spawnEnemies = true;
     [Header("References")]
     [SerializeField] private EnemySpawner enemySpawner;
+    [SerializeField] private LevelManager levelManager;
     [SerializeField] private TMP_Text waveText;
 
     [Header("Wave Settings")]
@@ -17,14 +18,16 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float timeBetweenWaves = 2f;
     [SerializeField] private float initialDelay = 3f;
 
-    [Header("Boss")]
-    [SerializeField] private int bossWave = 10;
-
     private int currentWave;
     private int enemiesAlive;
     private bool waveInProgress;
 
     public int CurrentWave => currentWave;
+
+    private void Awake()
+    {
+        levelManager.ShowLevel(levelManager.LevelForWave(startingWave));
+    }
 
     private void Start()
     {
@@ -45,8 +48,9 @@ public class WaveManager : MonoBehaviour
         if (waveText != null)
             waveText.text = $"WAVE: {currentWave}";
 
-        if (currentWave == bossWave)
-            enemySpawner.SpawnBoss(this);
+        LevelData level = levelManager.CurrentLevel;
+        if (level != null && currentWave == level.bossWave && level.bossPrefab != null)
+            enemySpawner.SpawnBoss(level.bossPrefab, this);
         else
             enemySpawner.SpawnWave(EnemiesForWave(currentWave), this, currentWave);
     }
@@ -72,6 +76,12 @@ public class WaveManager : MonoBehaviour
     private IEnumerator StartNextWaveWithDelay()
     {
         yield return new WaitForSeconds(timeBetweenWaves);
+
+        // Si la siguiente oleada es de otro nivel (se acaba de matar al jefe), se cambia de mapa antes.
+        LevelData nextLevel = levelManager.LevelForWave(currentWave + 1);
+        if (nextLevel != levelManager.CurrentLevel)
+            yield return levelManager.TransitionTo(nextLevel);
+
         StartNextWave();
     }
 
