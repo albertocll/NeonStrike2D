@@ -6,9 +6,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class FuseHalo : MonoBehaviour
 {
-    [SerializeField] private Color color = new Color(1f, 0.5f, 0.05f, 0.85f);
+    [SerializeField] private Color color = new Color(1f, 0.5f, 0.05f, 0.595f);
     [Tooltip("Diametro del halo en unidades de mundo.")]
-    [SerializeField] private float size = 1.6f;
+    [SerializeField] private float size = 1.36f;
     [Tooltip("Pulsos por segundo.")]
     [SerializeField] private float pulseSpeed = 2f;
     [Tooltip("Cuanto crece y se aviva en cada pulso (0 = nada, 1 = el doble).")]

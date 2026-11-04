@@ -104,8 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 342c1bc3201ed4e4387238f3eadf4af4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NeonStrike2D::FuseHalo
-  color: {r: 1, g: 0.5, b: 0.05, a: 0.85}
-  size: 1.6
+  color: {r: 1, g: 0.5, b: 0.05, a: 0.595}
+  size: 1.36
   pulseSpeed: 2
   pulseAmount: 0.35
 --- !u!1 &9017135314714469954
