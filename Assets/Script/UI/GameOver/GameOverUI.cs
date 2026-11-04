@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using TMPro;
 
 public class GameOverUI : MonoBehaviour
@@ -55,7 +54,7 @@ public class GameOverUI : MonoBehaviour
     public void RestartScene()
     {
         Time.timeScale = 1f;
-        SceneLoader.Load(SceneManager.GetActiveScene().name);
+        LevelManager.StartNewRun();
     }
 
     public void LoadMainMenu()

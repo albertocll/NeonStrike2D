@@ -6,4 +6,6 @@ public static class GameData
     public static string Username { get; set; } = "";
     public static string RemoteUsername { get; set; } = "";
     public static bool IsHost { get; set; } = false;
+
+    public static bool IsCoop => !string.IsNullOrEmpty(RoomId) && NetworkManager.Instance != null && NetworkManager.Instance.IsConnected;
 }

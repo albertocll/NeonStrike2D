@@ -53,6 +53,28 @@ public class PlayerPowerUps : MonoBehaviour
             baseSpriteColor = spriteRenderer.color;
     }
 
+    private void Start()
+    {
+        // Viniendo de otro nivel, el jugador local recupera los power-ups que tenia activos.
+        // El remoto ya tiene el tag cambiado por PlayerSpawner cuando llega Start.
+        if (!RunState.Active || !CompareTag("Player")) return;
+
+        foreach (var entry in RunState.PowerUpTimes)
+            ApplyPowerUp(entry.Key, entry.Value);
+    }
+
+    public float RemainingTime(PowerUp.PowerUpType type)
+    {
+        switch (type)
+        {
+            case PowerUp.PowerUpType.Shield: return shieldActive ? shieldTimer : 0f;
+            case PowerUp.PowerUpType.HeavyWeapon: return heavyWeaponActive ? heavyWeaponTimer : 0f;
+            case PowerUp.PowerUpType.TripleShot: return tripleShotActive ? tripleShotTimer : 0f;
+            case PowerUp.PowerUpType.SpeedBoost: return speedBoostActive ? speedBoostTimer : 0f;
+            default: return 0f;
+        }
+    }
+
     private void Update()
     {
         if (shieldActive)

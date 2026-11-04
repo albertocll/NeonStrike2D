@@ -1648,7 +1648,6 @@ MonoBehaviour:
   enemiesAddedPerWave: 1
   timeBetweenWaves: 2.5
   initialDelay: 3
-  bossWave: 10
 --- !u!4 &573412841
 Transform:
   m_ObjectHideFlags: 0
@@ -7234,7 +7233,6 @@ MonoBehaviour:
   uiExclusionZones:
   - {fileID: 906127721}
   - {fileID: 1260157046}
-  bossSentinelPrefab: {fileID: 2085037830857136681, guid: 10299d137a1141a41a77df4da8e891f5, type: 3}
 --- !u!4 &1916839832
 Transform:
   m_ObjectHideFlags: 0

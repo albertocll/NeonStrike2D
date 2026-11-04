@@ -98,7 +98,7 @@ NeonStrike2D/
 │   │   ├── Network/       # ApiManager, NetworkManager, UnityMainThreadDispatcher
 │   │   ├── Projectiles/   # Bullet
 │   │   └── UI/            # GameOverUI, RankingUI, CharacterSelectController, MultiplayerUI, LoginUI
-│   ├── Scenes/            # MainMenu, CharacterSelect, Level1
+│   ├── Scenes/            # MainMenu, CharacterSelect, Level1, TheGrid
 │   └── Prefab/
 ├── Backend/
 │   └── NeonStrike2D.Backend.Api/

@@ -11,6 +11,8 @@ public static class WebSocketHandler
     private static readonly ConcurrentDictionary<string, string> UsernameToId = new();
     private static readonly ConcurrentDictionary<string, List<string>> Rooms = new();
     private static readonly ConcurrentDictionary<string, Dictionary<string, string>> RoomReady = new();
+    // Por sala: escena del nivel siguiente y conexiones que ya la han cargado.
+    private static readonly ConcurrentDictionary<string, (string Scene, HashSet<string> Loaded)> RoomLevelLoaded = new();
 
     public static async Task Handle(HttpContext context)
     {
@@ -82,6 +84,12 @@ public static class WebSocketHandler
                     break;
                 case "SendFriendRequest":
                     await OnSendFriendRequest(connectionId, args[0], args[1]);
+                    break;
+                case "LevelComplete":
+                    await OnLevelComplete(args[0], args[1]);
+                    break;
+                case "LevelLoaded":
+                    await OnLevelLoaded(connectionId, args[0], args[1]);
                     break;
             }
         }
@@ -171,6 +179,37 @@ public static class WebSocketHandler
         }
     }
 
+    // El anfitrion avisa de que ha muerto su jefe: los dos clientes cargan el nivel siguiente.
+    private static async Task OnLevelComplete(string roomId, string scene)
+    {
+        RoomLevelLoaded[roomId] = (scene, new HashSet<string>());
+        await SendToRoom(roomId, new { type = "LoadLevel", scene });
+    }
+
+    // Igual que PlayerReady/GameStart: con el aviso de todos los de la sala se manda LevelStart.
+    private static async Task OnLevelLoaded(string connectionId, string roomId, string scene)
+    {
+        if (!RoomLevelLoaded.TryGetValue(roomId, out var level) || level.Scene != scene) return;
+
+        lock (level.Loaded)
+            level.Loaded.Add(connectionId);
+
+        await TryStartLevel(roomId);
+    }
+
+    private static async Task TryStartLevel(string roomId)
+    {
+        if (!Rooms.TryGetValue(roomId, out var room)) return;
+        if (!RoomLevelLoaded.TryGetValue(roomId, out var level)) return;
+
+        bool allLoaded;
+        lock (level.Loaded)
+            allLoaded = room.All(level.Loaded.Contains);
+
+        if (allLoaded && RoomLevelLoaded.TryRemove(roomId, out _))
+            await SendToRoom(roomId, new { type = "LevelStart", scene = level.Scene });
+    }
+
     private static async Task OnSendFriendRequest(string connectionId, string fromUsername, string toUsername)
     {
         if (UsernameToId.TryGetValue(toUsername, out var targetId))
@@ -196,6 +235,12 @@ public static class WebSocketHandler
                 {
                     Rooms.TryRemove(room.Key, out _);
                     RoomReady.TryRemove(room.Key, out _);
+                    RoomLevelLoaded.TryRemove(room.Key, out _);
+                }
+                else
+                {
+                    // Si se iba a esperar al que se ha ido, el que queda empieza el nivel.
+                    await TryStartLevel(room.Key);
                 }
                 break;
             }
