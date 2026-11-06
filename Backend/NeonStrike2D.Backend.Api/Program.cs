@@ -144,7 +144,7 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
         issuer: builder.Configuration["Jwt:Issuer"],
         audience: builder.Configuration["Jwt:Audience"],
         claims: claims,
-        expires: DateTime.UtcNow.AddHours(2),
+        expires: DateTime.UtcNow.AddDays(30),
         signingCredentials: creds
     );
 
