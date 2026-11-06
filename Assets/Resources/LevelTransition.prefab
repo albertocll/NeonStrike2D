@@ -50,7 +50,6 @@ MonoBehaviour:
   font: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   fontSize: 34
   textColor: {r: 0.75, g: 0.95, b: 1, a: 1}
-  textPrefix: 'Now entering '
   starCount: 160
   starThickness: 3
   starMaxSpeed: 2600

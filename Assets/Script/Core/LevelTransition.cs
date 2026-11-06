@@ -21,7 +21,6 @@ public class LevelTransition : MonoBehaviour
     [SerializeField] private TMP_FontAsset font;
     [SerializeField] private float fontSize = 34f;
     [SerializeField] private Color textColor = new Color(0.75f, 0.95f, 1f, 1f);
-    [SerializeField] private string textPrefix = "Now entering ";
 
     [Header("Estrellas")]
     [SerializeField] private int starCount = 160;
@@ -66,7 +65,7 @@ public class LevelTransition : MonoBehaviour
     private IEnumerator Run(LevelData next, Sprite ship)
     {
         Time.timeScale = 1f;
-        Build(ship, textPrefix + next.displayName);
+        Build(ship, next.displayName);
         startTime = Time.unscaledTime;
 
         yield return Fade(0f, 1f);
