@@ -63,7 +63,7 @@ public class OptionsMenu : MonoBehaviour
         rect.anchoredPosition = new Vector2(sfxRect.anchoredPosition.x, y);
 
         var label = toggle.GetComponentInChildren<TMP_Text>(true);
-        if (label != null) label.text = "zurdo";
+        if (label != null) label.text = "left-handed";
 
         toggle.isOn = Joystick.LeftHanded;
         toggle.onValueChanged.AddListener(isOn => Joystick.LeftHanded = isOn);
