@@ -111,7 +111,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         yield return AttackLoop();
     }
 
-    // Entra despacio desde donde aparece (EnemySpawner lo coloca fuera de la arena, a la derecha)
+    // Entra despacio desde donde aparece (EnemySpawner lo coloca fuera de la arena, por un lado al azar)
     // hasta el centro de la arena. Su collider es trigger, asi que atraviesa el muro sin chocar.
     private IEnumerator Entry()
     {

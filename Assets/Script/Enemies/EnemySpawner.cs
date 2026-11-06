@@ -24,23 +24,41 @@ public class EnemySpawner : MonoBehaviour
 
     private Bounds? outerBounds;
 
-    // El jefe aparece fuera, a la derecha de los muros y de la camara, y BossSentinelController
-    // lo hace entrar hasta el centro de la arena.
+    // El jefe aparece fuera de los muros y de la camara, por un lado al azar como el resto de
+    // enemigos, y BossSentinelController lo hace entrar hasta el centro de la arena.
     public void SpawnBoss(GameObject bossPrefab, WaveManager waveManager)
     {
         Bounds arena = spawnArea.bounds;
         GameObject bossInstance = Instantiate(bossPrefab, arena.center, Quaternion.identity);
 
-        float halfWidth = SpawnAreaUtils.GetHalfExtent(bossPrefab);
+        float half = SpawnAreaUtils.GetHalfExtent(bossPrefab);
+        Vector2 halfSize = new Vector2(half, half);
         var bossRenderer = bossInstance.GetComponentInChildren<SpriteRenderer>();
-        if (bossRenderer != null) halfWidth = Mathf.Max(halfWidth, bossRenderer.bounds.extents.x);
+        if (bossRenderer != null) halfSize = Vector2.Max(halfSize, bossRenderer.bounds.extents);
 
-        float startX = GetOuterBounds().max.x;
+        // Rectangulo del que tiene que quedar fuera: los muros y, si es mayor, la vista de la camara.
+        Bounds outer = GetOuterBounds();
+        Vector2 min = outer.min, max = outer.max;
         Camera cam = Camera.main;
         if (cam != null)
-            startX = Mathf.Max(startX, cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, Mathf.Abs(cam.transform.position.z))).x);
+        {
+            float z = Mathf.Abs(cam.transform.position.z);
+            min = Vector2.Min(min, cam.ViewportToWorldPoint(new Vector3(0f, 0f, z)));
+            max = Vector2.Max(max, cam.ViewportToWorldPoint(new Vector3(1f, 1f, z)));
+        }
 
-        bossInstance.transform.position = new Vector3(startX + halfWidth + outsideMargin, arena.center.y, 0f);
+        float x = Random.Range(arena.min.x, arena.max.x);
+        float y = Random.Range(arena.min.y, arena.max.y);
+        Vector2 start;
+        switch (Random.Range(0, 4))
+        {
+            case 0: start = new Vector2(min.x - halfSize.x - outsideMargin, y); break; // izquierda
+            case 1: start = new Vector2(max.x + halfSize.x + outsideMargin, y); break; // derecha
+            case 2: start = new Vector2(x, max.y + halfSize.y + outsideMargin); break; // arriba
+            default: start = new Vector2(x, min.y - halfSize.y - outsideMargin); break; // abajo
+        }
+
+        bossInstance.transform.position = start;
         bossInstance.GetComponent<BossSentinelController>()?.SetArena(arena);
 
         EnemyWaveMember waveMember = bossInstance.GetComponent<EnemyWaveMember>();
