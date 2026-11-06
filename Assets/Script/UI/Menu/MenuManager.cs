@@ -6,10 +6,13 @@ public class MenuManager : MonoBehaviour
     [SerializeField] private GameObject panelLogin;
     [SerializeField] private GameObject panelRegister;
 
-    private void Start()
+    private async void Start()
     {
         if (panelLogin != null) panelLogin.SetActive(false);
         if (panelRegister != null) panelRegister.SetActive(false);
+
+        LoginUI.DeleteLegacyPassword();
+        await LoginUI.TryRestoreSessionAsync();
     }
 
     public void Play()

@@ -42,6 +42,14 @@ public class ApiManager : MonoBehaviour
         return JsonUtility.FromJson<RegisterResponse>(result);
     }
 
+    // SESIÓN: valida un token guardado. Devuelve null si el servidor lo rechaza o no responde.
+    public async Task<MeResponse> GetMeAsync(string token)
+    {
+        var result = await GetAsync("/me", token);
+        if (string.IsNullOrEmpty(result)) return null;
+        return JsonUtility.FromJson<MeResponse>(result);
+    }
+
     // RANKING
     public async Task<string> GetRankingAsync()
     {
@@ -131,6 +139,8 @@ public class ApiManager : MonoBehaviour
 // DTOs
 [Serializable] public class LoginRequest { public string email; public string password; }
 [Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
+// /me devuelve userId como texto porque sale directamente del claim del JWT.
+[Serializable] public class MeResponse { public string userId; public string username; public string email; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
 [Serializable] public class RegisterResponse { public bool success; public string message; }
 [Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; public int score; }
