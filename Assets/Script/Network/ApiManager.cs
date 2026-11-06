@@ -42,6 +42,22 @@ public class ApiManager : MonoBehaviour
         return JsonUtility.FromJson<RegisterResponse>(result);
     }
 
+    // SESIÓN: valida un token guardado. unauthorized = true solo si el servidor responde 401;
+    // si falla la red, me es null y unauthorized es false (el token sigue siendo utilizable más tarde).
+    public async Task<(MeResponse me, bool unauthorized)> GetMeAsync(string token)
+    {
+        using var request = UnityWebRequest.Get($"{serverUrl}/me");
+        request.SetRequestHeader("Authorization", $"Bearer {token}");
+
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+            await Task.Yield();
+
+        if (request.responseCode == 401) return (null, true);
+        if (request.result != UnityWebRequest.Result.Success) return (null, false);
+        return (JsonUtility.FromJson<MeResponse>(request.downloadHandler.text), false);
+    }
+
     // RANKING
     public async Task<string> GetRankingAsync()
     {
@@ -131,6 +147,8 @@ public class ApiManager : MonoBehaviour
 // DTOs
 [Serializable] public class LoginRequest { public string email; public string password; }
 [Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
+// /me devuelve userId como texto porque sale directamente del claim del JWT.
+[Serializable] public class MeResponse { public string userId; public string username; public string email; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
 [Serializable] public class RegisterResponse { public bool success; public string message; }
 [Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; public int score; }
