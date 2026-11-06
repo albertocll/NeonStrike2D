@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class LoginUI : MonoBehaviour
@@ -102,6 +103,31 @@ public class LoginUI : MonoBehaviour
         {
             Debug.LogWarning($"[LoginUI] Sesión restaurada pero no se pudo conectar el WebSocket: {e.Message}");
         }
+    }
+
+    // Cierra la sesión (issue #230): borra lo recordado, olvida al usuario, cierra el WebSocket
+    // y recarga el menú principal para que el login vuelva a salir vacío.
+    public static async Task LogoutAsync()
+    {
+        PlayerPrefs.DeleteKey(KEY_TOKEN);
+        PlayerPrefs.DeleteKey(KEY_EMAIL);
+        PlayerPrefs.DeleteKey(KEY_REMEMBER);
+        PlayerPrefs.Save();
+        GameData.Username = "";
+
+        if (NetworkManager.Instance != null)
+        {
+            try
+            {
+                await NetworkManager.Instance.LogoutAsync();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning($"[LoginUI] Error al cerrar el WebSocket en el logout: {e.Message}");
+            }
+        }
+
+        SceneManager.LoadScene("MainMenu");
     }
 
     public async void OnLoginClicked()

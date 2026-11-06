@@ -61,6 +61,16 @@ public class NetworkManager : MonoBehaviour
         IsGuest = true;
     }
 
+    // Cierre de sesión (issue #230): olvida al usuario y cierra el WebSocket para que los amigos lo vean desconectado.
+    public async Task LogoutAsync()
+    {
+        UserId = 0;
+        Username = null;
+        Token = null;
+        IsGuest = false;
+        await DisconnectAsync();
+    }
+
     private TaskCompletionSource<bool> _connectTcs;
 
     public async Task ConnectAsync(string roomId = null)
