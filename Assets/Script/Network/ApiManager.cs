@@ -42,12 +42,20 @@ public class ApiManager : MonoBehaviour
         return JsonUtility.FromJson<RegisterResponse>(result);
     }
 
-    // SESIÓN: valida un token guardado. Devuelve null si el servidor lo rechaza o no responde.
-    public async Task<MeResponse> GetMeAsync(string token)
+    // SESIÓN: valida un token guardado. unauthorized = true solo si el servidor responde 401;
+    // si falla la red, me es null y unauthorized es false (el token sigue siendo utilizable más tarde).
+    public async Task<(MeResponse me, bool unauthorized)> GetMeAsync(string token)
     {
-        var result = await GetAsync("/me", token);
-        if (string.IsNullOrEmpty(result)) return null;
-        return JsonUtility.FromJson<MeResponse>(result);
+        using var request = UnityWebRequest.Get($"{serverUrl}/me");
+        request.SetRequestHeader("Authorization", $"Bearer {token}");
+
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+            await Task.Yield();
+
+        if (request.responseCode == 401) return (null, true);
+        if (request.result != UnityWebRequest.Result.Success) return (null, false);
+        return (JsonUtility.FromJson<MeResponse>(request.downloadHandler.text), false);
     }
 
     // RANKING

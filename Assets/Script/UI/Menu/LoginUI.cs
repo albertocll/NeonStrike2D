@@ -78,13 +78,15 @@ public class LoginUI : MonoBehaviour
         string token = PlayerPrefs.GetString(KEY_TOKEN, "");
         if (string.IsNullOrEmpty(token)) return;
 
-        var me = await ApiManager.Instance.GetMeAsync(token);
-        if (me == null || !int.TryParse(me.userId, out int userId))
+        var (me, unauthorized) = await ApiManager.Instance.GetMeAsync(token);
+        if (unauthorized)
         {
+            // Token caducado o inválido: se borra. Si solo falló la red, se conserva para el siguiente arranque.
             PlayerPrefs.DeleteKey(KEY_TOKEN);
             PlayerPrefs.Save();
             return;
         }
+        if (me == null || !int.TryParse(me.userId, out int userId)) return;
 
         // Durante la espera el jugador pudo entrar como invitado o iniciar sesión a mano.
         if (NetworkManager.Instance.IsGuest || !string.IsNullOrEmpty(NetworkManager.Instance.Token)) return;
