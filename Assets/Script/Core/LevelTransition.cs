@@ -204,6 +204,7 @@ public class LevelTransition : MonoBehaviour
         var label = textGo.AddComponent<TextMeshProUGUI>();
         if (font != null) label.font = font;
         label.text = text;
+        label.fontStyle = FontStyles.Normal; // tal cual viene displayName: minusculas salvo la inicial de cada palabra
         label.fontSize = fontSize;
         label.color = textColor;
         label.alignment = TextAlignmentOptions.Center;

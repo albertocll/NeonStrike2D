@@ -47,7 +47,7 @@ MonoBehaviour:
   minDuration: 3
   fadeDuration: 0.35
   partnerTimeout: 10
-  font: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
+  font: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   fontSize: 34
   textColor: {r: 0.75, g: 0.95, b: 1, a: 1}
   starCount: 160
