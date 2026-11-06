@@ -46,7 +46,7 @@ public static class SpawnAreaUtils
         return margin != null ? margin.ExtraMargin : 0f;
     }
 
-    private static float GetHalfExtent(GameObject prefab)
+    public static float GetHalfExtent(GameObject prefab)
     {
         float scale = Mathf.Max(prefab.transform.localScale.x, prefab.transform.localScale.y);
 

@@ -17,6 +17,9 @@ public class FuseAI : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        // Los mensajes de trigger llegan aunque el script este desactivado: mientras
+        // EnemyArenaEntry lo tiene apagado (entrando en la arena) no detona por contacto.
+        if (!enabled) return;
         if (hasDetonated) return;
         if (!other.CompareTag("Player")) return;
 
