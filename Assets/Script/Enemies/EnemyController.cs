@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour, IDamageable
     private Animator animator;
     private SpriteRenderer spriteRenderer;
     [SerializeField] private bool isDead;
+    public bool IsDead => isDead;
 
     [SerializeField] private float deathDestroyDelay = 0.8f;
 
