@@ -19,9 +19,13 @@ public class LevelTransition : MonoBehaviour
 
     [Header("Texto")]
     [SerializeField] private TMP_FontAsset font;
-    [SerializeField] private float fontSize = 34f;
+    [Tooltip("Tamano maximo del nombre del nivel. Si un nombre largo no cabe en pantalla, se reduce solo.")]
+    [SerializeField] private float fontSize = 102f;
+    [Tooltip("Margen lateral (unidades del canvas de referencia 1920x1080) que el nombre deja libre a cada lado.")]
+    [SerializeField] private float textSideMargin = 80f;
+    [Tooltip("Separacion entre la parte de arriba de la nave y el nombre del nivel.")]
+    [SerializeField] private float textGapAboveShip = 40f;
     [SerializeField] private Color textColor = new Color(0.75f, 0.95f, 1f, 1f);
-    [SerializeField] private string textPrefix = "Now entering ";
 
     [Header("Estrellas")]
     [SerializeField] private int starCount = 160;
@@ -66,7 +70,7 @@ public class LevelTransition : MonoBehaviour
     private IEnumerator Run(LevelData next, Sprite ship)
     {
         Time.timeScale = 1f;
-        Build(ship, textPrefix + next.displayName);
+        Build(ship, (next.displayName ?? "").ToLowerInvariant());
         startTime = Time.unscaledTime;
 
         yield return Fade(0f, 1f);
@@ -205,15 +209,25 @@ public class LevelTransition : MonoBehaviour
         var label = textGo.AddComponent<TextMeshProUGUI>();
         if (font != null) label.font = font;
         label.text = text;
-        label.fontSize = fontSize;
+        label.fontStyle = FontStyles.Normal; // el texto ya llega en minusculas
         label.color = textColor;
         label.alignment = TextAlignmentOptions.Center;
         label.textWrappingMode = TextWrappingModes.NoWrap;
         label.raycastTarget = false;
+
+        // Ocupa el ancho de la pantalla menos los margenes; si el nombre no cabe a fontSize, se reduce.
+        label.enableAutoSizing = true;
+        label.fontSizeMax = fontSize;
+        label.fontSizeMin = fontSize * 0.3f;
+        label.fontSize = fontSize;
+
+        float textHeight = fontSize * 1.3f;
         RectTransform textRect = label.rectTransform;
-        textRect.anchorMin = textRect.anchorMax = new Vector2(0.5f, 0.5f);
-        textRect.sizeDelta = new Vector2(1200f, 60f);
-        textRect.anchoredPosition = new Vector2(0f, -shipHeight * 0.5f - 70f);
+        textRect.anchorMin = new Vector2(0f, 0.5f);
+        textRect.anchorMax = new Vector2(1f, 0.5f);
+        textRect.sizeDelta = new Vector2(-2f * textSideMargin, textHeight);
+        // Encima de la nave (la nave oscila unos pixeles, de ahi la separacion).
+        textRect.anchoredPosition = new Vector2(0f, shipHeight * 0.5f + textGapAboveShip + textHeight * 0.5f);
     }
 
     private static Image CreateImage(string name, Transform parent)
