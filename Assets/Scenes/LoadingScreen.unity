@@ -2376,12 +2376,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41610ffaffd01d0469792bbda837c55c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LoadingScreenController
-  minDisplayTime: 9
+  minDisplayTime: 1
   legendPanels:
   - {fileID: 967650602}
   - {fileID: 1442878247}
   - {fileID: 179472900}
-  timePerPanel: 3
 --- !u!4 &1244201410
 Transform:
   m_ObjectHideFlags: 0
