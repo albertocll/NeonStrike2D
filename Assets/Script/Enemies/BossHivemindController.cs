@@ -4,7 +4,8 @@ using UnityEngine;
 
 // Hivemind (issue #187), jefe de la oleada 40. Su peligro son los anadidos: se mueve de forma
 // erratica por la arena (cambia de rumbo cada poco) y, a mas ritmo que el DataCrawler, invoca
-// pequenos grupos de enemigos basicos, sin pasar nunca de maxAlive vivos a la vez.
+// enjambres (EnemySwarmUnit: cada uno genera su racimo al aparecer). El tope cuenta todos los
+// enemigos basicos vivos de la arena, racimos incluidos, para no saturar la partida.
 public class BossHivemindController : BossBase
 {
     [Header("Movimiento erratico")]
@@ -13,17 +14,16 @@ public class BossHivemindController : BossBase
     [SerializeField] private float maxRetarget = 2f;
 
     [Header("Invocacion")]
-    [Tooltip("Enemigos basicos que invoca (al azar).")]
+    [Tooltip("Enemigos que invoca (al azar). EnemySwarmUnit trae su propio racimo.")]
     [SerializeField] private List<GameObject> summonPrefabs = new List<GameObject>();
     [SerializeField] private float summonInterval = 3.5f;
-    [SerializeField] private int summonsPerWave = 2;
-    [SerializeField] private int maxAlive = 8;
+    [SerializeField] private int summonsPerWave = 1;
+    [Tooltip("Maximo de enemigos basicos vivos en la arena (cada racimo de Swarm son 5).")]
+    [SerializeField] private int maxAlive = 12;
     [SerializeField] private float summonDistance = 1.5f;
     [SerializeField] private float summonTelegraph = 0.5f;
     [SerializeField] private Color summonTelegraphColor = new Color(1f, 0.8f, 0.3f, 1f);
     [SerializeField] private Sprite summoningSprite;
-
-    private readonly List<GameObject> summoned = new List<GameObject>();
 
     protected override IEnumerator Fight()
     {
@@ -54,22 +54,29 @@ public class BossHivemindController : BossBase
 
     private IEnumerator SummonGroup()
     {
-        int free = maxAlive - CountAlive(summoned);
-        if (free <= 0 || summonPrefabs.Count == 0) yield break;
+        if (AliveBasicEnemies() >= maxAlive || summonPrefabs.Count == 0) yield break;
 
         SetPose(summoningSprite);
         yield return Blink(summonTelegraphColor, summonTelegraph);
         if (IsDead) yield break;
 
-        int count = Mathf.Min(free, summonsPerWave);
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < summonsPerWave; i++)
         {
             GameObject prefab = summonPrefabs[Random.Range(0, summonPrefabs.Count)];
             Vector2 pos = (Vector2)transform.position + Random.insideUnitCircle.normalized * summonDistance;
-            GameObject add = Summon(prefab, pos);
-            if (add != null) summoned.Add(add);
+            Summon(prefab, pos);
             yield return null; // una por frame (#170)
         }
         SetPose(idleSprite);
+    }
+
+    // ponytail: recorre los enemigos de la escena en cada invocacion (cada 3,5 s); en la
+    // oleada del jefe solo estan sus anadidos, asi que no hace falta llevar la cuenta aparte.
+    private static int AliveBasicEnemies()
+    {
+        int alive = 0;
+        foreach (var e in FindObjectsByType<EnemyController>(FindObjectsSortMode.None))
+            if (!e.IsDead) alive++;
+        return alive;
     }
 }

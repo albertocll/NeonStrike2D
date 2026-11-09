@@ -217,11 +217,10 @@ MonoBehaviour:
   minRetarget: 1
   maxRetarget: 2
   summonPrefabs:
-  - {fileID: 3153298351150200298, guid: e462e59794671cd498d8589dde9b0570, type: 3}
-  - {fileID: 9017135314714469954, guid: 623b09aebeae2114fb34de5e37eb5066, type: 3}
+  - {fileID: 1567827880273612916, guid: 7ba3f8f8b494c974c8f4db136d213cb5, type: 3}
   summonInterval: 3.5
-  summonsPerWave: 2
-  maxAlive: 8
+  summonsPerWave: 1
+  maxAlive: 12
   summonDistance: 1.5
   summonTelegraph: 0.5
   summonTelegraphColor: {r: 1, g: 0.8, b: 0.3, a: 1}
