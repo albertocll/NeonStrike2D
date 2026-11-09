@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/Scenes/DroneHive.unity
     guid: 69c1257304ce162488ac4fb9d0d2d5bd
   - enabled: 1
+    path: Assets/Scenes/CorruptedSignalZone.unity
+    guid: 78df6da82f0eea041a1a7b6daf787256
+  - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: 4aeb5a7871ba88d43a11961d0c09b4bb
   m_configObjects:
