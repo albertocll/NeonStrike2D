@@ -189,6 +189,7 @@ MonoBehaviour:
   powerUpPrefabs: []
   powerUpDropChance: 0.05
   deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
+  deathVfxColor: {r: 1, g: 0.81, b: 0.18, a: 1}
 --- !u!114 &7890051660476764741
 MonoBehaviour:
   m_ObjectHideFlags: 0
