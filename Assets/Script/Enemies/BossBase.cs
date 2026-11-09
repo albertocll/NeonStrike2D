@@ -30,8 +30,10 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
     [SerializeField] protected Sprite hitSprite;
     [SerializeField] protected Sprite dieSprite;
     [SerializeField] private float hitFlashDuration = 0.12f;
-    [Tooltip("El arte mira a la derecha: se voltea cuando el jugador esta a la izquierda.")]
+    [Tooltip("Voltea el sprite para que mire al jugador.")]
     [SerializeField] private bool faceTarget = true;
+    [Tooltip("Marcar si el arte original mira a la izquierda (p. ej. Bulwark).")]
+    [SerializeField] private bool artFacesLeft;
 
     [Header("Dano de contacto")]
     [SerializeField] private int contactDamage = 2;
@@ -127,7 +129,7 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
         if (s != null) spriteRenderer.sprite = s;
 
         if (faceTarget && target != null)
-            spriteRenderer.flipX = target.position.x < transform.position.x;
+            spriteRenderer.flipX = (target.position.x < transform.position.x) != artFacesLeft;
     }
 
     protected void SetPose(Sprite sprite) => poseSprite = sprite != null ? sprite : idleSprite;
