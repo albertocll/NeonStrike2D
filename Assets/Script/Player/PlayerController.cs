@@ -22,7 +22,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashSpeed = 24f;
     [SerializeField] private float dashDuration = 0.15f;
     [SerializeField] private float dashCooldown = 3f;
-    [SerializeField] private KeyCode dashKey = KeyCode.Space;
+    [Tooltip("Teclado (PC). La barra espaciadora queda para disparar (WeaponController).")]
+    [SerializeField] private KeyCode dashKey = KeyCode.Return;
+    [SerializeField] private KeyCode altDashKey = KeyCode.KeypadEnter;
     [SerializeField] private Color trailColor = new Color(0.1f, 0.9f, 1f, 0.8f);
     [SerializeField] private float trailTime = 0.25f;
     [SerializeField] private float trailStartWidth = 0.3f;
@@ -95,7 +97,7 @@ public class PlayerController : MonoBehaviour
         if (cooldownTimer > 0f)
             cooldownTimer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(dashKey))
+        if (Input.GetKeyDown(dashKey) || Input.GetKeyDown(altDashKey))
             TryDash();
 
         if (isDashing)
