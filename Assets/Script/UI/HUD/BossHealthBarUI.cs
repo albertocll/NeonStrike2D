@@ -25,6 +25,10 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private float introSlideDuration = 0.35f;
     [SerializeField] private float introFadeDuration = 0.4f;
 
+    [Header("Marcas de fase (jefes con IBossPhases)")]
+    [SerializeField] private Color phaseMarkerColor = new Color(0f, 0f, 0f, 0.85f);
+    [SerializeField] private float phaseMarkerWidth = 4f;
+
     private IBoss boss;
     private CanvasGroup introGroup;
     private TextMeshProUGUI introText;
@@ -64,8 +68,41 @@ public class BossHealthBarUI : MonoBehaviour
         if (bannerText != null) bannerText.text = boss.DisplayName;
         if (healthSlider != null) healthSlider.value = 1f;
         if (panel != null) panel.SetActive(true);
+        BuildPhaseMarkers(boss as IBossPhases);
 
         PlayIntro(boss.DisplayName);
+    }
+
+    // Una marca vertical en la barra por cada umbral de fase (NexusCore: 6 segmentos).
+    private void BuildPhaseMarkers(IBossPhases phases)
+    {
+        if (healthSlider == null) return;
+
+        var bar = (RectTransform)healthSlider.transform;
+        Transform old = bar.Find("PhaseMarkers");
+        if (old != null) Destroy(old.gameObject);
+        if (phases == null || phases.PhaseThresholds == null) return;
+
+        var container = new GameObject("PhaseMarkers", typeof(RectTransform));
+        var crt = (RectTransform)container.transform;
+        crt.SetParent(bar, false);
+        crt.anchorMin = Vector2.zero;
+        crt.anchorMax = Vector2.one;
+        crt.offsetMin = crt.offsetMax = Vector2.zero;
+
+        foreach (float t in phases.PhaseThresholds)
+        {
+            var marker = new GameObject("Marker", typeof(RectTransform), typeof(Image));
+            var rt = (RectTransform)marker.transform;
+            rt.SetParent(crt, false);
+            rt.anchorMin = new Vector2(t, 0f);
+            rt.anchorMax = new Vector2(t, 1f);
+            rt.pivot = new Vector2(0.5f, 0.5f);
+            rt.sizeDelta = new Vector2(phaseMarkerWidth, 0f);
+            var img = marker.GetComponent<Image>();
+            img.color = phaseMarkerColor;
+            img.raycastTarget = false;
+        }
     }
 
     private void HandleHealthChanged(float normalized)

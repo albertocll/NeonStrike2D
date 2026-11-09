@@ -9,6 +9,12 @@ public interface IBoss
     event Action OnCombatStarted;
 }
 
+// Opcional: jefes con fases por vida. La barra marca cada umbral (fraccion de vida 0..1).
+public interface IBossPhases
+{
+    float[] PhaseThresholds { get; }
+}
+
 public static class BossEvents
 {
     public static event Action<IBoss> OnBossSpawned;
