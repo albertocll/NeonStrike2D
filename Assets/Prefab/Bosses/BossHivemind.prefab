@@ -220,7 +220,8 @@ MonoBehaviour:
   - {fileID: 1567827880273612916, guid: 7ba3f8f8b494c974c8f4db136d213cb5, type: 3}
   summonInterval: 3.5
   summonsPerWave: 1
-  maxAlive: 12
+  maxAlive: 15
+  unitsPerSummon: 5
   summonDistance: 1.5
   summonTelegraph: 0.5
   summonTelegraphColor: {r: 1, g: 0.8, b: 0.3, a: 1}

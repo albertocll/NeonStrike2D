@@ -18,8 +18,10 @@ public class BossHivemindController : BossBase
     [SerializeField] private List<GameObject> summonPrefabs = new List<GameObject>();
     [SerializeField] private float summonInterval = 3.5f;
     [SerializeField] private int summonsPerWave = 1;
-    [Tooltip("Maximo de enemigos basicos vivos en la arena (cada racimo de Swarm son 5).")]
-    [SerializeField] private int maxAlive = 12;
+    [Tooltip("Maximo de enemigos basicos vivos a la vez en la arena.")]
+    [SerializeField] private int maxAlive = 15;
+    [Tooltip("Enemigos que trae cada invocacion (un racimo de Swarm son 5).")]
+    [SerializeField] private int unitsPerSummon = 5;
     [SerializeField] private float summonDistance = 1.5f;
     [SerializeField] private float summonTelegraph = 0.5f;
     [SerializeField] private Color summonTelegraphColor = new Color(1f, 0.8f, 0.3f, 1f);
@@ -54,13 +56,16 @@ public class BossHivemindController : BossBase
 
     private IEnumerator SummonGroup()
     {
-        if (AliveBasicEnemies() >= maxAlive || summonPrefabs.Count == 0) yield break;
+        // Solo invoca si cabe entera sin pasar del tope.
+        int room = maxAlive - AliveBasicEnemies();
+        int summons = Mathf.Min(summonsPerWave, room / Mathf.Max(1, unitsPerSummon));
+        if (summons <= 0 || summonPrefabs.Count == 0) yield break;
 
         SetPose(summoningSprite);
         yield return Blink(summonTelegraphColor, summonTelegraph);
         if (IsDead) yield break;
 
-        for (int i = 0; i < summonsPerWave; i++)
+        for (int i = 0; i < summons; i++)
         {
             GameObject prefab = summonPrefabs[Random.Range(0, summonPrefabs.Count)];
             Vector2 pos = (Vector2)transform.position + Random.insideUnitCircle.normalized * summonDistance;
