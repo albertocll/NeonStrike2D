@@ -27,6 +27,15 @@ public class EnemyController : MonoBehaviour, IDamageable
     private static readonly Color StrikerDeathVfxColor = new Color(0f, 0.95f, 1f);
     private static readonly Color FuseDeathVfxColor = new Color(1f, 0.5f, 0.1f);
 
+    [Header("Golpe (enemigos sin Animator)")]
+    [SerializeField] private Color hitFlashColor = new Color(1f, 0.35f, 0.35f, 1f);
+    [SerializeField] private float hitFlashDuration = 0.1f;
+    [Tooltip("Cuanto crece el sprite en el golpe (0.15 = un 15%).")]
+    [SerializeField] private float hitPunchScale = 0.15f;
+    private Coroutine hitFlashRoutine;
+    private Vector3 visualBaseScale;
+    private bool visualScaleCaptured;
+
     void Awake()
     {
         currentHealth = maxHealth;
@@ -48,9 +57,15 @@ public class EnemyController : MonoBehaviour, IDamageable
             return;
         }
 
-        if (animator != null)
+        if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetTrigger("Hit");
+        }
+        else
+        {
+            // Sin Animator (enemigos de un solo sprite): destello y pequeno golpe de escala.
+            if (hitFlashRoutine != null) StopCoroutine(hitFlashRoutine);
+            hitFlashRoutine = StartCoroutine(HitFlash());
         }
     }
 
@@ -134,6 +149,42 @@ public class EnemyController : MonoBehaviour, IDamageable
         else if (isWarden) main.startColor = WardenDeathVfxColor;
         else if (isStriker) main.startColor = StrikerDeathVfxColor;
         else if (isFuse) main.startColor = FuseDeathVfxColor;
+    }
+
+    // Tine el sprite (respetando su alfa, p. ej. Wisp intangible) y lo agranda un instante.
+    // Las IA que fijan el color cada frame (Bastion) se quedan con el golpe de escala.
+    private IEnumerator HitFlash()
+    {
+        if (spriteRenderer == null) yield break;
+
+        Transform visual = spriteRenderer.transform;
+        if (!visualScaleCaptured)
+        {
+            // En valor absoluto: EnemyOrientation2D voltea el sprite con el signo de la escala X.
+            Vector3 s = visual.localScale;
+            visualBaseScale = new Vector3(Mathf.Abs(s.x), Mathf.Abs(s.y), s.z);
+            visualScaleCaptured = true;
+        }
+
+        for (float t = 0f; t < hitFlashDuration && !isDead; t += Time.deltaTime)
+        {
+            float k = 1f - t / hitFlashDuration;
+            Color c = hitFlashColor;
+            c.a = spriteRenderer.color.a;
+            spriteRenderer.color = Color.Lerp(new Color(1f, 1f, 1f, c.a), c, k);
+            SetVisualScale(visual, 1f + hitPunchScale * k);
+            yield return null;
+        }
+
+        spriteRenderer.color = new Color(1f, 1f, 1f, spriteRenderer.color.a);
+        SetVisualScale(visual, 1f);
+        hitFlashRoutine = null;
+    }
+
+    private void SetVisualScale(Transform visual, float factor)
+    {
+        float signX = Mathf.Sign(visual.localScale.x);
+        visual.localScale = new Vector3(signX * visualBaseScale.x * factor, visualBaseScale.y * factor, visualBaseScale.z);
     }
 
     private void TryDropPowerUp()
