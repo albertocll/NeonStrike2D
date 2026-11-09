@@ -33,6 +33,9 @@ public class SwarmAI : MonoBehaviour
     private float lastDamageTime;
     private bool isFollower; // no serializado: las copias nacen como lider hasta que se marcan
 
+    // EnemySpawner lo cuenta como groupSize enemigos de la oleada.
+    public int GroupSize => Mathf.Max(1, groupSize);
+
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();

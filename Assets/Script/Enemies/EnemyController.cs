@@ -34,6 +34,16 @@ public class EnemyController : MonoBehaviour, IDamageable
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
     }
 
+    // Enemigos mas fuertes en cada nivel (LevelData.enemyHealthMultiplier). Se llama justo
+    // despues de instanciarlo; las copias (racimo de Swarm) heredan la vida ya escalada.
+    public void ScaleHealth(float multiplier)
+    {
+        if (multiplier <= 0f || Mathf.Approximately(multiplier, 1f)) return;
+        // El -0.001 evita que el error de coma flotante redondee 50 x 1.2 a 61.
+        maxHealth = Mathf.Max(1, Mathf.CeilToInt(maxHealth * multiplier - 0.001f));
+        currentHealth = maxHealth;
+    }
+
     public void TakeDamage(int damage)
     {
         if (isDead) return;
