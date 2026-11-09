@@ -771,7 +771,8 @@ MonoBehaviour:
   dashSpeed: 24
   dashDuration: 0.2
   dashCooldown: 3
-  dashKey: 32
+  dashKey: 13
+  altDashKey: 271
   trailColor: {r: 0.1, g: 0.9, b: 1, a: 0.8}
   trailTime: 0.25
   trailStartWidth: 0.3
