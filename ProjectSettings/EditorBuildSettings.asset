@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/TheGrid.unity
     guid: 80e5a88d2d70d1e45b229efcf439c639
   - enabled: 1
+    path: Assets/Scenes/PlasmaFrontier.unity
+    guid: d1a13b898466c844b898912e4b2258a6
+  - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: 4aeb5a7871ba88d43a11961d0c09b4bb
   m_configObjects:
