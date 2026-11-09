@@ -17,4 +17,7 @@ MonoBehaviour:
   firstWave: 61
   bossWave: 0
   bossPrefab: {fileID: 0}
-  enemyHealthMultiplier: 2.2
+  enemyHealthMultiplier: 1.6
+  firstWaveEnemies: 26
+  enemiesAddedPerWave: 1
+  maxEnemiesPerWave: 35

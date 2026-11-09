@@ -222,6 +222,9 @@ MonoBehaviour:
   powerUpDropChance: 0.05
   deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
   deathVfxColor: {r: 0.5, g: 1, b: 0.62, a: 1}
+  hitFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  hitFlashDuration: 0.1
+  hitPunchScale: 0.15
 --- !u!114 &6725621280315847360
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +255,7 @@ MonoBehaviour:
   arenaMargin: 0.6
   summonPrefab: {fileID: 3153298351150200298, guid: e462e59794671cd498d8589dde9b0570, type: 3}
   summonInterval: 5
-  maxAlive: 3
+  maxAlive: 2
   summonDistance: 0.9
   telegraphDuration: 0.7
   telegraphColor: {r: 0.4, g: 1, b: 0.5, a: 1}

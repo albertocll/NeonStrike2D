@@ -214,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5681407dfef9cd641bdc993be0356e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NeonStrike2D::EnemyController
-  maxHealth: 250
+  maxHealth: 200
   currentHealth: 0
   scoreValue: 150
   isDead: 0
@@ -223,6 +223,9 @@ MonoBehaviour:
   powerUpDropChance: 0.05
   deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
   deathVfxColor: {r: 1, g: 0.25, b: 0.38, a: 1}
+  hitFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  hitFlashDuration: 0.1
+  hitPunchScale: 0.15
 --- !u!114 &3409480151842561981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -249,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::StrikerAI
   target: {fileID: 0}
   speed: 1.5
-  contactDamage: 5
+  contactDamage: 4
   damageCooldown: 1
   anim: {fileID: 0}
   movingParam: Moving

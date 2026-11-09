@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::BossHivemindController
   target: {fileID: 0}
   displayName: Hivemind
-  maxHealth: 4500
+  maxHealth: 3500
   scoreValue: 1000
   entrySpeed: 2.5
   idleSprite: {fileID: 7900860114431040669, guid: 543340dd35e2e984aa573f5b0308b41c, type: 3}
@@ -223,7 +223,7 @@ MonoBehaviour:
   - {fileID: 1567827880273612916, guid: 7ba3f8f8b494c974c8f4db136d213cb5, type: 3}
   summonInterval: 3.5
   summonsPerWave: 1
-  maxAlive: 15
+  maxAlive: 10
   unitsPerSummon: 5
   summonDistance: 1.5
   summonTelegraph: 0.5

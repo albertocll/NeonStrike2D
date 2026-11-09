@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::BossBulwarkController
   target: {fileID: 0}
   displayName: Bulwark
-  maxHealth: 6000
+  maxHealth: 4000
   scoreValue: 1000
   entrySpeed: 2.5
   idleSprite: {fileID: -7795898347463599000, guid: b28cc83c62cb77b458efd9852a3ed01e, type: 3}
@@ -204,7 +204,7 @@ MonoBehaviour:
   hitFlashDuration: 0.12
   faceTarget: 1
   artFacesLeft: 1
-  contactDamage: 4
+  contactDamage: 3
   contactDamageCooldown: 1
   arenaMargin: 0.8
   guaranteedDropPrefabs:
@@ -217,7 +217,7 @@ MonoBehaviour:
   deathVfxColor: {r: 0.55, g: 0.84, b: 1, a: 1}
   deathVfxScale: 3
   moveSpeed: 1.2
-  shieldHealth: 400
+  shieldHealth: 250
   vulnerableDuration: 5
   regenWarning: 0.8
   shieldBrokenSprite: {fileID: -876379094901323769, guid: 8da7c50e5b1dc964883942a73d240264, type: 3}
