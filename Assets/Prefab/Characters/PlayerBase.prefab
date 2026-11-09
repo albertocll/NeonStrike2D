@@ -826,7 +826,6 @@ MonoBehaviour:
   maxHealth: 100
   deathFreezeDelay: 0.6
   gameOverUI: {fileID: 0}
-  waveManager: {fileID: 0}
 --- !u!114 &8876627795129320162
 MonoBehaviour:
   m_ObjectHideFlags: 0

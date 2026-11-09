@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private string movingParam = "Moving";
 
     [Header("Bounds")]
+    [Tooltip("Solo si la escena no tiene muros Wall_*: con muros, el limite es su borde interior menos lo que mide el collider de la nave.")]
     [SerializeField] private float minX = 1029f;
     [SerializeField] private float maxX = 1052f;
     [SerializeField] private float minY = 524f;
@@ -33,6 +34,9 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private Vector2 input;
     private Vector2 lastMoveDirection = Vector2.right;
+
+    private Collider2D bodyCollider;
+    private Rect? arenaInner;
 
     private bool isDashing;
     private float dashTimer;
@@ -73,6 +77,56 @@ public class PlayerController : MonoBehaviour
     {
         if (joystick == null)
             joystick = FindFirstObjectByType<Joystick>();
+
+        bodyCollider = GetComponent<Collider2D>();
+        arenaInner = FindArenaInner();
+    }
+
+    // Rectangulo interior de los muros Wall_* de la escena: para cada muro, su cara interior
+    // es lo mas interior entre su collider y lo que se ve de el (su sprite o el de sus hijos).
+    private Rect? FindArenaInner()
+    {
+        float left = float.NegativeInfinity, right = float.PositiveInfinity;
+        float bottom = float.NegativeInfinity, top = float.PositiveInfinity;
+        int found = 0;
+
+        foreach (var wall in FindObjectsByType<Collider2D>(FindObjectsSortMode.None))
+        {
+            if (!wall.name.StartsWith("Wall_") || wall.gameObject.scene != gameObject.scene) continue;
+
+            Bounds b = wall.bounds;
+            foreach (var r in wall.GetComponentsInChildren<Renderer>())
+                if (r.enabled && r.gameObject.activeInHierarchy) b.Encapsulate(r.bounds);
+
+            switch (wall.name)
+            {
+                case "Wall_Left": left = Mathf.Max(left, b.max.x); found++; break;
+                case "Wall_Right": right = Mathf.Min(right, b.min.x); found++; break;
+                case "Wall_Bottom": bottom = Mathf.Max(bottom, b.max.y); found++; break;
+                case "Wall_Top": top = Mathf.Min(top, b.min.y); found++; break;
+            }
+        }
+
+        if (found < 4 || left >= right || bottom >= top) return null;
+        return Rect.MinMaxRect(left, bottom, right, top);
+    }
+
+    // Limites para la posicion de la nave: con muros, que su collider (ajustado al sprite)
+    // no pase de la cara interior de ningun muro; sin muros, los valores del Inspector.
+    private Vector2 ClampToArena(Vector2 pos)
+    {
+        if (!arenaInner.HasValue || bodyCollider == null)
+            return new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
+
+        Rect a = arenaInner.Value;
+        Bounds cb = bodyCollider.bounds;
+        Vector2 current = rb.position;
+        float l = current.x - cb.min.x, r = cb.max.x - current.x;
+        float d = current.y - cb.min.y, u = cb.max.y - current.y;
+
+        return new Vector2(
+            Mathf.Clamp(pos.x, a.xMin + l, Mathf.Max(a.xMin + l, a.xMax - r)),
+            Mathf.Clamp(pos.y, a.yMin + d, Mathf.Max(a.yMin + d, a.yMax - u)));
     }
     private void Update()
     {
@@ -116,9 +170,7 @@ public class PlayerController : MonoBehaviour
         float currentSpeed = isDashing ? dashSpeed : speed * speedMultiplier;
 
         Vector2 newPos = rb.position + moveDir * currentSpeed * Time.fixedDeltaTime;
-        newPos.x = Mathf.Clamp(newPos.x, minX, maxX);
-        newPos.y = Mathf.Clamp(newPos.y, minY, maxY);
-        rb.MovePosition(newPos);
+        rb.MovePosition(ClampToArena(newPos));
     }
 
     public void TryDash()
