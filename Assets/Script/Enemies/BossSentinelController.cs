@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BossSentinelController : MonoBehaviour, IDamageable
+public class BossSentinelController : MonoBehaviour, IDamageable, IBoss
 {
-    public static event Action<BossSentinelController> OnAnyBossSpawned;
 
     [Header("Target")]
     [SerializeField] private Transform target;
@@ -97,7 +96,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         }
 
         SFXManager.Instance?.PlayBossAppear();
-        OnAnyBossSpawned?.Invoke(this);
+        BossEvents.RaiseSpawned(this);
 
         StartCoroutine(EntryThenFight());
     }
