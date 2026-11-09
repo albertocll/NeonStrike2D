@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/PlasmaFrontier.unity
     guid: d1a13b898466c844b898912e4b2258a6
   - enabled: 1
+    path: Assets/Scenes/DroneHive.unity
+    guid: 69c1257304ce162488ac4fb9d0d2d5bd
+  - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: 4aeb5a7871ba88d43a11961d0c09b4bb
   m_configObjects:
