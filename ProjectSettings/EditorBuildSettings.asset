@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CoreChamber.unity
     guid: d09c1ab550a94d74280d42572041e5e5
   - enabled: 1
+    path: Assets/Scenes/Sector7.unity
+    guid: 1898873672982ff429c1733436af9f3d
+  - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: 4aeb5a7871ba88d43a11961d0c09b4bb
   m_configObjects:
