@@ -60,6 +60,14 @@ public class Bullet : MonoBehaviour
         {
             if (other.CompareTag("Enemy"))
             {
+                // Escudo frontal de Bastion: la bala se pierde sin hacer dano.
+                var bastion = other.GetComponentInParent<BastionAI>();
+                if (bastion != null && bastion.BlocksHit(dir))
+                {
+                    Destroy(gameObject);
+                    return;
+                }
+
                 IDamageable enemy = other.GetComponentInParent<IDamageable>();
 
                 if (enemy != null)
