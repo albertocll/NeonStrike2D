@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5681407dfef9cd641bdc993be0356e33, type: 3}
   m_Name: 
   m_EditorClassIdentifier: NeonStrike2D::EnemyController
-  maxHealth: 100
+  maxHealth: 150
   currentHealth: 0
   scoreValue: 100
   isDead: 0
