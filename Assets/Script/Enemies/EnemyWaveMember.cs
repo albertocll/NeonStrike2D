@@ -5,6 +5,9 @@ public class EnemyWaveMember : MonoBehaviour
     private WaveManager waveManager;
     private bool hasNotifiedDeath;
 
+    // Para que lo que invoca o genera un enemigo cuente en su misma oleada.
+    public WaveManager Manager => waveManager;
+
     public void Initialize(WaveManager manager)
     {
         waveManager = manager;

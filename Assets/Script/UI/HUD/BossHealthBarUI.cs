@@ -25,7 +25,7 @@ public class BossHealthBarUI : MonoBehaviour
     [SerializeField] private float introSlideDuration = 0.35f;
     [SerializeField] private float introFadeDuration = 0.4f;
 
-    private BossSentinelController boss;
+    private IBoss boss;
     private CanvasGroup introGroup;
     private TextMeshProUGUI introText;
     private Coroutine introRoutine;
@@ -38,12 +38,12 @@ public class BossHealthBarUI : MonoBehaviour
 
     private void OnEnable()
     {
-        BossSentinelController.OnAnyBossSpawned += HandleBossSpawned;
+        BossEvents.OnBossSpawned += HandleBossSpawned;
     }
 
     private void OnDisable()
     {
-        BossSentinelController.OnAnyBossSpawned -= HandleBossSpawned;
+        BossEvents.OnBossSpawned -= HandleBossSpawned;
         Unsubscribe();
     }
 
@@ -52,7 +52,7 @@ public class BossHealthBarUI : MonoBehaviour
         if (panel != null) panel.SetActive(false);
     }
 
-    private void HandleBossSpawned(BossSentinelController spawnedBoss)
+    private void HandleBossSpawned(IBoss spawnedBoss)
     {
         Unsubscribe();
 
