@@ -17,4 +17,4 @@ MonoBehaviour:
   firstWave: 21
   bossWave: 30
   bossPrefab: {fileID: 2977527044627802763, guid: 99301abdb8a368b49a6f7b105687cf11, type: 3}
-  enemyHealthMultiplier: 1.4
+  enemyHealthMultiplier: 1.2

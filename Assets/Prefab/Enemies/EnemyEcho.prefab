@@ -222,6 +222,9 @@ MonoBehaviour:
   powerUpDropChance: 0.05
   deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
   deathVfxColor: {r: 0.73, g: 0.37, b: 1, a: 1}
+  hitFlashColor: {r: 1, g: 0.35, b: 0.35, a: 1}
+  hitFlashDuration: 0.1
+  hitPunchScale: 0.15
 --- !u!114 &8762303319111312671
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,7 +254,7 @@ MonoBehaviour:
   preferredDistance: 9
   arenaMargin: 0.6
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
-  bulletDamage: 25
+  bulletDamage: 15
   bulletSpeed: 16
   shootRange: 14
   cooldown: 2.5

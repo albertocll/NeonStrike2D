@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::BossDataCrawlerController
   target: {fileID: 0}
   displayName: DataCrawler
-  maxHealth: 4500
+  maxHealth: 3500
   scoreValue: 800
   entrySpeed: 2.5
   idleSprite: {fileID: -1792465365188054924, guid: 5856e48c42b9e0e489d0947e02efcf71, type: 3}
@@ -203,6 +203,7 @@ MonoBehaviour:
   dieSprite: {fileID: 843983160977252857, guid: 885e8972f2e858448bc510ed096fa4f0, type: 3}
   hitFlashDuration: 0.12
   faceTarget: 1
+  artFacesLeft: 0
   contactDamage: 2
   contactDamageCooldown: 1
   arenaMargin: 0.8
@@ -220,7 +221,7 @@ MonoBehaviour:
   fanRange: 10
   fanBulletCount: 5
   fanSpread: 50
-  fanBulletDamage: 8
+  fanBulletDamage: 6
   fanTelegraph: 0.35
   fanTelegraphColor: {r: 1, g: 0.4, b: 1, a: 1}
   shootingSprite: {fileID: -2296348286164583505, guid: 746e2505eb5c09e4f93c1cc418e0752d, type: 3}

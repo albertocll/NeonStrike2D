@@ -194,7 +194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: NeonStrike2D::BossNexusCoreController
   target: {fileID: 0}
   displayName: NexusCore
-  maxHealth: 9000
+  maxHealth: 6000
   scoreValue: 3000
   entrySpeed: 2.5
   idleSprite: {fileID: 3669020460007147146, guid: 875cb9878d2127c4fb7a934b9143f495, type: 3}
@@ -256,7 +256,7 @@ MonoBehaviour:
   chargeSpeed: 14
   chargeDuration: 0.6
   chargePause: 0.9
-  shieldHealth: 500
+  shieldHealth: 300
   shieldVulnerableDuration: 4
   shieldRegenWarning: 0.8
   shieldChaseSpeed: 1.5
@@ -267,7 +267,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   diagonalSpeed: 2.5
   crossInterval: 1.6
-  crossBulletDamage: 8
+  crossBulletDamage: 6
   summonPrefab: {fileID: 1567827880273612916, guid: 7ba3f8f8b494c974c8f4db136d213cb5, type: 3}
   summonInterval: 4
   maxAlive: 10
@@ -276,6 +276,6 @@ MonoBehaviour:
   teleportIdle: 2
   teleportFade: 0.4
   burstCount: 3
-  burstBulletDamage: 8
+  burstBulletDamage: 6
   finalSpeed: 2.5
   finalSpeedGain: 0.15
