@@ -27,6 +27,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CorruptedSignalZone.unity
     guid: 78df6da82f0eea041a1a7b6daf787256
   - enabled: 1
+    path: Assets/Scenes/CoreChamber.unity
+    guid: d09c1ab550a94d74280d42572041e5e5
+  - enabled: 1
     path: Assets/Scenes/LoadingScreen.unity
     guid: 4aeb5a7871ba88d43a11961d0c09b4bb
   m_configObjects:
