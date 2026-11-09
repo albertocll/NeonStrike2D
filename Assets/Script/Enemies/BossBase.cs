@@ -47,6 +47,13 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
     [SerializeField] private List<GameObject> guaranteedDropPrefabs = new List<GameObject>();
     [SerializeField] private float deathDestroyDelay = 1.2f;
 
+    [Header("Efecto de muerte")]
+    [SerializeField] private GameObject deathVfxPrefab;
+    [Tooltip("Color de las particulas (el de su sprite).")]
+    [SerializeField] private Color deathVfxColor = Color.white;
+    [Tooltip("Mas grande que el de un enemigo normal.")]
+    [SerializeField] private float deathVfxScale = 3f;
+
     public event Action<float> OnHealthChanged;
     public event Action OnDefeated;
     public event Action OnCombatStarted;
@@ -188,7 +195,22 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
         rb.linearVelocity = Vector2.zero;
         if (myCol != null) myCol.enabled = false;
 
+        SpawnDeathVfx();
         StartCoroutine(DeathFade());
+    }
+
+    private void SpawnDeathVfx()
+    {
+        if (deathVfxPrefab == null) return;
+
+        GameObject vfx = Instantiate(deathVfxPrefab, transform.position, Quaternion.identity);
+        vfx.transform.localScale *= deathVfxScale;
+        var ps = vfx.GetComponent<ParticleSystem>();
+        if (ps == null) return;
+
+        var main = ps.main;
+        main.startColor = deathVfxColor;
+        main.scalingMode = ParticleSystemScalingMode.Hierarchy;
     }
 
     // Sin animacion de muerte: sprite de muerte (si hay) que parpadea y se desvanece.
