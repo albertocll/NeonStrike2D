@@ -111,6 +111,9 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
     // trigger y atraviesa el muro).
     private IEnumerator Entry()
     {
+        // EnemySpawner lo instancia en el centro y despues mueve el transform fuera: el
+        // Rigidbody aun tiene la posicion del centro hasta la siguiente sincronizacion.
+        rb.position = transform.position;
         Vector2 destination = arena.HasValue ? (Vector2)arena.Value.center : rb.position;
         SetPose(moveSprite);
         while (!IsDead && rb.position != destination)
