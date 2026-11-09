@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 lastMoveDirection = Vector2.right;
 
     private Collider2D bodyCollider;
+    private SpriteRenderer bodyRenderer;
     private Rect? arenaInner;
 
     private bool isDashing;
@@ -79,6 +80,7 @@ public class PlayerController : MonoBehaviour
             joystick = FindFirstObjectByType<Joystick>();
 
         bodyCollider = GetComponent<Collider2D>();
+        bodyRenderer = GetComponent<SpriteRenderer>();
         arenaInner = FindArenaInner();
     }
 
@@ -111,22 +113,28 @@ public class PlayerController : MonoBehaviour
         return Rect.MinMaxRect(left, bottom, right, top);
     }
 
-    // Limites para la posicion de la nave: con muros, que su collider (ajustado al sprite)
-    // no pase de la cara interior de ningun muro; sin muros, los valores del Inspector.
+    // Limites para la posicion de la nave: con muros, que su dibujo no pase de la cara interior
+    // de ningun muro; sin muros, los valores del Inspector. Se usa el sprite y no el collider,
+    // que solo cubre el casco (para los impactos) y es mas pequeno que el dibujo.
+    // Solo frena el avance hacia el muro: si un fotograma mas grande (llamas mas largas) deja
+    // la nave un poco dentro, no la empuja hacia atras para que no tiemble.
     private Vector2 ClampToArena(Vector2 pos)
     {
-        if (!arenaInner.HasValue || bodyCollider == null)
+        if (!arenaInner.HasValue || (bodyRenderer == null && bodyCollider == null))
             return new Vector2(Mathf.Clamp(pos.x, minX, maxX), Mathf.Clamp(pos.y, minY, maxY));
 
         Rect a = arenaInner.Value;
-        Bounds cb = bodyCollider.bounds;
+        Bounds vb = bodyRenderer != null ? bodyRenderer.bounds : bodyCollider.bounds;
         Vector2 current = rb.position;
-        float l = current.x - cb.min.x, r = cb.max.x - current.x;
-        float d = current.y - cb.min.y, u = cb.max.y - current.y;
+        float l = current.x - vb.min.x, r = vb.max.x - current.x;
+        float d = current.y - vb.min.y, u = vb.max.y - current.y;
+
+        float minPx = Mathf.Min(a.xMin + l, current.x), maxPx = Mathf.Max(a.xMax - r, current.x);
+        float minPy = Mathf.Min(a.yMin + d, current.y), maxPy = Mathf.Max(a.yMax - u, current.y);
 
         return new Vector2(
-            Mathf.Clamp(pos.x, a.xMin + l, Mathf.Max(a.xMin + l, a.xMax - r)),
-            Mathf.Clamp(pos.y, a.yMin + d, Mathf.Max(a.yMin + d, a.yMax - u)));
+            Mathf.Clamp(pos.x, minPx, Mathf.Max(minPx, maxPx)),
+            Mathf.Clamp(pos.y, minPy, Mathf.Max(minPy, maxPy)));
     }
     private void Update()
     {
