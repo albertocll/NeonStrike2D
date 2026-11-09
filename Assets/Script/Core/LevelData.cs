@@ -8,4 +8,6 @@ public class LevelData : ScriptableObject
     public int firstWave = 1;
     public int bossWave = 10;
     public GameObject bossPrefab;
+    [Tooltip("Multiplica la vida de los enemigos de las oleadas del nivel (1 = la del prefab).")]
+    public float enemyHealthMultiplier = 1f;
 }
