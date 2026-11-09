@@ -21,6 +21,8 @@ public class EnemyController : MonoBehaviour, IDamageable
 
     [Header("VFX")]
     [SerializeField] private GameObject deathVfxPrefab;
+    [Tooltip("Color de las particulas de muerte (el de su sprite). Con alfa 0 se usa el de siempre segun el tipo.")]
+    [SerializeField] private Color deathVfxColor = Color.clear;
     private static readonly Color WardenDeathVfxColor = new Color32(0x80, 0x1D, 0x43, 0xFF);
     private static readonly Color StrikerDeathVfxColor = new Color(0f, 0.95f, 1f);
     private static readonly Color FuseDeathVfxColor = new Color(1f, 0.5f, 0.1f);
@@ -128,7 +130,8 @@ public class EnemyController : MonoBehaviour, IDamageable
         if (ps == null) return;
 
         var main = ps.main;
-        if (isWarden) main.startColor = WardenDeathVfxColor;
+        if (deathVfxColor.a > 0f) main.startColor = deathVfxColor;
+        else if (isWarden) main.startColor = WardenDeathVfxColor;
         else if (isStriker) main.startColor = StrikerDeathVfxColor;
         else if (isFuse) main.startColor = FuseDeathVfxColor;
     }
