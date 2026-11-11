@@ -32,4 +32,5 @@ public interface IRemoteBoss
     void RemoteCombatStart();
     void ApplyRemoteHealth(int health);
     void RemoteDie();
+    bool AwardScore { get; set; }
 }

@@ -76,7 +76,21 @@ public class NetEnemy : MonoBehaviour
         var bastion = GetComponent<BastionAI>();
         if (bastion != null && bastion.BlocksHit(direction)) return;
         var target = GetComponent<IDamageable>();
-        if (target != null) target.TakeDamage(damage);
+        if (target == null) return;
+
+        // Si este impacto lo mata, los puntos son del invitado, no del anfitrion.
+        SetAwardScore(false);
+        target.TakeDamage(damage);
+        if (IsDead) KilledByGuest = true;
+        else SetAwardScore(true);
+    }
+
+    public bool KilledByGuest { get; private set; }
+
+    private void SetAwardScore(bool award)
+    {
+        if (controller != null) controller.AwardScore = award;
+        else if (boss != null) boss.AwardScore = award;
     }
 
     // ── Invitado ─────────────────────────────────────────────────────────────
@@ -156,9 +170,11 @@ public class NetEnemy : MonoBehaviour
         }
     }
 
-    public void RemoteDie()
+    // En el invitado solo suma puntos si lo ha matado el invitado.
+    public void RemoteDie(bool killedByGuest)
     {
         if (IsDead) return;
+        SetAwardScore(killedByGuest);
         if (controller != null) controller.RemoteDie();
         else boss?.RemoteDie();
     }

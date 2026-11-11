@@ -110,8 +110,17 @@ public class CoopEnemySync : MonoBehaviour
         }
         if (deadIds.Count == 0) return;
 
-        foreach (int id in deadIds) enemies.Remove(id);
-        Send(KindDeaths, string.Join(",", deadIds));
+        // id, con una g detras si lo ha matado el invitado (para que sume el los puntos).
+        sb.Clear();
+        foreach (int id in deadIds)
+        {
+            if (sb.Length > 0) sb.Append(',');
+            sb.Append(id);
+            NetEnemy dead = enemies[id];
+            if (dead != null && dead.KilledByGuest) sb.Append('g');
+            enemies.Remove(id);
+        }
+        Send(KindDeaths, sb.ToString());
     }
 
     // oleada|id,clave,x,y,vida,banderas,color;... en trozos de EnemiesPerMessage.
@@ -226,10 +235,11 @@ public class CoopEnemySync : MonoBehaviour
     {
         foreach (string s in data.Split(','))
         {
-            int id = int.Parse(s, Inv);
+            bool killedByGuest = s.EndsWith("g");
+            int id = int.Parse(killedByGuest ? s.Substring(0, s.Length - 1) : s, Inv);
             if (enemies.TryGetValue(id, out NetEnemy net))
             {
-                if (net != null) net.RemoteDie();
+                if (net != null) net.RemoteDie(killedByGuest);
                 enemies.Remove(id);
             }
         }

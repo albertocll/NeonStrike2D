@@ -76,6 +76,9 @@ public class EnemyController : MonoBehaviour, IDamageable
     public void ApplyRemoteHealth(int health) => currentHealth = health;
     public void RemoteDie() => Die();
 
+    // En cooperativo cada jugador suma solo lo que mata el (#206): quien no lo ha matado no suma.
+    public bool AwardScore { get; set; } = true;
+
     // Golpe visual sin tocar la vida (tambien para el impacto que el invitado manda al anfitrion).
     public void PlayHitFeedback()
     {
@@ -100,7 +103,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         SFXManager.Instance?.PlayEnemyDeath();
 
-        if (ScoreManager.Instance != null)
+        if (AwardScore && ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);
 
         TryDropPowerUp();

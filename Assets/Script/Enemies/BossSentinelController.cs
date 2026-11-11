@@ -152,6 +152,9 @@ public class BossSentinelController : MonoBehaviour, IDamageable, IBoss, IRemote
     }
 
     public void RemoteDie() => Die();
+
+    // En cooperativo cada jugador suma solo lo que mata el (#206): quien no lo ha matado no suma.
+    public bool AwardScore { get; set; } = true;
     public void TakeDamage(int damage)
     {
         if (IsDead || IsInvulnerable) return;
@@ -179,7 +182,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable, IBoss, IRemote
 
         SFXManager.Instance?.PlayEnemyDeath();
 
-        if (ScoreManager.Instance != null)
+        if (AwardScore && ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);
 
         DropRewards();
