@@ -323,4 +323,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: NeonStrike2D::FuseAI
   explosionRadius: 2.5
-  explosionDamage: 2
+  explosionDamage: 20

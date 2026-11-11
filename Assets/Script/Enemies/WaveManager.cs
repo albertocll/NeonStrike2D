@@ -76,6 +76,9 @@ public class WaveManager : MonoBehaviour
 
     public void RegisterEnemy() => enemiesAlive++;
 
+    // Lo que invoca enemigos (Herald) no pasa del tope de la oleada actual.
+    public bool WaveIsFull => enemiesAlive >= EnemiesThisWave(currentWave);
+
     public void OnEnemyKilled()
     {
         if (!waveInProgress) return;

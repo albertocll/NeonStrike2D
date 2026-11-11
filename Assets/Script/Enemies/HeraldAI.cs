@@ -91,6 +91,7 @@ public class HeraldAI : MonoBehaviour
 
             summoned.RemoveAll(s => s == null || s.GetComponent<EnemyController>()?.IsDead == true);
             if (summoned.Count >= maxAlive) continue;
+            if (TryGetComponent(out EnemyWaveMember member) && member.Manager != null && member.Manager.WaveIsFull) continue;
 
             yield return Telegraph();
             if (controller.IsDead) yield break;

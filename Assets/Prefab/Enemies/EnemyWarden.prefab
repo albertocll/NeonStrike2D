@@ -85,6 +85,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   fireRate: 1.6
   shootRange: 5
+  bulletDamage: 15
   anim: {fileID: 4490529092211434942}
   movingParam: Moving
   shootParam: Shoot
