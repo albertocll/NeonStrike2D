@@ -38,6 +38,7 @@ public class StrikerAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target) return;
 
         Vector2 toTarget = (Vector2)target.position - rb.position;
@@ -49,13 +50,13 @@ public class StrikerAI : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!PlayerTargets.IsPlayer(other)) return;
         TryDamagePlayer(other);
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!PlayerTargets.IsPlayer(other)) return;
         TryDamagePlayer(other);
     }
 

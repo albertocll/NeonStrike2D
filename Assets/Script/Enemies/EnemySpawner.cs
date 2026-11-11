@@ -5,9 +5,13 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
     [Header("Enemy Prefabs")]
+    [Tooltip("Enemigos de niveles anteriores (salen en menor proporcion).")]
     [SerializeField] private List<GameObject> basicEnemyPrefabs;
+    [Tooltip("Enemigos nuevos del nivel (salen en mayor proporcion).")]
     [SerializeField] private List<GameObject> advancedEnemyPrefabs;
     [SerializeField] private int advancedEnemyFromWave = 3;
+    [Tooltip("Probabilidad de que cada enemigo de la oleada sea de la lista de avanzados.")]
+    [SerializeField, Range(0f, 1f)] private float advancedEnemyChance = 0.3f;
 
     [Header("Spawn Area")]
     [SerializeField] private BoxCollider2D spawnArea;
@@ -23,6 +27,16 @@ public class EnemySpawner : MonoBehaviour
     private const string WallPrefix = "Wall_";
 
     private Bounds? outerBounds;
+
+    // Todos los enemigos que puede sacar este nivel (el invitado en cooperativo los necesita para crear sus copias, #206).
+    public IEnumerable<GameObject> AllPrefabs
+    {
+        get
+        {
+            foreach (var p in basicEnemyPrefabs) yield return p;
+            foreach (var p in advancedEnemyPrefabs) yield return p;
+        }
+    }
 
     // El jefe aparece fuera de los muros y de la camara, por un lado al azar como el resto de
     // enemigos, y BossSentinelController lo hace entrar hasta el centro de la arena.
@@ -76,14 +90,23 @@ public class EnemySpawner : MonoBehaviour
     // subir a 2-3 por frame en vez de 1.
     private IEnumerator SpawnWaveRoutine(int enemyCount, WaveManager waveManager, int currentWave)
     {
+        LevelData level = LevelManager.ForScene(gameObject.scene.name);
+        float healthMultiplier = level != null ? level.enemyHealthMultiplier : 1f;
+
         for (int i = 0; i < enemyCount; i++)
         {
             GameObject enemyPrefab = ChooseEnemyPrefab(currentWave);
+
+            // Un Swarm trae su racimo: cuenta como groupSize enemigos de la oleada.
+            var swarm = enemyPrefab.GetComponent<SwarmAI>();
+            if (swarm != null) i += swarm.GroupSize - 1;
             float halfExtent = SpawnAreaUtils.GetHalfExtent(enemyPrefab);
             Vector2 destination = GetRandomPosition(enemyPrefab);
             Vector2 spawnPosition = GetOutsidePosition(halfExtent);
 
             GameObject enemyInstance = Instantiate(enemyPrefab, spawnPosition, Quaternion.identity);
+            if (enemyInstance.TryGetComponent(out EnemyController controller))
+                controller.ScaleHealth(healthMultiplier);
             enemyInstance.AddComponent<EnemyArenaEntry>().Begin(destination, spawnArea.bounds, halfExtent, entrySpeed);
 
             EnemyWaveMember waveMember = enemyInstance.GetComponent<EnemyWaveMember>();
@@ -99,7 +122,7 @@ public class EnemySpawner : MonoBehaviour
 
     public GameObject ChooseEnemyPrefab(int currentWave)
     {
-        if (currentWave >= advancedEnemyFromWave && advancedEnemyPrefabs.Count > 0 && Random.value < 0.3f)
+        if (currentWave >= advancedEnemyFromWave && advancedEnemyPrefabs.Count > 0 && Random.value < advancedEnemyChance)
             return advancedEnemyPrefabs[Random.Range(0, advancedEnemyPrefabs.Count)];
         return basicEnemyPrefabs[Random.Range(0, basicEnemyPrefabs.Count)];
     }

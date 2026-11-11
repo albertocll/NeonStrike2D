@@ -15,6 +15,8 @@ public class WardenAI : MonoBehaviour
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] private float fireRate = 1.5f;   // balas por segundo
     [SerializeField] private float shootRange = 8f;
+    [Tooltip("Dano de cada bala. Sustituye al de la bala compartida (BulletEnemy).")]
+    [SerializeField] private int bulletDamage = 15;
 
     [Header("Animator (optional)")]
     [SerializeField] private Animator anim;
@@ -47,6 +49,7 @@ public class WardenAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target) return;
 
         Vector2 toTarget = (Vector2)target.position - rb.position;
@@ -84,6 +87,7 @@ public class WardenAI : MonoBehaviour
         Vector2 dir = ((Vector2)target.position - (Vector2)firePoint.position).normalized;
 
         Bullet b = Instantiate(bulletPrefab, firePoint.position, Quaternion.identity);
+        b.damage = bulletDamage;
         b.Init(dir);
 
         // Evitar autocolisión con el enemigo

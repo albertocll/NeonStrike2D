@@ -13,6 +13,12 @@ public class WeaponController : MonoBehaviour
     [Header("Stats")]
     [SerializeField] private float fireRate = 5f; // balas por segundo
 
+    [Header("Teclado (PC)")]
+    [Tooltip("En PC la nave local solo dispara mientras se mantiene esta tecla. En movil el disparo sigue siendo automatico.")]
+    [SerializeField] private KeyCode fireKey = KeyCode.Space;
+    [SerializeField] private bool requireFireKeyOnDesktop = true;
+    private PlayerController localController;
+
     private float nextShotTime;
     private Collider2D ownerCollider;
     private Sprite bulletSprite;
@@ -31,12 +37,21 @@ public class WeaponController : MonoBehaviour
 
         if (autoOrientation == null)
             autoOrientation = GetComponent<PlayerAutoOrientation2D>();
+
+        localController = GetComponent<PlayerController>();
     }
+
+    // La nave del otro jugador en cooperativo tiene el PlayerController apagado (PlayerSync):
+    // su disparo no depende del teclado de este cliente.
+    private bool WaitsForFireKey =>
+        requireFireKeyOnDesktop && !Application.isMobilePlatform &&
+        localController != null && localController.enabled;
 
     private void Update()
     {
         if (firePoint == null || bulletPrefab == null || autoOrientation == null) return;
         if (autoOrientation.CurrentTarget == null) return;
+        if (WaitsForFireKey && !Input.GetKey(fireKey)) return;
         if (Time.time < nextShotTime) return;
 
         float currentFireRate = fireRate * (heavyWeaponActive ? heavyWeaponFireRateMultiplier : 1f);
@@ -52,6 +67,9 @@ public class WeaponController : MonoBehaviour
     {
         Bullet bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
         bullet.IgnoreCollider(ownerCollider);
+        // Nave del otro jugador en cooperativo: sus disparos solo se ven; el dano de verdad lo hacen
+        // las balas de su dueño (el invitado lo manda al anfitrion, #206).
+        if (localController != null && !localController.enabled) bullet.MakeVisualOnly();
         bullet.Init(direction);
 
         if (bulletSprite != null)

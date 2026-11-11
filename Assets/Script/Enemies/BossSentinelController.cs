@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BossSentinelController : MonoBehaviour, IDamageable
+public class BossSentinelController : MonoBehaviour, IDamageable, IBoss, IRemoteBoss
 {
-    public static event Action<BossSentinelController> OnAnyBossSpawned;
 
     [Header("Target")]
     [SerializeField] private Transform target;
@@ -97,9 +96,14 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         }
 
         SFXManager.Instance?.PlayBossAppear();
-        OnAnyBossSpawned?.Invoke(this);
+        BossEvents.RaiseSpawned(this);
 
         StartCoroutine(EntryThenFight());
+    }
+
+    private void Update()
+    {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
     }
 
     private IEnumerator EntryThenFight()
@@ -131,6 +135,26 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         }
     }
 
+    // Copia del jefe en el invitado (cooperativo, #206): sin IA; la vida y la muerte llegan del anfitrion.
+    public void BeginRemote()
+    {
+        SFXManager.Instance?.PlayBossAppear();
+        BossEvents.RaiseSpawned(this);
+    }
+
+    public void RemoteCombatStart() => OnCombatStarted?.Invoke();
+
+    public void ApplyRemoteHealth(int health)
+    {
+        if (IsDead || health == CurrentHealth) return;
+        CurrentHealth = health;
+        OnHealthChanged?.Invoke((float)Mathf.Max(health, 0) / maxHealth);
+    }
+
+    public void RemoteDie() => Die();
+
+    // En cooperativo cada jugador suma solo lo que mata el (#206): quien no lo ha matado no suma.
+    public bool AwardScore { get; set; } = true;
     public void TakeDamage(int damage)
     {
         if (IsDead || IsInvulnerable) return;
@@ -158,7 +182,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
         SFXManager.Instance?.PlayEnemyDeath();
 
-        if (ScoreManager.Instance != null)
+        if (AwardScore && ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);
 
         DropRewards();
@@ -333,13 +357,13 @@ public class BossSentinelController : MonoBehaviour, IDamageable
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!PlayerTargets.IsPlayer(other)) return;
         TryDamagePlayer(other);
     }
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!PlayerTargets.IsPlayer(other)) return;
         TryDamagePlayer(other);
     }
 

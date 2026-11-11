@@ -16,9 +16,13 @@ public class OptionsMenu : MonoBehaviour
 
     private float cachedVolume = 1f;
 
+    // Botón LOGOUT (issue #230): copia del botón de volver, reflejado al otro lado de la ventana.
+    private GameObject logoutButton;
+
     private void Start()
     {
         CreateLeftHandedToggle();
+        CreateLogoutButton();
 
         if (musicSource == null)
             musicSource = FindFirstObjectByType<MusicManager>().GetComponent<AudioSource>();
@@ -67,6 +71,56 @@ public class OptionsMenu : MonoBehaviour
 
         toggle.isOn = Joystick.LeftHanded;
         toggle.onValueChanged.AddListener(isOn => Joystick.LeftHanded = isOn);
+    }
+
+    private void Update()
+    {
+        // La sesión recordada se restaura en segundo plano, así que la visibilidad se comprueba cada frame.
+        if (logoutButton != null)
+        {
+            bool hasSession = NetworkManager.Instance != null && !string.IsNullOrEmpty(NetworkManager.Instance.Token);
+            if (logoutButton.activeSelf != hasSession) logoutButton.SetActive(hasSession);
+        }
+    }
+
+    private void CreateLogoutButton()
+    {
+        Button back = null;
+        foreach (var b in optionsWindow.GetComponentsInChildren<Button>(true))
+            if (b.name == "BackButton") { back = b; break; }
+        if (back == null)
+        {
+            Debug.LogWarning("[OptionsMenu] No se encontró BackButton; no se crea el botón LOGOUT.");
+            return;
+        }
+
+        var button = Instantiate(back, back.transform.parent);
+        button.name = "LogoutButton";
+        button.onClick = new Button.ButtonClickedEvent(); // quita el CloseOptions copiado del botón de volver
+        button.onClick.AddListener(OnLogoutClicked);
+
+        var rect = (RectTransform)button.transform;
+        var backRect = (RectTransform)back.transform;
+        rect.anchoredPosition = new Vector2(-backRect.anchoredPosition.x, backRect.anchoredPosition.y);
+
+        var label = button.GetComponentInChildren<TMP_Text>(true);
+        if (label != null)
+        {
+            label.text = "LOGOUT";
+            // Ensancha el fondo si el texto no cabe en el ancho del botón de volver.
+            float needed = label.GetPreferredValues("LOGOUT").x + 20f;
+            if (needed > rect.sizeDelta.x) rect.sizeDelta = new Vector2(needed, rect.sizeDelta.y);
+        }
+
+        logoutButton = button.gameObject;
+        logoutButton.SetActive(false);
+    }
+
+    private async void OnLogoutClicked()
+    {
+        logoutButton.GetComponent<Button>().interactable = false;
+        CloseOptions();
+        await LoginUI.LogoutAsync();
     }
 
     public void OnSfxSliderChanged(float value)
@@ -120,5 +174,11 @@ public class OptionsMenu : MonoBehaviour
             // Música OFF → muteamos solamente
             musicSource.mute = true;
         }
+    }
+
+    // Botón de borrar cuenta (issue #280), creado por código.
+    private void Awake()
+    {
+        if (!TryGetComponent(out DeleteAccountButton _)) gameObject.AddComponent<DeleteAccountButton>();
     }
 }

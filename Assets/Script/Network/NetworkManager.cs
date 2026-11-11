@@ -61,6 +61,16 @@ public class NetworkManager : MonoBehaviour
         IsGuest = true;
     }
 
+    // Cierre de sesión (issue #230): olvida al usuario y cierra el WebSocket para que los amigos lo vean desconectado.
+    public async Task LogoutAsync()
+    {
+        UserId = 0;
+        Username = null;
+        Token = null;
+        IsGuest = false;
+        await DisconnectAsync();
+    }
+
     private TaskCompletionSource<bool> _connectTcs;
 
     public async Task ConnectAsync(string roomId = null)
@@ -258,6 +268,15 @@ public class NetworkManager : MonoBehaviour
     {
         if (_ws != null && _ws.State == WebSocketState.Open)
             await _ws.Close();
+    }
+
+    // Olvida al usuario tras borrar su cuenta (issue #280).
+    public void ClearUserData()
+    {
+        UserId = 0;
+        Username = null;
+        Token = null;
+        IsGuest = false;
     }
 
     private void OnDestroy()

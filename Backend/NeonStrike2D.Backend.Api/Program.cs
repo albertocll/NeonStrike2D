@@ -67,13 +67,39 @@ app.UseWebSockets();
 
 app.MapGet("/", () => "NeonStrike2D Backend API running");
 
-app.MapGet("/me", (ClaimsPrincipal user) =>
+app.MapGet("/me", async (ClaimsPrincipal user, AppDbContext db) =>
 {
     var userId = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     var username = user.FindFirst(ClaimTypes.Name)?.Value;
     var email = user.FindFirst(ClaimTypes.Email)?.Value;
 
+    // Un token de una cuenta ya borrada no restaura la sesión (issue #280).
+    if (!int.TryParse(userId, out var id) || !await db.Users.AnyAsync(u => u.Id == id))
+        return Results.Unauthorized();
+
     return Results.Ok(new { UserId = userId, Username = username, Email = email });
+}).RequireAuthorization();
+
+// Borrado de cuenta (issue #280, requisito de Google Play): borra el usuario y todos sus datos
+// en una transacción y cierra su WebSocket si está conectado.
+app.MapDelete("/me", async (ClaimsPrincipal user, AppDbContext db) =>
+{
+    var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    var username = await db.Users.Where(u => u.Id == userId).Select(u => u.Username).FirstOrDefaultAsync();
+    if (username == null) return Results.NotFound();
+
+    await using (var tx = await db.Database.BeginTransactionAsync())
+    {
+        var sessions = db.GameSessions.Where(s => s.Player1Id == userId || s.Player2Id == userId || s.WinnerId == userId);
+        await db.GameResults.Where(r => r.UserId == userId || sessions.Any(s => s.Id == r.GameSessionId)).ExecuteDeleteAsync();
+        await sessions.ExecuteDeleteAsync();
+        await db.Friendships.Where(f => f.RequesterId == userId || f.AddresseeId == userId).ExecuteDeleteAsync();
+        await db.Users.Where(u => u.Id == userId).ExecuteDeleteAsync();
+        await tx.CommitAsync();
+    }
+
+    await WebSocketHandler.DisconnectUserAsync(username);
+    return Results.Ok(new { Success = true });
 }).RequireAuthorization();
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
@@ -144,7 +170,7 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
         issuer: builder.Configuration["Jwt:Issuer"],
         audience: builder.Configuration["Jwt:Audience"],
         claims: claims,
-        expires: DateTime.UtcNow.AddHours(2),
+        expires: DateTime.UtcNow.AddDays(30),
         signingCredentials: creds
     );
 
@@ -161,13 +187,16 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 
-app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db) =>
+app.MapPost("/match/result", async (MatchResultRequest request, ClaimsPrincipal user, AppDbContext db) =>
 {
+    // El resultado siempre es del usuario del token, nunca del id que llegue en el cuerpo (issue #288).
+    var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
     var session = new GameSession
     {
-        RoomId = $"solo_{request.UserId}_{DateTime.UtcNow.Ticks}",
-        Player1Id = request.UserId,
-        Player2Id = request.UserId,
+        RoomId = $"solo_{userId}_{DateTime.UtcNow.Ticks}",
+        Player1Id = userId,
+        Player2Id = userId,
         WinnerId = null,
         StartedAt = DateTime.UtcNow,
         EndedAt = DateTime.UtcNow,
@@ -179,7 +208,7 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
 
     db.GameResults.Add(new GameResult
     {
-        UserId = request.UserId,
+        UserId = userId,
         GameSessionId = session.Id,
         Won = false,
         RoundsWon = request.BestWave,
@@ -287,6 +316,8 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
 
 app.Map("/ws", WebSocketHandler.Handle);
 
-app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
+// Solo en local: en produccion no se expone quien esta conectado (issue #281).
+if (app.Environment.IsDevelopment())
+    app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
 
 app.Run();

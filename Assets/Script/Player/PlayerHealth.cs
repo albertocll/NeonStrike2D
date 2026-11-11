@@ -18,6 +18,12 @@ public class PlayerHealth : MonoBehaviour
     public bool IsDead => isDead;
     public bool IsInvulnerable => isInvulnerable;
 
+    // Copia del otro jugador en cooperativo (#206): el dano que recibe en este cliente se reenvia
+    // a su dueño, que lo aplica a su vida real (con sus escudos y su invulnerabilidad).
+    public bool IsRemoteProxy { get; private set; }
+
+    public void MakeRemoteProxy() => IsRemoteProxy = true;
+
     public void Init(int maxHealth)
     {
         this.maxHealth = maxHealth;
@@ -45,6 +51,7 @@ public class PlayerHealth : MonoBehaviour
 
     public void Heal(int amount)
     {
+        if (IsRemoteProxy) return;
         if (isDead) return;
         currentHealth += amount;
         if (currentHealth > maxHealth)
@@ -56,6 +63,11 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(int amount)
     {
+        if (IsRemoteProxy)
+        {
+            CoopEnemySync.Instance?.SendPlayerDamage(amount);
+            return;
+        }
         if (isDead) return;
         if (isInvulnerable) return;
 
@@ -125,6 +137,7 @@ public class PlayerHealth : MonoBehaviour
 
     private void Update()
     {
+        if (IsRemoteProxy) return;
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.T)) TakeDamage(1);
 #endif

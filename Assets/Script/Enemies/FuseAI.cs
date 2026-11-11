@@ -21,7 +21,7 @@ public class FuseAI : MonoBehaviour
         // EnemyArenaEntry lo tiene apagado (entrando en la arena) no detona por contacto.
         if (!enabled) return;
         if (hasDetonated) return;
-        if (!other.CompareTag("Player")) return;
+        if (!PlayerTargets.IsPlayer(other)) return;
 
         controller.TakeDamage(controller.maxHealth);
     }
@@ -37,7 +37,7 @@ public class FuseAI : MonoBehaviour
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
         foreach (var hit in hits)
         {
-            if (!hit.CompareTag("Player")) continue;
+            if (!PlayerTargets.IsPlayer(hit)) continue;
 
             var health = hit.GetComponentInParent<PlayerHealth>();
             if (health != null && !health.IsDead)

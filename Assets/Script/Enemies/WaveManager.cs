@@ -51,6 +51,7 @@ public class WaveManager : MonoBehaviour
     public void StartNextWave()
     {
         if (!spawnEnemies) return;
+        if (CoopEnemySync.IsGuest) return; // en cooperativo solo el anfitrion crea enemigos (#206)
 
         SFXManager.Instance?.PlayWaveStart();
 
@@ -65,12 +66,30 @@ public class WaveManager : MonoBehaviour
         if (level != null && currentWave == level.bossWave && level.bossPrefab != null)
             enemySpawner.SpawnBoss(level.bossPrefab, this);
         else
-            enemySpawner.SpawnWave(EnemiesForWave(currentWave), this, currentWave);
+            enemySpawner.SpawnWave(EnemiesThisWave(currentWave), this, currentWave);
+    }
+
+    // Invitado en cooperativo: la oleada la marca el anfitrion (#206).
+    public void ShowRemoteWave(int wave)
+    {
+        if (wave == currentWave) return;
+        currentWave = wave;
+        RunState.Wave = wave;
+        SFXManager.Instance?.PlayWaveStart();
+        if (waveText != null)
+            waveText.text = $"WAVE: {currentWave}";
     }
 
     public int EnemiesForWave(int wave) => baseEnemiesPerWave + ((wave - 1) * enemiesAddedPerWave);
 
+    // Lo que define el LevelData del nivel (primeras oleadas, subida y tope) o, si no, la formula.
+    public int EnemiesThisWave(int wave) =>
+        level != null ? level.EnemiesForWave(wave, EnemiesForWave(wave)) : EnemiesForWave(wave);
+
     public void RegisterEnemy() => enemiesAlive++;
+
+    // Lo que invoca enemigos (Herald) no pasa del tope de la oleada actual.
+    public bool WaveIsFull => enemiesAlive >= EnemiesThisWave(currentWave);
 
     public void OnEnemyKilled()
     {
