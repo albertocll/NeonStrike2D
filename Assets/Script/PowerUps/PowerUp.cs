@@ -21,6 +21,7 @@ public class PowerUp : MonoBehaviour
     [SerializeField] private float rotateSpeed = 60f;
 
     private Vector3 startPos;
+    private bool picked; // el casco y la zona de recogida pueden entrar en el mismo paso de fisica
 
     private void Start()
     {
@@ -38,11 +39,13 @@ public class PowerUp : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        GameObject player = PlayerPickupRange.PlayerOf(other);
+        if (player == null || picked) return;
 
-        PlayerPowerUps powerUps = other.GetComponentInParent<PlayerPowerUps>();
+        PlayerPowerUps powerUps = player.GetComponent<PlayerPowerUps>();
         if (powerUps != null)
         {
+            picked = true;
             powerUps.ApplyPowerUp(type, duration);
             Destroy(gameObject);
         }
