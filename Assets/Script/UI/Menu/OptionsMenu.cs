@@ -21,6 +21,7 @@ public class OptionsMenu : MonoBehaviour
 
     private void Start()
     {
+        CreateLeftHandedToggle();
         CreateLogoutButton();
 
         if (musicSource == null)
@@ -47,6 +48,29 @@ public class OptionsMenu : MonoBehaviour
             sfxToggle.isOn = !SFXManager.Instance.Muted;
             sfxToggle.onValueChanged.AddListener(OnSfxToggleChanged);
         }
+    }
+
+    // Ajuste de controles para zurdos (issue #232): copia del toggle de efectos, a la altura del botón de volver.
+    private void CreateLeftHandedToggle()
+    {
+        if (sfxToggle == null) return;
+
+        var toggle = Instantiate(sfxToggle, sfxToggle.transform.parent);
+        toggle.name = "LeftHandedToggle";
+        toggle.onValueChanged = new Toggle.ToggleEvent(); // sin los listeners copiados del toggle de efectos
+
+        var rect = (RectTransform)toggle.transform;
+        var sfxRect = (RectTransform)sfxToggle.transform;
+        float y = sfxRect.anchoredPosition.y - 60f;
+        foreach (var b in optionsWindow.GetComponentsInChildren<Button>(true))
+            if (b.name == "BackButton") { y = ((RectTransform)b.transform).anchoredPosition.y; break; }
+        rect.anchoredPosition = new Vector2(sfxRect.anchoredPosition.x, y);
+
+        var label = toggle.GetComponentInChildren<TMP_Text>(true);
+        if (label != null) label.text = "left-handed";
+
+        toggle.isOn = Joystick.LeftHanded;
+        toggle.onValueChanged.AddListener(isOn => Joystick.LeftHanded = isOn);
     }
 
     private void Update()
