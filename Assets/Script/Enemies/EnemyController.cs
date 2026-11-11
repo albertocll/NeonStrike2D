@@ -41,6 +41,7 @@ public class EnemyController : MonoBehaviour, IDamageable
         currentHealth = maxHealth;
         animator = GetComponentInChildren<Animator>();
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
+        if (!TryGetComponent(out EnemySeparation _)) gameObject.AddComponent<EnemySeparation>();
     }
 
     // Enemigos mas fuertes en cada nivel (LevelData.enemyHealthMultiplier). Se llama justo
