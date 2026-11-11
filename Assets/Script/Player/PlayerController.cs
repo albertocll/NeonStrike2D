@@ -83,12 +83,12 @@ public class PlayerController : MonoBehaviour
 
         bodyCollider = GetComponent<Collider2D>();
         bodyRenderer = GetComponent<SpriteRenderer>();
-        arenaInner = FindArenaInner();
+        arenaInner = FindArenaInner(gameObject.scene);
     }
 
     // Rectangulo interior de los muros Wall_* de la escena: para cada muro, su cara interior
     // es lo mas interior entre su collider y lo que se ve de el (su sprite o el de sus hijos).
-    private Rect? FindArenaInner()
+    public static Rect? FindArenaInner(UnityEngine.SceneManagement.Scene scene)
     {
         float left = float.NegativeInfinity, right = float.PositiveInfinity;
         float bottom = float.NegativeInfinity, top = float.PositiveInfinity;
@@ -96,7 +96,7 @@ public class PlayerController : MonoBehaviour
 
         foreach (var wall in FindObjectsByType<Collider2D>(FindObjectsSortMode.None))
         {
-            if (!wall.name.StartsWith("Wall_") || wall.gameObject.scene != gameObject.scene) continue;
+            if (!wall.name.StartsWith("Wall_") || wall.gameObject.scene != scene) continue;
 
             Bounds b = wall.bounds;
             foreach (var r in wall.GetComponentsInChildren<Renderer>())
