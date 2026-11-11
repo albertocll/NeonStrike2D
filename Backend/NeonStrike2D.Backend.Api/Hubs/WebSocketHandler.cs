@@ -267,4 +267,18 @@ public static class WebSocketHandler
 
     public static bool IsUserOnline(string username) => UsernameToId.ContainsKey(username);
     public static List<string> GetOnlineUsers() => UsernameToId.Keys.ToList();
+
+    // Cuenta borrada (issue #280): deja de salir en línea al momento y se cierra su conexión.
+    // Solo se envía el cierre: el bucle de Handle recibe la respuesta del cliente y limpia la sala.
+    public static async Task DisconnectUserAsync(string username)
+    {
+        if (!UsernameToId.TryRemove(username, out var connectionId)) return;
+        if (!Connections.TryGetValue(connectionId, out var ws) || ws.State != WebSocketState.Open) return;
+
+        try
+        {
+            await ws.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "Cuenta borrada", CancellationToken.None);
+        }
+        catch (WebSocketException) { }
+    }
 }

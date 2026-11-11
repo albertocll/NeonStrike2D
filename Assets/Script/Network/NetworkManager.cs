@@ -260,6 +260,15 @@ public class NetworkManager : MonoBehaviour
             await _ws.Close();
     }
 
+    // Olvida al usuario tras borrar su cuenta (issue #280).
+    public void ClearUserData()
+    {
+        UserId = 0;
+        Username = null;
+        Token = null;
+        IsGuest = false;
+    }
+
     private void OnDestroy()
     {
         _ = DisconnectAsync();

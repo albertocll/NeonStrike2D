@@ -142,6 +142,19 @@ public class ApiManager : MonoBehaviour
         var response = JsonUtility.FromJson<UserResponse>(result);
         return response?.userId;
     }
+
+    // BORRADO DE CUENTA (issue #280): true si el servidor ha borrado la cuenta y sus datos.
+    public async Task<bool> DeleteAccountAsync()
+    {
+        using var request = UnityWebRequest.Delete($"{serverUrl}/me");
+        request.SetRequestHeader("Authorization", $"Bearer {NetworkManager.Instance.Token}");
+
+        var operation = request.SendWebRequest();
+        while (!operation.isDone)
+            await Task.Yield();
+
+        return request.result == UnityWebRequest.Result.Success;
+    }
 }
 
 // DTOs

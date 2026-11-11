@@ -67,6 +67,15 @@ public class LoginUI : MonoBehaviour
         PlayerPrefs.Save();
     }
 
+    // Olvida la cuenta recordada en este dispositivo (cuenta borrada, issue #280).
+    public static void ForgetRememberedAccount()
+    {
+        PlayerPrefs.DeleteKey(KEY_EMAIL);
+        PlayerPrefs.DeleteKey(KEY_TOKEN);
+        PlayerPrefs.DeleteKey(KEY_REMEMBER);
+        PlayerPrefs.Save();
+    }
+
     // Si hay una sesión recordada, valida el token contra /me y la restaura sin pedir contraseña.
     // El JWT caduca a las 2 horas: pasado ese tiempo /me lo rechaza y hay que volver a iniciar sesión.
     public static async Task TryRestoreSessionAsync()
