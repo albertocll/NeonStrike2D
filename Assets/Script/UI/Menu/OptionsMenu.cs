@@ -95,4 +95,10 @@ public class OptionsMenu : MonoBehaviour
             musicSource.mute = true;
         }
     }
+
+    // Botón de borrar cuenta (issue #280), creado por código.
+    private void Awake()
+    {
+        if (!TryGetComponent(out DeleteAccountButton _)) gameObject.AddComponent<DeleteAccountButton>();
+    }
 }
