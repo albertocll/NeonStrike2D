@@ -1,24 +1,28 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 public class LoadingScreenController : MonoBehaviour
 {
-    [Tooltip("Tiempo minimo (segundos) que se muestra la pantalla de carga, para dar tiempo a leer el tip aunque la carga real sea mas rapida.")]
-    [SerializeField] private float minDisplayTime = 3f;
+    [Tooltip("Tiempo minimo (segundos) que se muestra la pantalla de carga aunque la carga real sea mas rapida.")]
+    [SerializeField] private float minDisplayTime = 1f;
 
-    [Tooltip("Paneles de leyenda a rotar durante la carga (CollectiblesLegend, PowerUpsLegend, DashLegend), en bucle mientras dure la pantalla.")]
+    [Tooltip("Paneles de leyenda (CollectiblesLegend, PowerUpsLegend, DashLegend). En cada carga se muestra uno al azar, fijo hasta que termina.")]
     [SerializeField] private GameObject[] legendPanels;
-
-    [Tooltip("Segundos que se muestra cada panel antes de pasar al siguiente.")]
-    [SerializeField] private float timePerPanel = 3f;
 
     private void Start()
     {
+        ShowRandomLegendPanel();
         StartCoroutine(LoadTargetScene());
+    }
 
-        if (legendPanels != null && legendPanels.Length > 0)
-            StartCoroutine(RotateLegendPanels());
+    private void ShowRandomLegendPanel()
+    {
+        if (legendPanels == null || legendPanels.Length == 0) return;
+
+        int chosen = Random.Range(0, legendPanels.Length);
+        for (int i = 0; i < legendPanels.Length; i++)
+            if (legendPanels[i] != null) legendPanels[i].SetActive(i == chosen);
     }
 
     private IEnumerator LoadTargetScene()
@@ -51,26 +55,5 @@ public class LoadingScreenController : MonoBehaviour
             yield return new WaitForSeconds(remaining);
 
         operation.allowSceneActivation = true;
-    }
-
-    private IEnumerator RotateLegendPanels()
-    {
-        // timePerPanel es independiente de minDisplayTime; si la carga real
-        // tarda mas, el bucle sigue rotando hasta que la escena cambie
-        // (este objeto se destruye y la corutina se detiene sola).
-        float interval = Mathf.Max(timePerPanel, 0.1f);
-
-        int current = 0;
-        for (int i = 0; i < legendPanels.Length; i++)
-            if (legendPanels[i] != null) legendPanels[i].SetActive(i == current);
-
-        while (true)
-        {
-            yield return new WaitForSeconds(interval);
-
-            if (legendPanels[current] != null) legendPanels[current].SetActive(false);
-            current = (current + 1) % legendPanels.Length;
-            if (legendPanels[current] != null) legendPanels[current].SetActive(true);
-        }
     }
 }

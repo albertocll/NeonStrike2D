@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
-public class BossSentinelController : MonoBehaviour, IDamageable
+public class BossSentinelController : MonoBehaviour, IDamageable, IBoss
 {
-    public static event Action<BossSentinelController> OnAnyBossSpawned;
 
     [Header("Target")]
     [SerializeField] private Transform target;
@@ -97,7 +96,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         }
 
         SFXManager.Instance?.PlayBossAppear();
-        OnAnyBossSpawned?.Invoke(this);
+        BossEvents.RaiseSpawned(this);
 
         StartCoroutine(EntryThenFight());
     }
@@ -111,20 +110,14 @@ public class BossSentinelController : MonoBehaviour, IDamageable
         yield return AttackLoop();
     }
 
-    // Entra despacio desde el borde derecho de la camara hasta su posicion de spawn.
+    // Entra despacio desde donde aparece (EnemySpawner lo coloca fuera de la arena, por un lado al azar)
+    // hasta el centro de la arena. Su collider es trigger, asi que atraviesa el muro sin chocar.
     private IEnumerator Entry()
     {
-        Camera cam = Camera.main;
-
-        if (cam != null && rb != null)
+        if (rb != null)
         {
-            Vector2 destination = rb.position;
-            float halfWidth = spriteRenderer != null ? spriteRenderer.bounds.extents.x : 0f;
-            float rightEdge = cam.ViewportToWorldPoint(new Vector3(1f, 0.5f, Mathf.Abs(cam.transform.position.z))).x;
-
-            Vector2 start = new Vector2(rightEdge + halfWidth, destination.y);
-            rb.position = start;
-            transform.position = start;
+            rb.position = transform.position;
+            Vector2 destination = arena.HasValue ? (Vector2)arena.Value.center : rb.position;
 
             SetMoving(true);
             while (!IsDead && rb.position != destination)
