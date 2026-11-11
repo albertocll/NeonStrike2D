@@ -110,7 +110,8 @@ NeonStrike2D is an independent project developed as a university final degree pr
 
 - **Categoría:** Juegos → Acción.
 - **Etiquetas sugeridas:** shooter, arcade, cooperativo, ciencia ficción, pixel art.
+- **Datos de contacto (obligatorio en la ficha):** email albertoclaroslaboral@gmail.com; sitio web https://neonstrike-game.netlify.app.
 - **Clasificación de contenido (cuestionario IARC):** violencia de fantasía contra robots y máquinas, sin sangre ni personas; interacción entre usuarios (lista de amigos y partidas online); sin compras, apuestas ni anuncios. Resultado esperado: PEGI 7 o similar. Si se publica el chat de amigos (#67), declarar que los usuarios pueden comunicarse.
-- **Seguridad de los datos:** datos recogidos: email, nombre de usuario e historial de partidas (funcionalidad de la app y gestión de la cuenta); no se comparten con terceros; cifrados en tránsito; el usuario puede pedir que se borren (ver #280). Enlazar la política de privacidad (`docs/politica-privacidad.md`, publicada en la web).
+- **Seguridad de los datos:** datos recogidos: email, nombre de usuario e historial de partidas (funcionalidad de la app y gestión de la cuenta); no se comparten con terceros; cifrados en tránsito; el usuario puede borrarlos desde el juego (Opciones → DELETE ACCOUNT, #280). URL de borrado de cuenta: https://neonstrike-game.netlify.app/borrar-cuenta.html. Enlazar la política de privacidad (`docs/politica-privacidad.md`, publicada en la web).
 - **Recursos gráficos pendientes:** icono 512×512, gráfico de funciones 1024×500 y al menos 4 capturas de móvil.
 - **Antes de publicar, revisar:** que los nombres de las zonas y los jefes coinciden con los del juego.
