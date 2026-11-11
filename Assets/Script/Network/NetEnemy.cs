@@ -33,7 +33,7 @@ public class NetEnemy : MonoBehaviour
     private void Cache()
     {
         controller = GetComponent<EnemyController>();
-        boss = GetComponent<IRemoteBoss>();
+        TryGetComponent(out boss); // null de verdad si no es jefe (con GetComponent, ?. podria fallar en el editor)
         spriteRenderer = GetComponentInChildren<SpriteRenderer>();
         animator = GetComponentInChildren<Animator>();
         if (animator != null && animator.runtimeAnimatorController != null)
@@ -131,7 +131,7 @@ public class NetEnemy : MonoBehaviour
         }
 
         targetPosition = transform.position;
-        boss?.BeginRemote();
+        if (boss != null) boss.BeginRemote();
     }
 
     public void ApplyRemoteState(Vector2 position, int health, int flags, Color color)
@@ -176,7 +176,7 @@ public class NetEnemy : MonoBehaviour
         if (IsDead) return;
         SetAwardScore(killedByGuest);
         if (controller != null) controller.RemoteDie();
-        else boss?.RemoteDie();
+        else if (boss != null) boss.RemoteDie();
     }
 
     // Bala del invitado contra esta copia: el dano lo decide el anfitrion; aqui solo el golpe visual.
