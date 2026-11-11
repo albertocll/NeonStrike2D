@@ -13,6 +13,8 @@ public class PlayerSpawner : MonoBehaviour
     void Awake()
     {
         roomId = GameData.RoomId;
+        PlayerTargets.Local = null;
+        PlayerTargets.Remote = null;
         SpawnLocalPlayer();
 
         if (!string.IsNullOrEmpty(GameData.RemoteCharacter))
@@ -23,6 +25,10 @@ public class PlayerSpawner : MonoBehaviour
             NetworkManager.Instance.OnReceiveGameState += OnReceiveGameState;
             NetworkManager.Instance.OnPlayerLeft += OnPlayerLeft;
         }
+
+        // Enemigos compartidos en cooperativo: el anfitrion los simula y el invitado ve copias (#206).
+        if (GameData.IsCoop)
+            gameObject.AddComponent<CoopEnemySync>().Init(roomId);
     }
 
     private void OnDestroy()
@@ -63,6 +69,7 @@ public class PlayerSpawner : MonoBehaviour
 
                 var sync = player.AddComponent<PlayerSync>();
                 sync.Init(roomId, true);
+                PlayerTargets.Local = player.transform;
 
                 PlayerPickupRange.Create(player);
 
@@ -89,8 +96,10 @@ public class PlayerSpawner : MonoBehaviour
                 _remotePlayer = Instantiate(data.prefab, spawnPos, Quaternion.identity);
                 _remotePlayer.transform.localScale = data.scale;
 
+                // Los enemigos del anfitrion tambien atacan a esta copia; el dano se reenvia al otro jugador (#206).
                 var remoteHealth = _remotePlayer.GetComponent<PlayerHealth>();
-                if (remoteHealth != null) Destroy(remoteHealth);
+                if (remoteHealth != null) remoteHealth.MakeRemoteProxy();
+                PlayerTargets.Remote = _remotePlayer.transform;
 
                 _remotePlayer.tag = "Untagged";
 
@@ -121,6 +130,7 @@ public class PlayerSpawner : MonoBehaviour
         {
             Destroy(_remotePlayer);
             _remotePlayer = null;
+            PlayerTargets.Remote = null;
         }
     }
 

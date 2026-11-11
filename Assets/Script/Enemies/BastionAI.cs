@@ -75,6 +75,7 @@ public class BastionAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target || Busy) return;
 
         facingAngle = Mathf.MoveTowardsAngle(facingAngle, AngleTo(target.position), turnSpeed * Time.fixedDeltaTime);
@@ -131,7 +132,7 @@ public class BastionAI : MonoBehaviour
 
     private void TryDamagePlayer(Collider2D other)
     {
-        if (!enabled || Busy || !other.CompareTag("Player")) return;
+        if (!enabled || Busy || !PlayerTargets.IsPlayer(other)) return;
         if (Time.time - lastDamageTime < damageCooldown) return;
         lastDamageTime = Time.time;
 

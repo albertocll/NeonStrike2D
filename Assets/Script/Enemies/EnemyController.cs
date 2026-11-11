@@ -68,6 +68,22 @@ public class EnemyController : MonoBehaviour, IDamageable
             return;
         }
 
+        PlayHitFeedback();
+    }
+
+    // Copia en el invitado (cooperativo, #206): la vida y la muerte llegan del anfitrion.
+    public int CurrentHealth => currentHealth;
+    public void ApplyRemoteHealth(int health) => currentHealth = health;
+    public void RemoteDie() => Die();
+
+    // En cooperativo cada jugador suma solo lo que mata el (#206): quien no lo ha matado no suma.
+    public bool AwardScore { get; set; } = true;
+
+    // Golpe visual sin tocar la vida (tambien para el impacto que el invitado manda al anfitrion).
+    public void PlayHitFeedback()
+    {
+        if (isDead) return;
+
         if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetTrigger("Hit");
@@ -87,7 +103,7 @@ public class EnemyController : MonoBehaviour, IDamageable
 
         SFXManager.Instance?.PlayEnemyDeath();
 
-        if (ScoreManager.Instance != null)
+        if (AwardScore && ScoreManager.Instance != null)
             ScoreManager.Instance.AddScore(scoreValue);
 
         TryDropPowerUp();

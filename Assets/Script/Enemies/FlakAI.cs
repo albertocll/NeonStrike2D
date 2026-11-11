@@ -53,6 +53,7 @@ public class FlakAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target || Busy) return;
 
         Vector2 pos = rb.position;

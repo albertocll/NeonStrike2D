@@ -84,6 +84,7 @@ public class EchoAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target || Busy) return;
 
         if (aiming) return; // quieto mientras apunta

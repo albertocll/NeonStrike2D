@@ -30,6 +30,10 @@ public class FlakShell : MonoBehaviour
     private SpriteRenderer marker;
     private SpriteRenderer markerFill;
     private bool exploded;
+    private bool visualOnly;
+
+    // Copia en el invitado de un proyectil del anfitrion (#206): se ve y explota, pero no hace dano.
+    public void MakeVisualOnly() => visualOnly = true;
 
     public void Init(Vector2 targetPoint)
     {
@@ -44,6 +48,9 @@ public class FlakShell : MonoBehaviour
 
         Vector2 d = targetPoint - (Vector2)start;
         transform.rotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(d.y, d.x) * Mathf.Rad2Deg);
+
+        if (!visualOnly)
+            CoopEnemySync.Instance?.ReportFlakShell(this, start, targetPoint);
     }
 
     void Update()
@@ -83,9 +90,11 @@ public class FlakShell : MonoBehaviour
         transform.localScale = baseScale;
         marker.transform.localScale = WorldScale(radius * 2f);
 
+        if (visualOnly) return;
+
         foreach (var hit in Physics2D.OverlapCircleAll(target, radius))
         {
-            if (!hit.CompareTag("Player")) continue;
+            if (!PlayerTargets.IsPlayer(hit)) continue;
             var health = hit.GetComponentInParent<PlayerHealth>();
             if (health != null && !health.IsDead)
                 health.TakeDamage(damage);

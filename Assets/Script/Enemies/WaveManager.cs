@@ -51,6 +51,7 @@ public class WaveManager : MonoBehaviour
     public void StartNextWave()
     {
         if (!spawnEnemies) return;
+        if (CoopEnemySync.IsGuest) return; // en cooperativo solo el anfitrion crea enemigos (#206)
 
         SFXManager.Instance?.PlayWaveStart();
 
@@ -66,6 +67,17 @@ public class WaveManager : MonoBehaviour
             enemySpawner.SpawnBoss(level.bossPrefab, this);
         else
             enemySpawner.SpawnWave(EnemiesThisWave(currentWave), this, currentWave);
+    }
+
+    // Invitado en cooperativo: la oleada la marca el anfitrion (#206).
+    public void ShowRemoteWave(int wave)
+    {
+        if (wave == currentWave) return;
+        currentWave = wave;
+        RunState.Wave = wave;
+        SFXManager.Instance?.PlayWaveStart();
+        if (waveText != null)
+            waveText.text = $"WAVE: {currentWave}";
     }
 
     public int EnemiesForWave(int wave) => baseEnemiesPerWave + ((wave - 1) * enemiesAddedPerWave);

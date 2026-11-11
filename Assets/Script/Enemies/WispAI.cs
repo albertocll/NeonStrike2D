@@ -105,6 +105,7 @@ public class WispAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target || Busy) return;
 
         Vector2 next = Vector2.MoveTowards(rb.position, target.position, speed * Time.fixedDeltaTime);
@@ -118,7 +119,7 @@ public class WispAI : MonoBehaviour
 
     private void TryDamagePlayer(Collider2D other)
     {
-        if (!enabled || Busy || !IsTangible || !other.CompareTag("Player")) return;
+        if (!enabled || Busy || !IsTangible || !PlayerTargets.IsPlayer(other)) return;
         if (Time.time - lastDamageTime < damageCooldown) return;
         lastDamageTime = Time.time;
 
