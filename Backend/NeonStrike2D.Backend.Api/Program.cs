@@ -287,6 +287,8 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
 
 app.Map("/ws", WebSocketHandler.Handle);
 
-app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
+// Solo en local: en produccion no se expone quien esta conectado (issue #281).
+if (app.Environment.IsDevelopment())
+    app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
 
 app.Run();
