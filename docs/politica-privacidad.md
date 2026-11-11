@@ -16,7 +16,7 @@ Esta política explica qué datos personales trata el juego NeonStrike2D (la apl
 ### 1. Responsable
 
 - **Responsable:** [nombre y apellidos del responsable]
-- **Contacto:** [email de contacto]
+- **Contacto:** albertoclaroslaboral@gmail.com
 
 NeonStrike2D es un proyecto independiente, desarrollado como Trabajo de Fin de Grado.
 
@@ -43,7 +43,7 @@ NeonStrike2D es un proyecto independiente, desarrollado como Trabajo de Fin de G
 
 **En tu dispositivo (no se envían al servidor):**
 
-- Si marcas "recordar", tu email y un token de sesión, para no tener que iniciar sesión cada vez. Se borran al cerrar sesión o al desmarcar la opción.
+- Si marcas "recordar", tu email y un token de sesión, para no tener que iniciar sesión cada vez. Se borran al cerrar sesión, al borrar la cuenta o al desmarcar la opción.
 - Tus ajustes: idioma, volumen de la música y los efectos, y la disposición de los controles.
 
 **Si juegas como invitado**, no se crea ninguna cuenta ni se envían datos personales al servidor.
@@ -72,17 +72,17 @@ Por eso, no uses tu nombre real ni datos personales en el nombre de usuario.
 
 ### 6. Cuánto tiempo los guardamos
 
-- Los datos de la cuenta, partidas y amistades, **mientras la cuenta exista**. Si la borras, se eliminan en un plazo máximo de [30] días.
+- Los datos de la cuenta, partidas y amistades, **mientras la cuenta exista**. Si la borras, se eliminan al momento; las copias de seguridad del servidor que aún los contengan desaparecen en 30 días como máximo.
 - El estado de conexión y la posición en partida solo existen mientras estás conectado.
 - Los datos de tu dispositivo, hasta que cierres sesión, cambies los ajustes o desinstales el juego.
 
 ### 7. Borrar tu cuenta
 
-Puedes pedir que se borre tu cuenta y todos sus datos (partidas, resultados y amistades) [desde el juego, en Opciones, o] escribiendo a [email de contacto] desde el email de la cuenta, indicando tu nombre de usuario. [Página web para pedir el borrado: URL]
+Puedes borrar tu cuenta y todos sus datos (partidas, resultados y amistades) desde el juego, en Opciones → DELETE ACCOUNT, o pedirlo sin el juego escribiendo a albertoclaroslaboral@gmail.com desde el email de la cuenta, indicando tu nombre de usuario. Los pasos están en [la página de borrado de cuenta](https://neonstrike-game.netlify.app/borrar-cuenta.html).
 
 ### 8. Tus derechos
 
-Puedes pedir en cualquier momento el acceso, la rectificación, la supresión, la portabilidad, la limitación o la oposición al tratamiento de tus datos escribiendo a [email de contacto]. Responderemos en un plazo máximo de un mes.
+Puedes pedir en cualquier momento el acceso, la rectificación, la supresión, la portabilidad, la limitación o la oposición al tratamiento de tus datos escribiendo a albertoclaroslaboral@gmail.com. Responderemos en un plazo máximo de un mes.
 
 Si crees que no hemos atendido bien tu solicitud, puedes reclamar ante la Agencia Española de Protección de Datos (www.aepd.es).
 
@@ -109,7 +109,7 @@ This policy explains which personal data the NeonStrike2D game (the Android and 
 ### 1. Controller
 
 - **Controller:** [full name of the controller]
-- **Contact:** [contact email]
+- **Contact:** albertoclaroslaboral@gmail.com
 
 NeonStrike2D is an independent project, developed as a university final degree project.
 
@@ -136,7 +136,7 @@ NeonStrike2D is an independent project, developed as a university final degree p
 
 **On your device (not sent to the server):**
 
-- If you tick "remember me", your email and a session token, so you don't have to sign in every time. They are deleted when you sign out or untick the option.
+- If you tick "remember me", your email and a session token, so you don't have to sign in every time. They are deleted when you sign out, delete your account or untick the option.
 - Your settings: language, music and sound effects volume, and control layout.
 
 **If you play as a guest**, no account is created and no personal data is sent to the server.
@@ -165,17 +165,17 @@ For this reason, don't use your real name or personal details in your username.
 
 ### 6. How long we keep data
 
-- Account, match and friendship data, **for as long as the account exists**. If you delete it, the data is erased within [30] days at most.
+- Account, match and friendship data, **for as long as the account exists**. If you delete it, the data is erased immediately; server backups that may still contain it are erased within 30 days at most.
 - Connection status and in-match position only exist while you are connected.
 - Data on your device, until you sign out, change your settings or uninstall the game.
 
 ### 7. Deleting your account
 
-You can ask for your account and all its data (matches, results and friendships) to be deleted [from the game, in Options, or] by writing to [contact email] from the account's email address, stating your username. [Web page to request deletion: URL]
+You can delete your account and all its data (matches, results and friendships) from the game, in Options → DELETE ACCOUNT, or request it without the game by writing to albertoclaroslaboral@gmail.com from the account's email address, stating your username. The steps are on [the account deletion page](https://neonstrike-game.netlify.app/borrar-cuenta.html).
 
 ### 8. Your rights
 
-You can request access to, rectification, erasure or portability of your data, or restrict or object to its processing, at any time by writing to [contact email]. We will reply within one month.
+You can request access to, rectification, erasure or portability of your data, or restrict or object to its processing, at any time by writing to albertoclaroslaboral@gmail.com. We will reply within one month.
 
 If you believe we have not handled your request properly, you can lodge a complaint with the Spanish Data Protection Agency (www.aepd.es) or the authority in your country.
 
