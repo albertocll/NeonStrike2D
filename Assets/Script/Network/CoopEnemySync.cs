@@ -27,6 +27,8 @@ public class CoopEnemySync : MonoBehaviour
     private const string KindBullet = "eb";
     private const string KindFlak = "ef";
     private const string KindPlayerDamage = "pd";
+    private const string KindDown = "dn";
+    private const string KindRevive = "rv";
 
     private static readonly CultureInfo Inv = CultureInfo.InvariantCulture;
 
@@ -199,6 +201,8 @@ public class CoopEnemySync : MonoBehaviour
                 case KindFlak: if (IsGuest) OnFlak(msg.d); break;
                 case KindPlayerDamage: if (IsGuest) OnPlayerDamage(msg.d); break;
                 case KindHit: if (GameData.IsHost) OnHit(msg.d); break;
+                case KindDown: OnRemoteDowned(); break;
+                case KindRevive: if (IsGuest) ReviveBoth(); break;
             }
         }
         catch (Exception e) when (e is FormatException || e is IndexOutOfRangeException || e is ArgumentException)
@@ -288,6 +292,58 @@ public class CoopEnemySync : MonoBehaviour
         net.ApplyGuestHit(int.Parse(f[1], Inv), new Vector2(float.Parse(f[2], Inv), float.Parse(f[3], Inv)));
     }
 
+    // ── Muerte en cooperativo (#296) ─────────────────────────────────────────
+    // Quien muere con el otro vivo queda fuera de combate hasta el final de la oleada y vuelve con la
+    // mitad de la vida. Cuando caen los dos, la partida termina en los dos clientes.
+
+    private bool bothDown;
+
+    // TryGetComponent devuelve null de verdad (GetComponent da un null falso en el editor y ?. fallaria).
+    private static PlayerHealth HealthOf(Transform t) => t != null && t.TryGetComponent(out PlayerHealth h) ? h : null;
+
+    // Lo llama PlayerHealth al morir. true = queda fuera de combate; false = fin de la partida.
+    public bool OnLocalDowned()
+    {
+        Send(KindDown, "1");
+        if (PlayerTargets.RemoteDown)
+        {
+            bothDown = true;
+            return false;
+        }
+        PlayerTargets.LocalDown = true;
+        return true;
+    }
+
+    private void OnRemoteDowned()
+    {
+        PlayerTargets.RemoteDown = true;
+        HealthOf(PlayerTargets.Remote)?.ShowRemoteDowned(true);
+
+        // Este ya estaba caido: han caido los dos.
+        var local = HealthOf(PlayerTargets.Local);
+        if (local != null && local.IsDowned && !bothDown)
+        {
+            bothDown = true;
+            local.EndDowned();
+        }
+    }
+
+    // Anfitrion: WaveManager avisa al limpiar la oleada; los dos vuelven a la partida.
+    public void OnWaveCleared()
+    {
+        if (!GameData.IsHost || bothDown) return;
+        ReviveBoth();
+        Send(KindRevive, "1");
+    }
+
+    private void ReviveBoth()
+    {
+        if (bothDown) return;
+        HealthOf(PlayerTargets.Local)?.Revive();
+        PlayerTargets.LocalDown = false;
+        if (PlayerTargets.RemoteDown) HealthOf(PlayerTargets.Remote)?.ShowRemoteDowned(false);
+        PlayerTargets.RemoteDown = false;
+    }
     // ── Invitado: copias ─────────────────────────────────────────────────────
 
     private NetEnemy SpawnPuppet(string key, Vector2 pos, int id)

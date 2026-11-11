@@ -11,6 +11,8 @@ public class CoopEnemySyncTests
         if (PlayerTargets.Remote != null) Object.DestroyImmediate(PlayerTargets.Remote.gameObject);
         PlayerTargets.Local = null;
         PlayerTargets.Remote = null;
+        PlayerTargets.LocalDown = false;
+        PlayerTargets.RemoteDown = false;
     }
 
     [Test]
@@ -54,6 +56,22 @@ public class CoopEnemySyncTests
         Object.DestroyImmediate(stranger);
     }
 
+    [Test]
+    public void Nearest_E_IsPlayer_IgnoranAlJugadorFueraDeCombate()
+    {
+        PlayerTargets.Local = new GameObject("Local").transform;
+        PlayerTargets.Local.position = new Vector2(1f, 0f);
+        PlayerTargets.Remote = new GameObject("Remote").transform;
+        PlayerTargets.Remote.position = new Vector2(5f, 0f);
+
+        PlayerTargets.LocalDown = true;
+        Assert.AreSame(PlayerTargets.Remote, PlayerTargets.Nearest(Vector2.zero, PlayerTargets.Local), "Con el local caido va a por el otro");
+
+        PlayerTargets.LocalDown = false;
+        PlayerTargets.RemoteDown = true;
+        Assert.AreSame(PlayerTargets.Local, PlayerTargets.Nearest(new Vector2(5f, 0f), PlayerTargets.Remote), "Con el otro caido va a por el local");
+        Assert.IsFalse(PlayerTargets.IsPlayer(PlayerTargets.Remote), "Al caido no se le hace dano");
+    }
     [Test]
     public void AppendState_FormatoCompactoSinComillas()
     {

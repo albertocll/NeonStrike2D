@@ -101,6 +101,8 @@ public class WaveManager : MonoBehaviour
             SFXManager.Instance?.PlayWaveBonus();
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.AddScore(50 * currentWave);
+            // Cooperativo: quien estuviera fuera de combate vuelve a la partida (#296).
+            if (CoopEnemySync.Instance != null) CoopEnemySync.Instance.OnWaveCleared();
             StartCoroutine(StartNextWaveWithDelay());
         }
     }
