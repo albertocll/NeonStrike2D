@@ -161,13 +161,16 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 
-app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db) =>
+app.MapPost("/match/result", async (MatchResultRequest request, ClaimsPrincipal user, AppDbContext db) =>
 {
+    // El resultado siempre es del usuario del token, nunca del id que llegue en el cuerpo (issue #288).
+    var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
     var session = new GameSession
     {
-        RoomId = $"solo_{request.UserId}_{DateTime.UtcNow.Ticks}",
-        Player1Id = request.UserId,
-        Player2Id = request.UserId,
+        RoomId = $"solo_{userId}_{DateTime.UtcNow.Ticks}",
+        Player1Id = userId,
+        Player2Id = userId,
         WinnerId = null,
         StartedAt = DateTime.UtcNow,
         EndedAt = DateTime.UtcNow,
@@ -179,7 +182,7 @@ app.MapPost("/match/result", async (MatchResultRequest request, AppDbContext db)
 
     db.GameResults.Add(new GameResult
     {
-        UserId = request.UserId,
+        UserId = userId,
         GameSessionId = session.Id,
         Won = false,
         RoundsWon = request.BestWave,
