@@ -204,7 +204,7 @@ MonoBehaviour:
   hitFlashDuration: 0.12
   faceTarget: 1
   artFacesLeft: 1
-  contactDamage: 3
+  contactDamage: 12
   contactDamageCooldown: 1
   arenaMargin: 0.8
   guaranteedDropPrefabs:
@@ -216,9 +216,9 @@ MonoBehaviour:
   deathVfxPrefab: {fileID: 6450227750599741819, guid: 9c2533076375fc24daa86af110016087, type: 3}
   deathVfxColor: {r: 0.55, g: 0.84, b: 1, a: 1}
   deathVfxScale: 3
-  moveSpeed: 1.2
-  shieldHealth: 250
-  vulnerableDuration: 5
+  moveSpeed: 2
+  shieldHealth: 150
+  vulnerableDuration: 6
   regenWarning: 0.8
   shieldBrokenSprite: {fileID: -876379094901323769, guid: 8da7c50e5b1dc964883942a73d240264, type: 3}
   haloColor: {r: 0.3, g: 0.9, b: 1, a: 0.22}

@@ -204,7 +204,7 @@ MonoBehaviour:
   hitFlashDuration: 0.12
   faceTarget: 1
   artFacesLeft: 1
-  contactDamage: 3
+  contactDamage: 12
   contactDamageCooldown: 1
   arenaMargin: 0.8
   guaranteedDropPrefabs:
@@ -256,10 +256,10 @@ MonoBehaviour:
   chargeSpeed: 14
   chargeDuration: 0.6
   chargePause: 0.9
-  shieldHealth: 300
-  shieldVulnerableDuration: 4
+  shieldHealth: 180
+  shieldVulnerableDuration: 5
   shieldRegenWarning: 0.8
-  shieldChaseSpeed: 1.5
+  shieldChaseSpeed: 2.5
   haloColor: {r: 0.3, g: 0.5, b: 1, a: 0.22}
   haloHitColor: {r: 0.6, g: 0.8, b: 1, a: 0.7}
   haloSize: 1.4
@@ -267,7 +267,7 @@ MonoBehaviour:
   bulletPrefab: {fileID: -4140543666674948957, guid: 63dbcd4f1cbd18e4f931fe0608254357, type: 3}
   diagonalSpeed: 2.5
   crossInterval: 1.6
-  crossBulletDamage: 6
+  crossBulletDamage: 12
   summonPrefab: {fileID: 1567827880273612916, guid: 7ba3f8f8b494c974c8f4db136d213cb5, type: 3}
   summonInterval: 4
   maxAlive: 10
@@ -276,6 +276,6 @@ MonoBehaviour:
   teleportIdle: 2
   teleportFade: 0.4
   burstCount: 3
-  burstBulletDamage: 6
+  burstBulletDamage: 12
   finalSpeed: 2.5
   finalSpeedGain: 0.15

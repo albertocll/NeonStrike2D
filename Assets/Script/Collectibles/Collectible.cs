@@ -16,6 +16,7 @@ public class Collectible : MonoBehaviour
     [SerializeField] private float floatSpeed = 2f;
 
     private Vector3 startPos;
+    private bool picked; // el casco y la zona de recogida pueden entrar en el mismo paso de fisica
 
     private void Start()
     {
@@ -33,21 +34,23 @@ public class Collectible : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        GameObject player = PlayerPickupRange.PlayerOf(other);
+        if (player == null || picked) return;
+        picked = true;
 
-        Debug.Log($"[Collectible] Recogido por {other.name}, tipo: {type}");
+        Debug.Log($"[Collectible] Recogido por {player.name}, tipo: {type}");
 
         if (type == CollectibleType.Score)
         {
             if (ScoreManager.Instance != null)
                 ScoreManager.Instance.AddScore(value);
 
-            if (other.GetComponent<PlayerHealth>() != null)
+            if (player.GetComponent<PlayerHealth>() != null)
                 SFXManager.Instance?.PlayCollectibleScore();
         }
         else if (type == CollectibleType.Health)
         {
-            var health = other.GetComponent<PlayerHealth>();
+            var health = player.GetComponent<PlayerHealth>();
             if (health != null && !health.IsDead)
             {
                 health.Heal(healthAmount);

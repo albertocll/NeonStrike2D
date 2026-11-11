@@ -64,6 +64,8 @@ public class PlayerSpawner : MonoBehaviour
                 var sync = player.AddComponent<PlayerSync>();
                 sync.Init(roomId, true);
 
+                PlayerPickupRange.Create(player);
+
                 var nameText = player.GetComponentInChildren<TMP_Text>();
                 if (nameText != null) nameText.text = GameData.Username;
 

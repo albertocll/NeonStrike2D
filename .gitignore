@@ -53,3 +53,6 @@ CLAUDE.md
 # Claves de firma de Android: nunca al repo
 *.keystore
 *.jks
+
+# Copias de seguridad de la base de datos (scripts/borrar-cuentas.ps1)
+backups/
