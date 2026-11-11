@@ -28,6 +28,16 @@ public class EnemySpawner : MonoBehaviour
 
     private Bounds? outerBounds;
 
+    // Todos los enemigos que puede sacar este nivel (el invitado en cooperativo los necesita para crear sus copias, #206).
+    public IEnumerable<GameObject> AllPrefabs
+    {
+        get
+        {
+            foreach (var p in basicEnemyPrefabs) yield return p;
+            foreach (var p in advancedEnemyPrefabs) yield return p;
+        }
+    }
+
     // El jefe aparece fuera de los muros y de la camara, por un lado al azar como el resto de
     // enemigos, y BossSentinelController lo hace entrar hasta el centro de la arena.
     public void SpawnBoss(GameObject bossPrefab, WaveManager waveManager)

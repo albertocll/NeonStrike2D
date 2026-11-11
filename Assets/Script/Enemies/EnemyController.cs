@@ -68,6 +68,19 @@ public class EnemyController : MonoBehaviour, IDamageable
             return;
         }
 
+        PlayHitFeedback();
+    }
+
+    // Copia en el invitado (cooperativo, #206): la vida y la muerte llegan del anfitrion.
+    public int CurrentHealth => currentHealth;
+    public void ApplyRemoteHealth(int health) => currentHealth = health;
+    public void RemoteDie() => Die();
+
+    // Golpe visual sin tocar la vida (tambien para el impacto que el invitado manda al anfitrion).
+    public void PlayHitFeedback()
+    {
+        if (isDead) return;
+
         if (animator != null && animator.runtimeAnimatorController != null)
         {
             animator.SetTrigger("Hit");

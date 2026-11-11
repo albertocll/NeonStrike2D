@@ -49,6 +49,7 @@ public class WardenAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target) return;
 
         Vector2 toTarget = (Vector2)target.position - rb.position;

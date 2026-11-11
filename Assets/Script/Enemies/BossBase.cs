@@ -9,7 +9,7 @@ using UnityEngine;
 // Los jefes tienen un sprite por estado y no usan Animator: se cambia el sprite del
 // SpriteRenderer (SetPose) y el golpe muestra hitSprite un instante.
 [RequireComponent(typeof(Rigidbody2D))]
-public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
+public abstract class BossBase : MonoBehaviour, IDamageable, IBoss, IRemoteBoss
 {
     [Header("Target")]
     [SerializeField] protected Transform target;
@@ -133,6 +133,7 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
 
     protected virtual void Update()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (IsDead || spriteRenderer == null) return;
 
         Sprite s = Time.time < hitUntil && hitSprite != null ? hitSprite : poseSprite;
@@ -144,6 +145,23 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
 
     protected void SetPose(Sprite sprite) => poseSprite = sprite != null ? sprite : idleSprite;
 
+    // Copia del jefe en el invitado (cooperativo, #206): sin IA; la vida y la muerte llegan del anfitrion.
+    public void BeginRemote()
+    {
+        SFXManager.Instance?.PlayBossAppear();
+        BossEvents.RaiseSpawned(this);
+    }
+
+    public void RemoteCombatStart() => OnCombatStarted?.Invoke();
+
+    public void ApplyRemoteHealth(int health)
+    {
+        if (IsDead || health == CurrentHealth) return;
+        CurrentHealth = health;
+        OnHealthChanged?.Invoke((float)Mathf.Max(health, 0) / maxHealth);
+    }
+
+    public void RemoteDie() => Die();
     public void TakeDamage(int damage)
     {
         if (IsDead || IsInvulnerable) return;
@@ -314,7 +332,7 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss
 
     private void TryDamagePlayer(Collider2D other)
     {
-        if (IsInvulnerable || IsDead || !other.CompareTag("Player")) return;
+        if (IsInvulnerable || IsDead || !PlayerTargets.IsPlayer(other)) return;
         if (Time.time - lastContactDamageTime < contactDamageCooldown) return;
         lastContactDamageTime = Time.time;
 

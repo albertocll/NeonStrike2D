@@ -86,6 +86,7 @@ public class SwarmAI : MonoBehaviour
 
     void FixedUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (!target || Busy) return;
 
         Vector2 goal = (Vector2)target.position + surroundOffset;
@@ -100,7 +101,7 @@ public class SwarmAI : MonoBehaviour
 
     private void TryDamagePlayer(Collider2D other)
     {
-        if (!enabled || Busy || !other.CompareTag("Player")) return;
+        if (!enabled || Busy || !PlayerTargets.IsPlayer(other)) return;
         if (Time.time - lastDamageTime < damageCooldown) return;
         lastDamageTime = Time.time;
 

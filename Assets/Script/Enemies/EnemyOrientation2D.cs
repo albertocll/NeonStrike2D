@@ -33,6 +33,7 @@ public class EnemyOrientation2D : MonoBehaviour
 
     void LateUpdate()
     {
+        target = PlayerTargets.Nearest(transform.position, target); // el jugador mas cercano (#206)
         if (visual == null || target == null) return;
 
         float dx = target.position.x - transform.position.x;

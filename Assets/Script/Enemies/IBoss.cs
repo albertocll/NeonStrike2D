@@ -21,3 +21,15 @@ public static class BossEvents
 
     public static void RaiseSpawned(IBoss boss) => OnBossSpawned?.Invoke(boss);
 }
+
+// Jefe que puede ser una copia sin IA en el invitado de una partida cooperativa (#206).
+public interface IRemoteBoss
+{
+    int CurrentHealth { get; }
+    bool IsDead { get; }
+    bool IsInvulnerable { get; }
+    void BeginRemote();
+    void RemoteCombatStart();
+    void ApplyRemoteHealth(int health);
+    void RemoteDie();
+}

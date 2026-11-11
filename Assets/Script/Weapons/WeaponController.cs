@@ -67,6 +67,9 @@ public class WeaponController : MonoBehaviour
     {
         Bullet bullet = Instantiate(bulletPrefab, spawnPos, Quaternion.identity);
         bullet.IgnoreCollider(ownerCollider);
+        // Nave del otro jugador en cooperativo: sus disparos solo se ven; el dano de verdad lo hacen
+        // las balas de su dueño (el invitado lo manda al anfitrion, #206).
+        if (localController != null && !localController.enabled) bullet.MakeVisualOnly();
         bullet.Init(direction);
 
         if (bulletSprite != null)
