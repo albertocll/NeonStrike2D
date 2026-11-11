@@ -49,3 +49,7 @@ Android/
 *.lscache
 
 CLAUDE.md
+
+# Claves de firma de Android: nunca al repo
+*.keystore
+*.jks
