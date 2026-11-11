@@ -6656,7 +6656,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 7d15a63d7ffa1a548a3b44c1bb939f9e, type: 2}
   - {fileID: 11400000, guid: d96e81353bdf935409a9572ec6807574, type: 2}
   - {fileID: 11400000, guid: c7626bc9c8265eb48b3dbed961a2bcd9, type: 2}
-  spawnPointLocal: {fileID: 284086549}
+  spawnPointLocal: {fileID: 1630904354}
   spawnPointRemote: {fileID: 2123349707}
   roomId: 
 --- !u!4 &1740853329
