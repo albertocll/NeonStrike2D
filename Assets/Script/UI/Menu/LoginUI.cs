@@ -77,7 +77,7 @@ public class LoginUI : MonoBehaviour
     }
 
     // Si hay una sesión recordada, valida el token contra /me y la restaura sin pedir contraseña.
-    // El JWT caduca a las 2 horas: pasado ese tiempo /me lo rechaza y hay que volver a iniciar sesión.
+    // El JWT caduca a los 30 días: pasado ese tiempo /me lo rechaza y hay que volver a iniciar sesión.
     public static async Task TryRestoreSessionAsync()
     {
         if (NetworkManager.Instance == null || ApiManager.Instance == null) return;
