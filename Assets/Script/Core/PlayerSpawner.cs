@@ -15,6 +15,8 @@ public class PlayerSpawner : MonoBehaviour
         roomId = GameData.RoomId;
         PlayerTargets.Local = null;
         PlayerTargets.Remote = null;
+        PlayerTargets.LocalDown = false;
+        PlayerTargets.RemoteDown = false;
         SpawnLocalPlayer();
 
         if (!string.IsNullOrEmpty(GameData.RemoteCharacter))

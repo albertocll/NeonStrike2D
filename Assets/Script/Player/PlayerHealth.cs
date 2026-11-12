@@ -103,7 +103,93 @@ public class PlayerHealth : MonoBehaviour
         Handheld.Vibrate();
 #endif
 
+        // Cooperativo (#296): si el otro sigue vivo, este queda fuera de combate hasta el final de la oleada.
+        if (CoopEnemySync.Instance != null && CoopEnemySync.Instance.OnLocalDowned())
+        {
+            IsDowned = true;
+            SetCombatActive(false);
+            return;
+        }
+
         StartCoroutine(HandleDeath());
+    }
+
+    // ── Cooperativo: fuera de combate (#296) ─────────────────────────────────
+
+    private const float DownedAlpha = 0.35f;
+    private readonly System.Collections.Generic.List<Collider2D> downedColliders = new System.Collections.Generic.List<Collider2D>();
+
+    // Muerto en cooperativo mientras el otro jugador sigue vivo: mira la partida sin moverse ni disparar.
+    public bool IsDowned { get; private set; }
+
+    // Final de la oleada: vuelve con la mitad de la vida.
+    public void Revive()
+    {
+        if (!IsDowned) return;
+        IsDowned = false;
+        isDead = false;
+        currentHealth = Mathf.Max(1, maxHealth / 2);
+        SetCombatActive(true);
+
+        if (anim != null)
+        {
+            anim.Rebind();
+            anim.Update(0f);
+        }
+
+        if (DamageOverlay.Instance != null)
+            DamageOverlay.Instance.SetPulsing((float)currentHealth / maxHealth <= 0.25f);
+    }
+
+    // El otro jugador tambien ha caido: fin de la partida.
+    public void EndDowned()
+    {
+        if (!IsDowned) return;
+        IsDowned = false;
+        StartCoroutine(HandleDeath());
+    }
+
+    // Copia del otro jugador: se ve transparente y sin disparar mientras esta fuera de combate.
+    public void ShowRemoteDowned(bool downed)
+    {
+        var weapon = GetComponent<WeaponController>();
+        if (weapon != null) weapon.enabled = !downed;
+        SetAlpha(downed ? DownedAlpha : 1f);
+    }
+
+    private void SetCombatActive(bool active)
+    {
+        var controller = GetComponent<PlayerController>();
+        if (controller != null) controller.enabled = active;
+        var weapon = GetComponent<WeaponController>();
+        if (weapon != null) weapon.enabled = active;
+        var rb = GetComponent<Rigidbody2D>();
+        if (rb != null) rb.linearVelocity = Vector2.zero;
+        // Sin colliders no recoge consumibles ni potenciadores mientras esta caido; al volver se
+        // reactivan solo los que se apagaron aqui.
+        if (!active)
+        {
+            downedColliders.Clear();
+            foreach (var col in GetComponentsInChildren<Collider2D>())
+                if (col.enabled) { col.enabled = false; downedColliders.Add(col); }
+        }
+        else
+        {
+            foreach (var col in downedColliders)
+                if (col != null) col.enabled = true;
+            downedColliders.Clear();
+        }
+        SetAlpha(active ? 1f : DownedAlpha);
+    }
+
+    private void SetAlpha(float alpha)
+    {
+        foreach (var sr in GetComponentsInChildren<SpriteRenderer>(true))
+        {
+            Color c = sr.color;
+            c.a = alpha;
+            sr.color = c;
+        }
     }
 
     private IEnumerator HandleDeath()
@@ -141,7 +227,7 @@ public class PlayerHealth : MonoBehaviour
 #if UNITY_EDITOR
         if (Input.GetKeyDown(KeyCode.T)) TakeDamage(1);
 #endif
-        if (isDead && Input.GetKeyDown(KeyCode.R)) RestartScene();
+        if (isDead && !IsDowned && Input.GetKeyDown(KeyCode.R)) RestartScene();
     }
 
     private void RestartScene()
