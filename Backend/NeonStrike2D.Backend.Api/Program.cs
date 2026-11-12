@@ -1,6 +1,7 @@
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -117,6 +118,10 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 
     var username = request.Username.Trim();
     var email = request.Email.Trim();
+
+    // Misma regla que LoginUI.IsValidUsername en el cliente (#208).
+    if (!Regex.IsMatch(username, "^[A-Za-z0-9_]{3,16}$"))
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _." });
 
     if (await db.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
         return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese email ya está registrado." });

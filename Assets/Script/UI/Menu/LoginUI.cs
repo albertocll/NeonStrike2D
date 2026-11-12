@@ -42,6 +42,12 @@ public class LoginUI : MonoBehaviour
     // Clave de versiones anteriores que guardaba la contraseña en texto plano (issue #216).
     private const string KEY_LEGACY_PASSWORD = "remembered_password";
 
+    // Nombre de usuario: 3-16 caracteres, letras sin tilde, números o _ (#208). Misma regla que /register.
+    private const int UsernameMaxLength = 16;
+
+    public static bool IsValidUsername(string username) =>
+        System.Text.RegularExpressions.Regex.IsMatch(username, "^[A-Za-z0-9_]{3,16}$");
+
     private void Start()
     {
         buttonLogin.onClick.AddListener(OnLoginClicked);
@@ -52,6 +58,11 @@ public class LoginUI : MonoBehaviour
         buttonRegister.onClick.AddListener(OnRegisterClicked);
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
         buttonCloseReg.onClick.AddListener(() => menuManager.CerrarPaneles());
+
+        // No deja escribir ni pegar caracteres fuera de la regla del nombre de usuario.
+        inputUsername.characterLimit = UsernameMaxLength;
+        inputUsername.onValidateInput = (text, index, c) =>
+            (c < 128 && (char.IsLetterOrDigit(c) || c == '_')) ? c : '\0';
 
         if (PlayerPrefs.GetInt(KEY_REMEMBER, 0) == 1)
         {
@@ -216,6 +227,12 @@ public class LoginUI : MonoBehaviour
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
             textFeedbackRegister.text = "Rellena todos los campos.";
+            return;
+        }
+
+        if (!IsValidUsername(username))
+        {
+            textFeedbackRegister.text = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _.";
             return;
         }
 
