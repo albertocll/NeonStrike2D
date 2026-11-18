@@ -35,6 +35,11 @@ Backend/**/appsettings.json
 Backend/**/appsettings.*.json
 Backend/**/bin/
 Backend/**/obj/
+
+# Variables de entorno con secretos
+.env
+.env.*
+!.env.example
 !Backend/**/*.csproj
 
 Builds/
