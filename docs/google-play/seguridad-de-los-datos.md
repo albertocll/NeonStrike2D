@@ -8,19 +8,17 @@ https://neonstrike-game.netlify.app/politica-privacidad.html.
 Revisado el 18/11/2026 sobre master. Si se añaden anuncios, analítica, inicio de sesión con
 Google, chat u otro servicio, hay que repasar este formulario y la política antes de publicar.
 
-## Antes de rellenarlo: decisión pendiente
+## Analítica del motor de Unity: desactivada
 
-En `ProjectSettings/ProjectSettings.asset` está activado `submitAnalytics: 1`. Con esa opción, el
-motor de Unity envía a Unity estadísticas del dispositivo (modelo, sistema, GPU...). Hay dos
-caminos, y lo decide Alberto:
+`submitAnalytics` está a `0` en `ProjectSettings/ProjectSettings.asset`, así que el motor no envía
+a Unity estadísticas del dispositivo y no hay que declararlas. El resto de servicios de Unity
+también están apagados (`UnityConnectSettings.asset`: todo `m_Enabled: 0`), igual que el informe
+de fallos de Unity (`enableCrashReportAPI: 0`).
 
-- **Desactivarla** (si la licencia de Unity lo permite) y rellenar el formulario tal cual está
-  abajo.
-- **Dejarla** y declarar además *Información y rendimiento de la aplicación → Diagnósticos*
-  como recogida, compartida con Unity, con finalidad *Analítica*, y nombrarlo en la política.
-
-El resto de servicios de Unity están apagados (`UnityConnectSettings.asset`: todo
-`m_Enabled: 0`) y el informe de fallos de Unity también (`enableCrashReportAPI: 0`).
+Comprobar antes de cada AAB: el proyecto usa Unity Personal, y si en algún momento el editor
+vuelve a poner `submitAnalytics: 1`, hay que desactivarlo otra vez o declarar *Información y
+rendimiento de la aplicación → Diagnósticos* (recogida y compartida con Unity, finalidad
+*Analítica*) y nombrarlo en la política de privacidad.
 
 ## 1. Recogida de datos y seguridad
 
@@ -66,15 +64,15 @@ Qué hay detrás de cada fila (para justificarlo si Google pregunta):
 | Email y token de sesión guardados con "recordar" | Se quedan en el dispositivo; no se envían al desarrollador como dato nuevo |
 | Ajustes (idioma, volumen, controles) | Solo en el dispositivo (`PlayerPrefs`) |
 | Ubicación, contactos, fotos, audio, archivos, calendario, salud, finanzas, mensajes, historial web, apps instaladas | El juego no accede a nada de esto |
-| ID de dispositivo o de publicidad | No se lee ningún identificador del dispositivo (ver la decisión pendiente sobre `submitAnalytics`) |
+| ID de dispositivo o de publicidad | No se lee ningún identificador del dispositivo |
 | Dirección IP | El backend no la guarda. Railway y Netlify pueden tenerla en sus registros por seguridad, como cualquier servidor, y eso ya lo explica la política |
-| Información de fallos y diagnóstico | Desactivados, salvo lo dicho sobre `submitAnalytics` |
+| Información de fallos y diagnóstico | Desactivados (`enableCrashReportAPI: 0` y `submitAnalytics: 0`) |
 
-## 4. Otros apartados de Contenido de la aplicación relacionados
+## 4. Otros apartados de Contenido de la aplicación
 
 - **Política de privacidad**: https://neonstrike-game.netlify.app/politica-privacidad.html
-- **Anuncios**: la aplicación **no** contiene anuncios.
 - **Acceso a la aplicación**: todo el juego se puede probar como invitado. Si Google pide una
   cuenta de prueba para el modo con cuenta y el cooperativo, crear una y darla en este apartado.
-- **Público objetivo**: mayores de 14 años como mínimo (lo dicen la política y los términos).
-  No marcar franjas de menores de 13 para no entrar en el programa Familias.
+- Público objetivo, anuncios y compras: ver
+  [publico-objetivo-anuncios-y-compras.md](publico-objetivo-anuncios-y-compras.md).
+- Clasificación de contenido: ver [clasificacion-de-contenido.md](clasificacion-de-contenido.md).
