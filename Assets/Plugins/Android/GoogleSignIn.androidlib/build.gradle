@@ -1,0 +1,24 @@
+// Plugin de inicio de sesión con Google con Credential Manager (issue #75).
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'com.albertocll.neonstrike2d.googlesignin'
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 23
+        // Unity llama al plugin por reflexión: que la minificación no lo borre.
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    implementation 'androidx.credentials:credentials:1.3.0'
+    implementation 'androidx.credentials:credentials-play-services-auth:1.3.0'
+    implementation 'com.google.android.libraries.identity.googleid:googleid:1.1.1'
+}

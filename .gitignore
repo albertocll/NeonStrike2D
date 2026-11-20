@@ -44,6 +44,8 @@ Builds/
 Windows/
 
 Android/
+# Los plugins Android sí van al repositorio (issue #75).
+!Assets/Plugins/Android/
 
 .utmp/
 *.lscache

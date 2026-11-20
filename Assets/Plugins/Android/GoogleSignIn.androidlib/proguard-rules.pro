@@ -1,0 +1,3 @@
+-keep class com.albertocll.neonstrike2d.GoogleSignInPlugin { *; }
+-keep interface com.albertocll.neonstrike2d.GoogleSignInPlugin$Callback { *; }
+-keep class com.google.android.libraries.identity.googleid.** { *; }
