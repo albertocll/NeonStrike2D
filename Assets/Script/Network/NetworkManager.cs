@@ -270,6 +270,18 @@ public class NetworkManager : MonoBehaviour
             await _ws.Close();
     }
 
+    // Tras cambiar el nombre de usuario (issue #75): el servidor registra el WebSocket por nombre,
+    // así que si estaba abierto se cierra y se abre de nuevo con el nombre y el token nuevos.
+    public async Task ApplyUsernameChangeAsync(string username, string token)
+    {
+        bool wasConnected = IsConnected;
+        SetUserData(UserId, username, token);
+        if (!wasConnected) return;
+
+        await DisconnectAsync();
+        await ConnectAsync();
+    }
+
     // Olvida al usuario tras borrar su cuenta (issue #280).
     public void ClearUserData()
     {

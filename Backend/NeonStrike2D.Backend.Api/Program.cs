@@ -198,6 +198,7 @@ app.MapPost("/auth/google", async (GoogleLoginRequest request, AppDbContext db) 
     if (string.IsNullOrEmpty(payload.Email) || !payload.EmailVerified)
         return Results.BadRequest(new LoginResponse { Success = false, Message = "La cuenta de Google no tiene un email verificado." });
 
+    var isNewAccount = false;
     var user = await db.Users.FirstOrDefaultAsync(u => u.GoogleSubject == payload.Subject);
     if (user == null)
     {
@@ -222,12 +223,15 @@ app.MapPost("/auth/google", async (GoogleLoginRequest request, AppDbContext db) 
                 GoogleSubject = payload.Subject
             };
             db.Users.Add(user);
+            isNewAccount = true;
         }
 
         await db.SaveChangesAsync();
     }
 
-    return Results.Ok(BuildLoginResponse(user, "Login correcto."));
+    var response = BuildLoginResponse(user, "Login correcto.");
+    response.IsNewAccount = isNewAccount;
+    return Results.Ok(response);
 });
 
 // Cambio de nombre de usuario, sobre todo para las cuentas de Google, cuyo nombre se propone
@@ -245,8 +249,13 @@ app.MapPut("/me/username", async (ChangeUsernameRequest request, ClaimsPrincipal
     if (await db.Users.AnyAsync(u => u.Id != userId && u.Username.ToLower() == username.ToLower()))
         return Results.BadRequest(new LoginResponse { Success = false, Message = "Ese username ya está en uso." });
 
+    var oldUsername = user.Username;
     user.Username = username;
     await db.SaveChangesAsync();
+
+    // El WebSocket está registrado con el nombre viejo: se cierra y el cliente vuelve a conectar con el nuevo.
+    if (oldUsername != username)
+        await WebSocketHandler.DisconnectUserAsync(oldUsername);
 
     return Results.Ok(BuildLoginResponse(user, "Nombre de usuario cambiado."));
 }).RequireAuthorization();

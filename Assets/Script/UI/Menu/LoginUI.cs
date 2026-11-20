@@ -38,6 +38,7 @@ public class LoginUI : MonoBehaviour
     // Inicio de sesión con Google (issue #75). Opcional: sin botón asignado, sin ID de cliente
     // o fuera de Android no se muestra.
     [SerializeField] private Button buttonGoogle;
+    [SerializeField] private ChooseUsernamePanel chooseUsernamePanel;
 
     private const string KEY_EMAIL = "remembered_email";
     private const string KEY_TOKEN = "remembered_token";
@@ -235,8 +236,17 @@ public class LoginUI : MonoBehaviour
 
             if (response != null && response.success)
             {
-                SaveRememberedSession(response.email, response.token);
                 NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
+
+                // Primera vez con Google: elige nombre antes de conectar el WebSocket.
+                if (response.isNewAccount && chooseUsernamePanel != null)
+                {
+                    textFeedbackLogin.text = "";
+                    response = await chooseUsernamePanel.ShowAsync(response);
+                    if (this == null) return;
+                }
+
+                SaveRememberedSession(response.email, response.token);
                 GameData.Username = response.username;
                 await NetworkManager.Instance.ConnectAsync();
                 textFeedbackLogin.text = $"Bienvenido, {response.username}!";

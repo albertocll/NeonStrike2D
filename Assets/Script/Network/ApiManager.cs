@@ -186,7 +186,7 @@ public class ApiManager : MonoBehaviour
 [Serializable] public class LoginRequest { public string email; public string password; }
 [Serializable] public class GoogleLoginRequest { public string idToken; }
 [Serializable] public class ChangeUsernameRequest { public string username; }
-[Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
+[Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; public bool isNewAccount; }
 // /me devuelve userId como texto porque sale directamente del claim del JWT.
 [Serializable] public class MeResponse { public string userId; public string username; public string email; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
