@@ -16,6 +16,11 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Una cuenta de Google solo puede estar vinculada a un usuario (issue #75).
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.GoogleSubject)
+            .IsUnique();
+
         // GameSession — relaciones con User
         modelBuilder.Entity<GameSession>()
             .HasOne(g => g.Player1)

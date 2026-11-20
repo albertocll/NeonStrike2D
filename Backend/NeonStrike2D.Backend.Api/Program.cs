@@ -3,6 +3,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
+using Google.Apis.Auth;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -157,38 +159,97 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
     if (user == null)
         return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
 
+    // Las cuentas creadas con Google no tienen contraseña (issue #75).
+    if (string.IsNullOrEmpty(user.PasswordHash))
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "Esta cuenta usa Google: entra con el botón de Google." });
+
     var passwordHasher = new PasswordHasher<User>();
     var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
     if (result == PasswordVerificationResult.Failed)
         return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
 
-    var claims = new[]
-    {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Name, user.Username),
-        new Claim(ClaimTypes.Email, user.Email)
-    };
-
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
-    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    var token = new JwtSecurityToken(
-        issuer: builder.Configuration["Jwt:Issuer"],
-        audience: builder.Configuration["Jwt:Audience"],
-        claims: claims,
-        expires: DateTime.UtcNow.AddDays(30),
-        signingCredentials: creds
-    );
-
-    return Results.Ok(new LoginResponse
-    {
-        Success = true,
-        Message = "Login correcto.",
-        UserId = user.Id,
-        Username = user.Username,
-        Email = user.Email,
-        Token = new JwtSecurityTokenHandler().WriteToken(token)
-    });
+    return Results.Ok(BuildLoginResponse(user, "Login correcto."));
 });
+
+// Inicio de sesión con Google (issue #75). El cliente solo manda el id_token; el email y el
+// "sub" salen del token una vez verificado aquí (firma, caducidad, emisor y audiencia).
+app.MapPost("/auth/google", async (GoogleLoginRequest request, AppDbContext db) =>
+{
+    var clientId = builder.Configuration["Google:ClientId"];
+    if (string.IsNullOrWhiteSpace(clientId))
+        return Results.Json(new LoginResponse { Success = false, Message = "El inicio de sesión con Google no está disponible." }, statusCode: StatusCodes.Status503ServiceUnavailable);
+
+    if (string.IsNullOrWhiteSpace(request.IdToken))
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "Falta el token de Google." });
+
+    GoogleJsonWebSignature.Payload payload;
+    try
+    {
+        payload = await GoogleJsonWebSignature.ValidateAsync(request.IdToken, new GoogleJsonWebSignature.ValidationSettings
+        {
+            Audience = new[] { clientId }
+        });
+    }
+    catch (InvalidJwtException)
+    {
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "El token de Google no es válido." });
+    }
+
+    if (string.IsNullOrEmpty(payload.Email) || !payload.EmailVerified)
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "La cuenta de Google no tiene un email verificado." });
+
+    var user = await db.Users.FirstOrDefaultAsync(u => u.GoogleSubject == payload.Subject);
+    if (user == null)
+    {
+        var email = payload.Email.Trim();
+        user = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email.ToLower());
+
+        if (user != null)
+        {
+            // Ya había una cuenta con ese email: se vincula, salvo que ya esté unida a otra cuenta de Google.
+            if (user.GoogleSubject != null)
+                return Results.BadRequest(new LoginResponse { Success = false, Message = "Ese email ya está vinculado a otra cuenta de Google." });
+
+            user.GoogleSubject = payload.Subject;
+        }
+        else
+        {
+            user = new User
+            {
+                Username = await ProposeUsernameAsync(db, payload.Name ?? payload.GivenName ?? email.Split('@')[0]),
+                Email = email,
+                PasswordHash = null,
+                GoogleSubject = payload.Subject
+            };
+            db.Users.Add(user);
+        }
+
+        await db.SaveChangesAsync();
+    }
+
+    return Results.Ok(BuildLoginResponse(user, "Login correcto."));
+});
+
+// Cambio de nombre de usuario, sobre todo para las cuentas de Google, cuyo nombre se propone
+// automáticamente (issue #75). Devuelve un JWT nuevo porque el nombre va dentro del token.
+app.MapPut("/me/username", async (ChangeUsernameRequest request, ClaimsPrincipal principal, AppDbContext db) =>
+{
+    var userId = int.Parse(principal.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Id == userId);
+    if (user == null) return Results.Unauthorized();
+
+    var username = (request.Username ?? string.Empty).Trim();
+    if (!IsValidUsername(username))
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _." });
+
+    if (await db.Users.AnyAsync(u => u.Id != userId && u.Username.ToLower() == username.ToLower()))
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "Ese username ya está en uso." });
+
+    user.Username = username;
+    await db.SaveChangesAsync();
+
+    return Results.Ok(BuildLoginResponse(user, "Nombre de usuario cambiado."));
+}).RequireAuthorization();
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 
@@ -326,3 +387,54 @@ if (app.Environment.IsDevelopment())
     app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
 
 app.Run();
+
+// ── AYUDAS ───────────────────────────────────────────────────────────────────
+
+// Misma regla que LoginUI.IsValidUsername en el cliente (#208).
+static bool IsValidUsername(string username) => Regex.IsMatch(username, "^[A-Za-z0-9_]{3,16}$");
+
+// Mismo JWT para el login con contraseña y el de Google.
+LoginResponse BuildLoginResponse(User user, string message)
+{
+    var claims = new[]
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Name, user.Username),
+        new Claim(ClaimTypes.Email, user.Email)
+    };
+
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!));
+    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+    var token = new JwtSecurityToken(
+        issuer: builder.Configuration["Jwt:Issuer"],
+        audience: builder.Configuration["Jwt:Audience"],
+        claims: claims,
+        expires: DateTime.UtcNow.AddDays(30),
+        signingCredentials: creds
+    );
+
+    return new LoginResponse
+    {
+        Success = true,
+        Message = message,
+        UserId = user.Id,
+        Username = user.Username,
+        Email = user.Email,
+        Token = new JwtSecurityTokenHandler().WriteToken(token)
+    };
+}
+
+// Nombre propuesto para una cuenta nueva de Google: el nombre de Google limpiado a la regla de #208,
+// con un sufijo numérico si ya existe.
+static async Task<string> ProposeUsernameAsync(AppDbContext db, string source)
+{
+    var baseName = Regex.Replace(source.Normalize(System.Text.NormalizationForm.FormD), "[^A-Za-z0-9_]", "");
+    if (baseName.Length < 3) baseName = "Jugador";
+    if (baseName.Length > 12) baseName = baseName[..12];
+
+    var candidate = baseName;
+    for (var i = 1; await db.Users.AnyAsync(u => u.Username.ToLower() == candidate.ToLower()); i++)
+        candidate = baseName + i;
+
+    return candidate;
+}

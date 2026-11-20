@@ -10,6 +10,12 @@ public class ApiManager : MonoBehaviour
 
     [SerializeField] private string serverUrl = "https://neonstrike2d-production.up.railway.app";
 
+    // ID de cliente OAuth de tipo "Aplicación web" de Google Cloud (issue #75). Es el mismo valor que
+    // Google__ClientId en el backend. Vacío = el botón de Google no se muestra.
+    [SerializeField] private string googleWebClientId = "";
+
+    public string GoogleWebClientId => googleWebClientId;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -27,6 +33,22 @@ public class ApiManager : MonoBehaviour
         var body = JsonUtility.ToJson(new LoginRequest { email = email, password = password });
         var result = await PostAsync("/login", body);
         return JsonUtility.FromJson<LoginResponse>(result);
+    }
+
+    // LOGIN CON GOOGLE (issue #75): el servidor verifica el id_token y devuelve el mismo JWT que /login.
+    public async Task<LoginResponse> LoginWithGoogleAsync(string idToken)
+    {
+        var body = JsonUtility.ToJson(new GoogleLoginRequest { idToken = idToken });
+        var result = await PostAsync("/auth/google", body);
+        return string.IsNullOrEmpty(result) ? null : JsonUtility.FromJson<LoginResponse>(result);
+    }
+
+    // CAMBIO DE NOMBRE (issue #75): devuelve un JWT nuevo con el nombre cambiado.
+    public async Task<LoginResponse> ChangeUsernameAsync(string username)
+    {
+        var body = JsonUtility.ToJson(new ChangeUsernameRequest { username = username });
+        var result = await SendAsync("PUT", "/me/username", body, NetworkManager.Instance.Token);
+        return string.IsNullOrEmpty(result) ? null : JsonUtility.FromJson<LoginResponse>(result);
     }
 
     // REGISTRO
@@ -93,9 +115,12 @@ public class ApiManager : MonoBehaviour
     }
 
     // HTTP POST
-    private async Task<string> PostAsync(string endpoint, string json, string token = null)
+    private Task<string> PostAsync(string endpoint, string json, string token = null) =>
+        SendAsync("POST", endpoint, json, token);
+
+    private async Task<string> SendAsync(string method, string endpoint, string json, string token = null)
     {
-        var request = new UnityWebRequest($"{serverUrl}{endpoint}", "POST");
+        var request = new UnityWebRequest($"{serverUrl}{endpoint}", method);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(json);
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
@@ -159,6 +184,8 @@ public class ApiManager : MonoBehaviour
 
 // DTOs
 [Serializable] public class LoginRequest { public string email; public string password; }
+[Serializable] public class GoogleLoginRequest { public string idToken; }
+[Serializable] public class ChangeUsernameRequest { public string username; }
 [Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
 // /me devuelve userId como texto porque sale directamente del claim del JWT.
 [Serializable] public class MeResponse { public string userId; public string username; public string email; }

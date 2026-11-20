@@ -35,6 +35,10 @@ public class LoginUI : MonoBehaviour
     [Header("Invitado")]
     [SerializeField] private Button buttonGuest;
 
+    // Inicio de sesión con Google (issue #75). Opcional: sin botón asignado, sin ID de cliente
+    // o fuera de Android no se muestra.
+    [SerializeField] private Button buttonGoogle;
+
     private const string KEY_EMAIL = "remembered_email";
     private const string KEY_TOKEN = "remembered_token";
     private const string KEY_REMEMBER = "remember_me";
@@ -54,6 +58,14 @@ public class LoginUI : MonoBehaviour
         buttonGoToRegister.onClick.AddListener(() => menuManager.AbrirRegister());
         buttonClose.onClick.AddListener(() => menuManager.CerrarPaneles());
         buttonGuest.onClick.AddListener(OnGuestClicked);
+
+        if (buttonGoogle != null)
+        {
+            bool googleAvailable = GoogleSignIn.IsSupported && ApiManager.Instance != null
+                && !string.IsNullOrWhiteSpace(ApiManager.Instance.GoogleWebClientId);
+            buttonGoogle.gameObject.SetActive(googleAvailable);
+            if (googleAvailable) buttonGoogle.onClick.AddListener(OnGoogleClicked);
+        }
 
         buttonRegister.onClick.AddListener(OnRegisterClicked);
         buttonGoToLogin.onClick.AddListener(() => menuManager.AbrirLogin());
@@ -197,6 +209,58 @@ public class LoginUI : MonoBehaviour
         {
             if (this != null && buttonLogin != null)
                 buttonLogin.interactable = true;
+        }
+    }
+
+    // Inicio de sesión con Google (issue #75): pide el id_token al sistema y lo cambia en el backend
+    // por el mismo JWT que el login normal; "recordar" y cerrar sesión funcionan igual.
+    public async void OnGoogleClicked()
+    {
+        textFeedbackLogin.text = "Conectando con Google...";
+        buttonGoogle.interactable = false;
+        buttonLogin.interactable = false;
+
+        try
+        {
+            var (idToken, error) = await GoogleSignIn.GetIdTokenAsync(ApiManager.Instance.GoogleWebClientId);
+            if (this == null) return;
+            if (string.IsNullOrEmpty(idToken))
+            {
+                textFeedbackLogin.text = error;
+                return;
+            }
+
+            var response = await ApiManager.Instance.LoginWithGoogleAsync(idToken);
+            if (this == null) return;
+
+            if (response != null && response.success)
+            {
+                SaveRememberedSession(response.email, response.token);
+                NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
+                GameData.Username = response.username;
+                await NetworkManager.Instance.ConnectAsync();
+                textFeedbackLogin.text = $"Bienvenido, {response.username}!";
+                await Task.Delay(1000);
+                menuManager.CerrarPaneles();
+                SceneLoader.Load("CharacterSelect");
+            }
+            else
+            {
+                textFeedbackLogin.text = response?.message ?? "Error al conectar.";
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[LoginUI] Error en el login con Google: {e}");
+            if (this != null) textFeedbackLogin.text = "No se pudo iniciar sesión con Google.";
+        }
+        finally
+        {
+            if (this != null)
+            {
+                if (buttonGoogle != null) buttonGoogle.interactable = true;
+                if (buttonLogin != null) buttonLogin.interactable = true;
+            }
         }
     }
 
