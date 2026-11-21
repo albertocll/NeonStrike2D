@@ -2,7 +2,7 @@
 
 Respuestas para **Contenido de la aplicación → Seguridad de los datos**, sacadas de lo que guarda
 el backend (`Backend/NeonStrike2D.Backend.Api/Models`) y de lo que hace el cliente. Tienen que
-coincidir con la [política de privacidad](../politica-privacidad.md) publicada en
+coincidir con la [política de privacidad](../../web/politica-privacidad.html) publicada en
 https://neonstrike-game.netlify.app/politica-privacidad.html.
 
 Revisado el 18/11/2026 sobre master. Si se añaden anuncios, analítica, inicio de sesión con
