@@ -1,31 +1,64 @@
-using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// Música del juego (issue #262). Pistas:
+// - Menú: menuMusic, en bucle en MainMenu, CharacterSelect y el resto de pantallas fuera de nivel.
+// - Zona: LevelData.zoneMusic de cada nivel, en las oleadas normales (en Sector7, durante todo el nivel).
+// - Crescendo: crescendoMusicA / crescendoMusicB, en las dos oleadas antes del jefe, alternándose de un nivel
+//   a otro (primer nivel A, segundo B, tercero A...).
+// - Jefe: LevelData.bossMusic, en la oleada del jefe del nivel.
+// Si falta una pista se usa la actual: gameMusic para la zona y gameMusicIntense para el crescendo y el jefe.
+// Los cambios de pista son fundidos entre dos AudioSource; si la pista no cambia, sigue sonando sin cortes.
 public class MusicManager : MonoBehaviour
 {
     public static MusicManager Instance { get; private set; }
 
-    [SerializeField] private AudioClip menuMusic;
-    [SerializeField] private AudioClip gameMusic;
-    [SerializeField] private AudioClip gameMusicIntense;
-    [SerializeField] private float volume = 0.5f;
+    public enum LevelTrack { Zone, Crescendo, Boss }
 
-    [Header("Intensidad de partida")]
-    [SerializeField] private int intenseWaveThreshold = 5;
-    [SerializeField] private float crossfadeDuration = 2f;
+    [Header("Pistas")]
+    [SerializeField] private AudioClip menuMusic;
+    [Tooltip("Crescendo de los niveles 1, 3 y 5 (Level1, PlasmaFrontier, CorruptedSignalZone).")]
+    [SerializeField] private AudioClip crescendoMusicA;
+    [Tooltip("Crescendo de los niveles 2, 4 y 6 (TheGrid, DroneHive, CoreChamber).")]
+    [SerializeField] private AudioClip crescendoMusicB;
+
+    [Header("Sustitutos mientras falten pistas")]
+    [Tooltip("Se usa en los niveles sin zoneMusic en su LevelData.")]
+    [SerializeField] private AudioClip gameMusic;
+    [Tooltip("Se usa como crescendo y como jefe mientras falten esas pistas.")]
+    [SerializeField] private AudioClip gameMusicIntense;
+    [Tooltip("Segundo en el que empieza gameMusicIntense cuando suena como sustituto.")]
     [SerializeField] private float gameMusicIntenseStartOffset = 0f;
+
+    [Header("Volumen y fundidos")]
+    [SerializeField] private float volume = 0.5f;
+    [SerializeField] private float crossfadeDuration = 2f;
 
     private const string MutePrefKey = "MusicMuted";
 
-    private AudioSource audioSource;
-    private AudioSource crossfadeSource;
+    // sources[active] es la pista que suena o entra; la otra se apaga.
+    private readonly AudioSource[] sources = new AudioSource[2];
+    private readonly float[] gains = new float[2];
+    private int active;
+
     private WaveManager waveManager;
-    private Coroutine crossfadeRoutine;
-    private bool intenseActive;
+    private LevelData currentLevel;
+    private int currentLevelIndex;
     private bool inLevel;
 
     public bool IsMuted { get; private set; }
+
+    // Volumen del deslizador de Opciones.
+    public float Volume
+    {
+        get => volume;
+        set => volume = Mathf.Clamp01(value);
+    }
+
+    // Interruptor de música de Opciones: silencia sin tocar el volumen ni guardar nada.
+    public bool Silenced { get; set; }
+
+    public AudioClip CurrentClip => sources[active] != null ? sources[active].clip : null;
 
     private void Awake()
     {
@@ -39,21 +72,25 @@ public class MusicManager : MonoBehaviour
 
         IsMuted = PlayerPrefs.GetInt(MutePrefKey, 0) == 1;
 
-        audioSource = gameObject.AddComponent<AudioSource>();
-        audioSource.loop = true;
-        audioSource.volume = IsMuted ? 0f : volume;
-        audioSource.priority = 0;
-
+        sources[0] = CreateSource(gameObject);
         var crossfadeLayer = new GameObject("MusicCrossfadeLayer");
         crossfadeLayer.transform.SetParent(transform);
-        crossfadeSource = crossfadeLayer.AddComponent<AudioSource>();
-        crossfadeSource.loop = true;
-        crossfadeSource.volume = 0f;
-        crossfadeSource.priority = 0;
+        sources[1] = CreateSource(crossfadeLayer);
+    }
+
+    private static AudioSource CreateSource(GameObject owner)
+    {
+        var source = owner.AddComponent<AudioSource>();
+        source.loop = true;
+        source.playOnAwake = false;
+        source.volume = 0f;
+        source.priority = 0;
+        return source;
     }
 
     private void Start()
     {
+        if (Instance != this) return;
         OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
@@ -67,112 +104,105 @@ public class MusicManager : MonoBehaviour
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
+    private void OnDestroy()
+    {
+        if (Instance == this) Instance = null;
+    }
+
     private void Update()
     {
-        if (intenseActive || gameMusicIntense == null || waveManager == null) return;
+        if (Instance != this) return;
 
-        if (waveManager.CurrentWave >= intenseWaveThreshold)
-            StartIntenseCrossfade();
+        if (inLevel)
+        {
+            if (waveManager == null) waveManager = FindFirstObjectByType<WaveManager>();
+            if (waveManager != null)
+                PlayTrack(ClipForLevel(currentLevel, currentLevelIndex, waveManager.CurrentWave));
+        }
+
+        UpdateFades(Mathf.Min(Time.unscaledDeltaTime, 0.1f));
     }
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // La pantalla de carga solo se usa al empezar o reiniciar partida y al ir al menu:
-        // la musica sigue sonando, pero el nivel al que se llegue empieza de cero.
-        if (scene.name == "LoadingScreen")
-        {
-            inLevel = false;
-            return;
-        }
+        if (Instance != this) return;
 
-        bool isLevel = LevelManager.IsLevelScene(scene.name);
+        // La pantalla de carga no cambia la música: suena la anterior hasta que llegue la escena siguiente.
+        if (scene.name == "LoadingScreen") return;
 
-        // Paso de un nivel al siguiente: la musica (normal o intensa) no se corta.
-        if (isLevel && inLevel)
-        {
-            waveManager = FindFirstObjectByType<WaveManager>();
-            return;
-        }
+        currentLevel = LevelManager.ForScene(scene.name);
+        inLevel = currentLevel != null;
+        currentLevelIndex = inLevel ? System.Array.IndexOf(LevelManager.Levels, currentLevel) : -1;
+        waveManager = inLevel ? FindFirstObjectByType<WaveManager>() : null;
 
-        inLevel = isLevel;
+        if (!inLevel)
+            PlayTrack(menuMusic);
+        // En un nivel, Update elige la pista en cuanto exista el WaveManager.
+    }
 
-        if (crossfadeRoutine != null)
-        {
-            StopCoroutine(crossfadeRoutine);
-            crossfadeRoutine = null;
-        }
-        crossfadeSource.Stop();
-        crossfadeSource.volume = 0f;
-        intenseActive = false;
+    // Qué pista toca en la oleada 'wave' de un nivel. Sin jefe (Sector7), siempre la de zona.
+    public static LevelTrack TrackForWave(LevelData level, int wave)
+    {
+        if (level == null || level.bossPrefab == null || level.bossWave <= 0) return LevelTrack.Zone;
+        if (wave == level.bossWave) return LevelTrack.Boss;
+        if (wave >= level.bossWave - 2 && wave < level.bossWave) return LevelTrack.Crescendo;
+        return LevelTrack.Zone;
+    }
 
-        if (isLevel)
+    // Crescendo A en los niveles de posición par (0, 2, 4) y B en los impares.
+    public static bool UsesCrescendoA(int levelIndex) => levelIndex % 2 == 0;
+
+    public AudioClip ClipForLevel(LevelData level, int levelIndex, int wave)
+    {
+        switch (TrackForWave(level, wave))
         {
-            waveManager = FindFirstObjectByType<WaveManager>();
-            PlayClip(gameMusic);
-        }
-        else
-        {
-            waveManager = null;
-            PlayClip(menuMusic);
+            case LevelTrack.Boss:
+                return level.bossMusic != null ? level.bossMusic : gameMusicIntense;
+            case LevelTrack.Crescendo:
+                AudioClip crescendo = UsesCrescendoA(levelIndex) ? crescendoMusicA : crescendoMusicB;
+                return crescendo != null ? crescendo : gameMusicIntense;
+            default:
+                return level != null && level.zoneMusic != null ? level.zoneMusic : gameMusic;
         }
     }
 
-    private void PlayClip(AudioClip clip)
+    // Pasa a 'clip' con un fundido. Si ya es la pista que suena, no hace nada; si es la que se estaba
+    // apagando, vuelve a subir desde donde iba sin empezar de nuevo.
+    private void PlayTrack(AudioClip clip)
     {
-        if (clip == null || audioSource.clip == clip) return;
-        audioSource.clip = clip;
-        audioSource.Play();
-    }
+        if (clip == null || sources[active].clip == clip) return;
 
-    private void StartIntenseCrossfade()
-    {
-        if (crossfadeRoutine != null) return;
-
-        intenseActive = true;
-        crossfadeRoutine = StartCoroutine(CrossfadeToIntense());
-    }
-
-    // ponytail: cambios de volumen/mute del slider de opciones durante el crossfade
-    // (máx. crossfadeDuration segundos) se aplican al terminar el fade, no en directo.
-    // El toggle de mute (.mute) sí se respeta en directo. Subir a live-tracking si
-    // llega a notarse en partida.
-    private IEnumerator CrossfadeToIntense()
-    {
-        float targetVolume = audioSource.volume;
-
-        crossfadeSource.clip = gameMusicIntense;
-        crossfadeSource.mute = audioSource.mute;
-        crossfadeSource.volume = 0f;
-        crossfadeSource.time = gameMusicIntenseStartOffset;
-        crossfadeSource.Play();
-
-        float t = 0f;
-        while (t < crossfadeDuration)
+        int other = 1 - active;
+        if (sources[other].clip != clip || !sources[other].isPlaying)
         {
-            float step = Mathf.Min(Time.deltaTime, 0.1f);
-            t += step;
-            float ratio = crossfadeDuration > 0f ? t / crossfadeDuration : 1f;
-            crossfadeSource.mute = audioSource.mute;
-            audioSource.volume = Mathf.Lerp(targetVolume, 0f, ratio);
-            crossfadeSource.volume = Mathf.Lerp(0f, targetVolume, ratio);
-            yield return null;
+            sources[other].Stop();
+            sources[other].clip = clip;
+            sources[other].time = clip == gameMusicIntense ? Mathf.Clamp(gameMusicIntenseStartOffset, 0f, clip.length - 0.01f) : 0f;
+            gains[other] = 0f;
+            sources[other].Play();
         }
+        active = other;
+    }
 
-        audioSource.clip = gameMusicIntense;
-        audioSource.time = crossfadeSource.time % gameMusicIntense.length;
-        audioSource.mute = crossfadeSource.mute;
-        audioSource.volume = targetVolume;
-        audioSource.Play();
+    private void UpdateFades(float dt)
+    {
+        float step = crossfadeDuration > 0f ? dt / crossfadeDuration : 1f;
+        float level = IsMuted ? 0f : volume;
 
-        crossfadeSource.Stop();
-        crossfadeSource.volume = 0f;
-        crossfadeRoutine = null;
+        for (int i = 0; i < 2; i++)
+        {
+            gains[i] = Mathf.MoveTowards(gains[i], i == active ? 1f : 0f, step);
+            sources[i].volume = level * gains[i];
+            sources[i].mute = Silenced;
+
+            if (i != active && gains[i] <= 0f && sources[i].isPlaying)
+                sources[i].Stop();
+        }
     }
 
     public void SetMuted(bool muted)
     {
         IsMuted = muted;
         PlayerPrefs.SetInt(MutePrefKey, muted ? 1 : 0);
-        audioSource.volume = muted ? 0f : volume;
     }
 }
