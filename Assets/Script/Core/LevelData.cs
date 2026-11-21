@@ -11,6 +11,12 @@ public class LevelData : ScriptableObject
     [Tooltip("Multiplica la vida de los enemigos de las oleadas del nivel (1 = la del prefab).")]
     public float enemyHealthMultiplier = 1f;
 
+    [Header("Música (#262)")]
+    [Tooltip("Pista de zona: suena en bucle en las oleadas normales del nivel. Vacía = la música de partida actual.")]
+    public AudioClip zoneMusic;
+    [Tooltip("Pista del jefe del nivel: suena en su oleada. Vacía = la música intensa actual.")]
+    public AudioClip bossMusic;
+
     [Header("Enemigos por oleada")]
     [Tooltip("Enemigos de la primera oleada del nivel. 0 = la formula de WaveManager (3 + 1 por oleada desde la 1).")]
     public int firstWaveEnemies = 0;

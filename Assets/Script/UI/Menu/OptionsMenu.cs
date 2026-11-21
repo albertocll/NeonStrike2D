@@ -11,9 +11,6 @@ public class OptionsMenu : MonoBehaviour
     public Slider sfxSlider;
     public Toggle sfxToggle;
 
-    [Header("Audio")]
-    public AudioSource musicSource;
-
     private float cachedVolume = 1f;
 
     // Botón LOGOUT (issue #230): copia del botón de volver, reflejado al otro lado de la ventana.
@@ -24,13 +21,13 @@ public class OptionsMenu : MonoBehaviour
         CreateLeftHandedToggle();
         CreateLogoutButton();
 
-        if (musicSource == null)
-            musicSource = FindFirstObjectByType<MusicManager>().GetComponent<AudioSource>();
-
         // Inicializamos valores
         cachedVolume = musicSlider.value;
-        musicSource.volume = cachedVolume;
-        musicSource.mute = false;
+        if (MusicManager.Instance != null)
+        {
+            MusicManager.Instance.Volume = cachedVolume;
+            MusicManager.Instance.Silenced = false;
+        }
         musicToggle.isOn = true;
 
         // Eventos
@@ -154,7 +151,7 @@ public class OptionsMenu : MonoBehaviour
         }
 
         // Si está encendida → aplicamos el volumen
-        musicSource.volume = value;
+        if (MusicManager.Instance != null) MusicManager.Instance.Volume = value;
         cachedVolume = value;
     }
 
@@ -163,22 +160,23 @@ public class OptionsMenu : MonoBehaviour
         if (isOn)
         {
             // Música ON → restauramos volumen al valor del slider
-            musicSource.mute = false;
-            musicSource.volume = cachedVolume;
-
-            if (!musicSource.isPlaying)
-                musicSource.Play();
+            if (MusicManager.Instance != null)
+            {
+                MusicManager.Instance.Silenced = false;
+                MusicManager.Instance.Volume = cachedVolume;
+            }
         }
         else
         {
             // Música OFF → muteamos solamente
-            musicSource.mute = true;
+            if (MusicManager.Instance != null) MusicManager.Instance.Silenced = true;
         }
     }
 
-    // Botón de borrar cuenta (issue #280), creado por código.
+    // Botón de borrar cuenta (issue #280) y enlaces legales (issue #117), creados por código.
     private void Awake()
     {
         if (!TryGetComponent(out DeleteAccountButton _)) gameObject.AddComponent<DeleteAccountButton>();
+        if (!TryGetComponent(out LegalLinks _)) gameObject.AddComponent<LegalLinks>();
     }
 }

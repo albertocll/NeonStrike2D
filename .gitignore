@@ -37,6 +37,11 @@ Backend/**/bin/
 Backend/**/obj/
 !Backend/**/*.csproj
 
+# Variables de entorno con secretos
+.env
+.env.*
+!.env.example
+
 Builds/
 
 *.apk

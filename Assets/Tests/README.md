@@ -11,10 +11,11 @@ instalado nada externo). Ver issue #134.
   `Instantiate` real, red, audio ni UI.
   - `WaveManagerTests.cs` — formula de enemigos por oleada (`WaveManager.EnemiesForWave`, #165).
   - `EnemySpawnerTests.cs` — umbral de enemigo avanzado por oleada (`EnemySpawner.ChooseEnemyPrefab`, #165).
+  - `MusicManagerTests.cs` — qué pista de nivel suena en cada oleada y qué crescendo usa cada nivel (`MusicManager.TrackForWave`, #262).
   - `WeaponControllerBulletScaleTests.cs` — asignacion de sprite/escala de bala por personaje (`WeaponController.SetBulletSprite`, #130).
 - `Assets/Tests/PlayMode/` — tests que necesitan el bucle de juego real
   (`MonoBehaviour.Awake`, corutinas, `AddComponent` con `RequireComponent`).
-  - `MusicManagerCrossfadeGuardTests.cs` — guard de reentrada del crossfade intenso (`MusicManager.StartIntenseCrossfade`, #148).
+  - `MusicManagerTrackTests.cs` — pistas de sustitución mientras faltan archivos y vuelta a la pista que se apagaba sin reiniciarla (`MusicManager.ClipForLevel`, #262).
   - `PlayerSpawnerRemoteTagTests.cs` — el avatar remoto no se queda con el tag `Player` (`PlayerSpawner.SpawnRemotePlayer`, #150).
 
 Fuera de alcance deliberadamente: tests de UI, de audio real (reproduccion/mezcla)
@@ -46,6 +47,6 @@ Unity -runTests -batchmode -projectPath . -testResults results-playmode.xml -tes
 - Varios metodos bajo prueba eran `private`; donde tenia sentido se expusieron
   como `public` (p.ej. `WaveManager.EnemiesForWave`, `EnemySpawner.ChooseEnemyPrefab`)
   en vez de usar reflexion, porque son calculos puros sin efectos secundarios.
-  Donde exponerlo no tenia sentido (p.ej. el campo `crossfadeRoutine` de
+  Donde exponerlo no tenia sentido (p.ej. el metodo `PlayTrack` de
   `MusicManager`, o metodos internos de `PlayerSpawner`), los tests acceden
   por reflexion en vez de cambiar la visibilidad de la API de produccion.
