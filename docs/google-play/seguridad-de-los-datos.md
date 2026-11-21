@@ -5,8 +5,11 @@ el backend (`Backend/NeonStrike2D.Backend.Api/Models`) y de lo que hace el clien
 coincidir con la [política de privacidad](../politica-privacidad.md) publicada en
 https://neonstrike-game.netlify.app/politica-privacidad.html.
 
-Revisado el 18/11/2026 sobre master. Si se añaden anuncios, analítica, inicio de sesión con
-Google, chat u otro servicio, hay que repasar este formulario y la política antes de publicar.
+Revisado el 18/11/2026 sobre master y actualizado el 21/11/2026 con el inicio de sesión con
+Google (#75). Las respuestas de Google solo valen cuando #75 esté publicado; hasta entonces, en la
+consola se deja como método de creación de cuenta solo el usuario y la contraseña. Si se añaden
+anuncios, analítica, chat u otro servicio, hay que repasar este formulario y la política antes
+de publicar.
 
 ## Analítica del motor de Unity: desactivada
 
@@ -26,7 +29,7 @@ rendimiento de la aplicación → Diagnósticos* (recogida y compartida con Unit
 |---|---|
 | ¿Tu aplicación recoge o comparte alguno de los tipos de datos de usuario obligatorios? | **Sí** |
 | ¿Todos los datos de usuario que recoge tu aplicación están cifrados en tránsito? | **Sí** (HTTPS y WSS hacia Railway) |
-| ¿Qué métodos de creación de cuenta admite tu aplicación? | **Nombre de usuario y contraseña** (con email). No hay inicio de sesión con terceros |
+| ¿Qué métodos de creación de cuenta admite tu aplicación? | **Nombre de usuario y contraseña** (con email) e **inicio de sesión con Google** (OAuth, #75) |
 | URL para pedir que se elimine la cuenta | https://neonstrike-game.netlify.app/borrar-cuenta.html |
 | ¿Ofreces una forma de pedir que se eliminen algunos datos o todos sin eliminar la cuenta? | **No** (solo se borra la cuenta entera) |
 
@@ -46,9 +49,17 @@ que tratan los datos en nombre del juego, y Google no lo considera compartir.
 
 Qué hay detrás de cada fila (para justificarlo si Google pregunta):
 
-- **Email**: `User.Email`. Sirve para iniciar sesión. Nunca se muestra a otros jugadores.
+- **Email**: `User.Email`. Sirve para iniciar sesión. Nunca se muestra a otros jugadores. Con
+  Google, es el email verificado que viene en el token, y sirve para vincular una cuenta existente.
 - **ID de usuario**: `User.Username` y `User.Id`, más la fecha de alta (`User.CreatedAt`). El
-  nombre de usuario sale en el ranking (los 10 mejores) y en las listas de amigos.
+  nombre de usuario sale en el ranking (los 10 mejores) y en las listas de amigos. Con Google se
+  guarda también el identificador de la cuenta de Google (`User.GoogleSubject`, el `sub` del
+  token) para reconocer al jugador; entra en esta misma fila.
+
+Inicio de sesión con Google (#75): no añade tipos de datos nuevos. El nombre del perfil de Google
+solo se usa para proponer el nombre de usuario y no se guarda aparte; no se pide acceso a nada
+más de la cuenta de Google (solo los ámbitos `openid`, `email` y `profile`). Google no cuenta como
+"compartir": el jugador inicia sesión directamente con Google.
 - **Otras acciones**:
   - `GameResult`: puntuación, rondas ganadas y perdidas, si ganó y fecha.
   - `GameSession`: sala, los dos jugadores, inicio, fin, ganador y estado.
@@ -58,7 +69,8 @@ Qué hay detrás de cada fila (para justificarlo si Google pregunta):
 
 | Dato | Motivo |
 |---|---|
-| Contraseña | Solo se guarda su hash (`User.PasswordHash`). Google no la cuenta como tipo de dato aparte de la cuenta |
+| Contraseña | Solo se guarda su hash (`User.PasswordHash`). Google no la cuenta como tipo de dato aparte de la cuenta. Las cuentas creadas con Google no tienen contraseña |
+| Token de Google (`id_token`) | Se verifica en el servidor y se descarta; no se guarda |
 | Estado de conexión (en línea o no) | Solo vive en la memoria del servidor mientras el jugador está conectado; no se guarda |
 | Posición de la nave en cooperativo | Se reenvía en el momento al otro jugador y no se guarda |
 | Email y token de sesión guardados con "recordar" | Se quedan en el dispositivo; no se envían al desarrollador como dato nuevo |
