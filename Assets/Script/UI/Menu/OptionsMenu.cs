@@ -173,9 +173,10 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    // Botón de borrar cuenta (issue #280), creado por código.
+    // Botón de borrar cuenta (issue #280) y enlaces legales (issue #117), creados por código.
     private void Awake()
     {
         if (!TryGetComponent(out DeleteAccountButton _)) gameObject.AddComponent<DeleteAccountButton>();
+        if (!TryGetComponent(out LegalLinks _)) gameObject.AddComponent<LegalLinks>();
     }
 }
