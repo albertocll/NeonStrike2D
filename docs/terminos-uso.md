@@ -1,6 +1,6 @@
 # Términos de uso de NeonStrike2D (borrador)
 
-> **Borrador.** Antes de publicarlo hay que rellenar lo que está entre corchetes y revisar que sigue siendo cierto con la versión del juego que se publique. Si se añaden compras, anuncios, chat u otros servicios, hay que actualizar estos términos antes de publicar esa versión. Van junto a la [política de privacidad](politica-privacidad.md).
+> **Borrador.** Antes de publicarlo hay que rellenar lo que está entre corchetes y revisar que sigue siendo cierto con la versión del juego que se publique. Si se añaden compras, anuncios, chat u otros servicios, hay que actualizar estos términos antes de publicar esa versión. Van junto a la [política de privacidad](https://neonstrike-game.netlify.app/politica-privacidad.html).
 
 - [Versión en español](#español)
 - [English version](#english)
@@ -61,7 +61,7 @@ Hacemos lo posible para que el juego funcione bien, pero no garantizamos que no 
 
 ### 9. Privacidad
 
-Cómo tratamos tus datos se explica en la [política de privacidad](politica-privacidad.md).
+Cómo tratamos tus datos se explica en la [política de privacidad](https://neonstrike-game.netlify.app/politica-privacidad.html).
 
 ### 10. Cambios
 
@@ -127,7 +127,7 @@ We do our best to make the game work well, but we don't guarantee that it is err
 
 ### 9. Privacy
 
-How we process your data is explained in the [privacy policy](politica-privacidad.md).
+How we process your data is explained in the [privacy policy](https://neonstrike-game.netlify.app/politica-privacidad.html).
 
 ### 10. Changes
 
