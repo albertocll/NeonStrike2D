@@ -16,7 +16,7 @@ public class TextEntryOverlay : MonoBehaviour
     private const float LabelFontSize = 44f;
     private const float ButtonFontSize = 32f;
     private static readonly Vector2 ButtonSize = new Vector2(260f, 70f);
-    private static readonly Color Dim = new Color(0f, 0f, 0f, 0.92f);
+    private static readonly Color Dim = new Color(0f, 0f, 0f, 1f);
 
     private static TextEntryOverlay current;
 
@@ -60,7 +60,7 @@ public class TextEntryOverlay : MonoBehaviour
         area.anchorMax = Vector2.one;
         area.offsetMin = area.offsetMax = Vector2.zero;
         var column = area.gameObject.AddComponent<VerticalLayoutGroup>();
-        column.spacing = 30f;
+        column.spacing = 50f;
         column.childAlignment = TextAnchor.MiddleCenter;
         column.childControlWidth = column.childControlHeight = false;
         column.childForceExpandWidth = column.childForceExpandHeight = false;
