@@ -5090,6 +5090,10 @@ MonoBehaviour:
   dashButton: {fileID: 1260157045}
   pauseButton: {fileID: 906127720}
   pausePanel: {fileID: 2026667194}
+  hudToHide:
+  - {fileID: 1663522414}
+  - {fileID: 377516135}
+  - {fileID: 1045391471}
 --- !u!1 &1434293239
 GameObject:
   m_ObjectHideFlags: 0

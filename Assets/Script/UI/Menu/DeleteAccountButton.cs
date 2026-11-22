@@ -23,7 +23,7 @@ public class DeleteAccountButton : MonoBehaviour
     private static readonly Vector2 TextSize = new Vector2(560f, 50f);
     private static readonly Vector2 BodySize = new Vector2(560f, 80f);
     private static readonly Vector2 DialogButtonSize = new Vector2(240f, 56f);
-    private static readonly Color Dim = new Color(0f, 0f, 0f, 0.95f);
+    private static readonly Color Dim = new Color(0f, 0f, 0f, 1f);
     private static readonly Color TitleColor = new Color(1f, 0.35f, 0.35f, 1f);
 
     private GameObject dialog;

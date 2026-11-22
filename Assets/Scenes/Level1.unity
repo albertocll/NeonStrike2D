@@ -4816,6 +4816,10 @@ MonoBehaviour:
   pausePanel: {fileID: 2026667194}
 --- !u!1 &1434293239
 GameObject:
+  hudToHide:
+  - {fileID: 1663522414}
+  - {fileID: 377516135}
+  - {fileID: 1045391471}
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
