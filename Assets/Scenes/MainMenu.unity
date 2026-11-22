@@ -3654,6 +3654,7 @@ GameObject:
   - component: {fileID: 589772051}
   - component: {fileID: 589772050}
   - component: {fileID: 589772049}
+  - component: {fileID: 589772052}
   m_Layer: 5
   m_Name: InputEmail
   m_TagString: Untagged
@@ -3734,7 +3735,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 7
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 7
   m_RegexValue: 
@@ -3820,6 +3821,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 589772047}
   m_CullTransparentMesh: 1
+--- !u!114 &589772052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 589772047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: login.userLabel
 --- !u!1 &593263651
 GameObject:
   m_ObjectHideFlags: 0
@@ -8878,6 +8892,7 @@ GameObject:
   - component: {fileID: 1348984652}
   - component: {fileID: 1348984651}
   - component: {fileID: 1348984650}
+  - component: {fileID: 1348984653}
   m_Layer: 5
   m_Name: InputPassword
   m_TagString: Untagged
@@ -8958,7 +8973,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 0
   m_RegexValue: 
@@ -9044,6 +9059,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1348984648}
   m_CullTransparentMesh: 1
+--- !u!114 &1348984653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1348984648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: login.passwordLabel
 --- !u!1 &1356371718
 GameObject:
   m_ObjectHideFlags: 0
@@ -10238,6 +10266,7 @@ GameObject:
   - component: {fileID: 1538324322}
   - component: {fileID: 1538324321}
   - component: {fileID: 1538324320}
+  - component: {fileID: 1538324323}
   m_Layer: 5
   m_Name: InputEmail
   m_TagString: Untagged
@@ -10318,7 +10347,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 7
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 7
   m_RegexValue: 
@@ -10404,6 +10433,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538324318}
   m_CullTransparentMesh: 1
+--- !u!114 &1538324323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538324318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: register.emailLabel
 --- !u!1 &1539083017
 GameObject:
   m_ObjectHideFlags: 0
@@ -11906,6 +11948,7 @@ GameObject:
   - component: {fileID: 1844926176}
   - component: {fileID: 1844926175}
   - component: {fileID: 1844926174}
+  - component: {fileID: 1844926177}
   m_Layer: 5
   m_Name: InputPassword
   m_TagString: Untagged
@@ -11986,7 +12029,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 0
   m_RegexValue: 
@@ -12072,6 +12115,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1844926172}
   m_CullTransparentMesh: 1
+--- !u!114 &1844926177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1844926172}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: login.passwordLabel
 --- !u!1 &1846789719
 GameObject:
   m_ObjectHideFlags: 0
@@ -12796,6 +12852,7 @@ GameObject:
   - component: {fileID: 1960275288}
   - component: {fileID: 1960275287}
   - component: {fileID: 1960275286}
+  - component: {fileID: 1960275289}
   m_Layer: 5
   m_Name: InputUsername
   m_TagString: Untagged
@@ -12876,7 +12933,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 0
   m_RegexValue: 
@@ -12962,6 +13019,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1960275284}
   m_CullTransparentMesh: 1
+--- !u!114 &1960275289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1960275284}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: register.usernameLabel
 --- !u!1 &1984252290
 GameObject:
   m_ObjectHideFlags: 0

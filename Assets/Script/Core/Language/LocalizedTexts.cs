@@ -58,6 +58,11 @@ public static class LocalizedTexts
         { "placeholder.email", ("correo", "email") },
         { "placeholder.friendName", ("nombre de usuario", "username") },
 
+        // Ventana de escritura (botones en Orbitronio, nombre del campo en la fuente del campo)
+        { "entry.accept", ("aceptar", "accept") },
+        { "entry.cancel", ("cancelar", "cancel") },
+        { "entry.friendName", ("Nombre de usuario", "Username") },
+
         // Mensajes de login y registro (Roboto)
         { "msg.fillFields", ("Rellena todos los campos.", "Fill in all fields.") },
         { "msg.connecting", ("Conectando...", "Connecting...") },
