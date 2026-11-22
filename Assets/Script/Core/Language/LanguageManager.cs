@@ -1,83 +1,84 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
-public class LanguageManager : MonoBehaviour
+// Idioma del juego (español o inglés). El primer arranque es en inglés; la elección se guarda en
+// PlayerPrefs. Al cambiar de idioma se lanza Changed para que los textos en pantalla se refresquen
+// al momento (LocalizedText y los scripts que ponen textos por código).
+public static class LanguageManager
 {
-    public static LanguageManager Instance;
-
     public enum Language
     {
-        Spanish,
-        English
+        English,
+        Spanish
     }
 
-    public Language currentLanguage = Language.Spanish;
+    private const string PrefKey = "idioma";
+    private const string PrefEnglish = "en";
+    private const string PrefSpanish = "es";
 
-    private Dictionary<string, string> spanishTexts = new Dictionary<string, string>()
-    {
-        { "play", "JUGAR" },
-        { "options", "OPCIONES" },
-        { "exit", "SALIR" },
-        { "about", "ABOUT" },
-        { "back", "VOLVER" },
-        { "music", "MÚSICA" },
-        { "language", "IDIOMA" },
-        { "gameOver", "FIN DE PARTIDA" },
-        { "restart", "REINICIAR" },
-        { "mainMenu", "MENÚ PRINCIPAL" }
-    };
+    private static bool loaded;
+    private static Language current;
 
-    private Dictionary<string, string> englishTexts = new Dictionary<string, string>()
-    {
-        { "play", "PLAY" },
-        { "options", "OPTIONS" },
-        { "exit", "EXIT" },
-        { "about", "ABOUT" },
-        { "back", "BACK" },
-        { "music", "MUSIC" },
-        { "language", "LANGUAGE" },
-        { "gameOver", "GAME OVER" },
-        { "restart", "RESTART" },
-        { "mainMenu", "MAIN MENU" }
-    };
+    public static event Action Changed;
 
-    private void Awake()
+    public static Language Current
     {
-        if (Instance != null && Instance != this)
+        get
         {
-            Destroy(gameObject);
-            return;
+            EnsureLoaded();
+            return current;
         }
-
-        Instance = this;
-        DontDestroyOnLoad(gameObject);
-
-        LoadLanguage();
     }
 
-    public void SetLanguage(int languageIndex)
+    public static void SetLanguage(Language language)
     {
-        currentLanguage = (Language)languageIndex;
-        PlayerPrefs.SetInt("language", languageIndex);
+        EnsureLoaded();
+        if (current == language) return;
+
+        current = language;
+        PlayerPrefs.SetString(PrefKey, language == Language.Spanish ? PrefSpanish : PrefEnglish);
         PlayerPrefs.Save();
+        Changed?.Invoke();
     }
 
-    public void LoadLanguage()
+    public static void Toggle()
     {
-        int savedLanguage = PlayerPrefs.GetInt("language", 0);
-        currentLanguage = (Language)savedLanguage;
+        SetLanguage(Current == Language.English ? Language.Spanish : Language.English);
     }
 
-    public string GetText(string key)
+    // Texto de la clave en el idioma actual. Si la clave no existe se devuelve la propia clave,
+    // para que el fallo se vea en pantalla y no quede un hueco.
+    public static string Get(string key)
     {
-        switch (currentLanguage)
-        {
-            case Language.English:
-                return englishTexts.ContainsKey(key) ? englishTexts[key] : key;
+        return LocalizedTexts.TryGet(key, Current, out var text) ? text : key;
+    }
 
-            case Language.Spanish:
-            default:
-                return spanishTexts.ContainsKey(key) ? spanishTexts[key] : key;
-        }
+    public static string Format(string key, params object[] args)
+    {
+        return string.Format(Get(key), args);
+    }
+
+    // Mensajes del servidor que se enseñan al jugador: llegan en español, así que se traducen en el
+    // cliente. Si el mensaje no es uno conocido se usa la clave de respaldo.
+    public static string ServerMessage(string message, string fallbackKey)
+    {
+        if (!string.IsNullOrEmpty(message) && LocalizedTexts.TryGetServerKey(message.Trim(), out var key))
+            return Get(key);
+        return Get(fallbackKey);
+    }
+
+    private static void EnsureLoaded()
+    {
+        if (loaded) return;
+        loaded = true;
+        current = PlayerPrefs.GetString(PrefKey, PrefEnglish) == PrefSpanish ? Language.Spanish : Language.English;
+    }
+
+    // Sin recarga de dominio al entrar en Play, el estado estático sobreviviría entre sesiones.
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    private static void ResetStatics()
+    {
+        loaded = false;
+        Changed = null;
     }
 }

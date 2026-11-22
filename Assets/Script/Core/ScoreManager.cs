@@ -40,6 +40,6 @@ public class ScoreManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = $"puntos {currentScore}";
+            scoreText.text = LanguageManager.Format("hud.score", currentScore);
     }
 }

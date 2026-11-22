@@ -36,6 +36,10 @@ public class WaveManager : MonoBehaviour
         else
             currentWave = Mathf.Max(startingWave, level != null ? level.firstWave : 1) - 1;
 
+        // Hasta que empiece la primera oleada se ve la que viene, ya en el idioma del jugador.
+        if (waveText != null)
+            waveText.text = LanguageManager.Format("hud.wave", currentWave + 1);
+
         if (NetworkManager.Instance != null)
             NetworkManager.Instance.OnLoadLevel += HandleLoadLevel;
 
@@ -61,7 +65,7 @@ public class WaveManager : MonoBehaviour
         enemiesAlive = 0;
 
         if (waveText != null)
-            waveText.text = $"oleada {currentWave}";
+            waveText.text = LanguageManager.Format("hud.wave", currentWave);
 
         if (level != null && currentWave == level.bossWave && level.bossPrefab != null)
             enemySpawner.SpawnBoss(level.bossPrefab, this);
@@ -77,7 +81,7 @@ public class WaveManager : MonoBehaviour
         RunState.Wave = wave;
         SFXManager.Instance?.PlayWaveStart();
         if (waveText != null)
-            waveText.text = $"oleada {currentWave}";
+            waveText.text = LanguageManager.Format("hud.wave", currentWave);
     }
 
     public int EnemiesForWave(int wave) => baseEnemiesPerWave + ((wave - 1) * enemiesAddedPerWave);

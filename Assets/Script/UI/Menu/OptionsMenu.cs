@@ -17,8 +17,8 @@ public class OptionsMenu : MonoBehaviour
     public RectTransform accountRow;
     public RectTransform legalRow;
 
-    private const string TextLeftHanded = "modo zurdo";
-    private const string TextLogout = "cerrar sesion";
+    private const string KeyLeftHanded = "options.leftHanded";
+    private const string KeyLogout = "options.logout";
     private const float ToggleFontSize = 34f;
     private static readonly Vector2 LeftHandedSize = new Vector2(330f, 40f);
     public const float AccountFontSize = 28f;
@@ -78,7 +78,7 @@ public class OptionsMenu : MonoBehaviour
         var label = toggle.GetComponentInChildren<TMP_Text>(true);
         if (label != null)
         {
-            label.text = TextLeftHanded;
+            MenuUiFactory.SetKey(label, KeyLeftHanded);
             label.enableAutoSizing = false;
             label.fontSize = ToggleFontSize;
             label.textWrappingMode = TextWrappingModes.NoWrap;
@@ -107,7 +107,7 @@ public class OptionsMenu : MonoBehaviour
             return;
         }
 
-        var button = MenuUiFactory.CloneButton(backButton, accountRow, "LogoutButton", TextLogout,
+        var button = MenuUiFactory.CloneButton(backButton, accountRow, "LogoutButton", KeyLogout,
             AccountButtonSize, AccountFontSize, OnLogoutClicked);
         button.transform.SetAsFirstSibling();
     }

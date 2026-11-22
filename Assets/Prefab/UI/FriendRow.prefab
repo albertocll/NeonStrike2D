@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 7557948536261466496}
   - component: {fileID: 2584546899093007269}
   - component: {fileID: 6955125390629241976}
+  - component: {fileID: 1369035892119245838}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -399,7 +400,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: desafiar
+  m_text: challenge
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -471,3 +472,16 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &1369035892119245838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4197342768646382170}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.challenge

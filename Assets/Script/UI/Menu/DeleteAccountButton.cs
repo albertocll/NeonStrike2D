@@ -10,13 +10,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(OptionsMenu))]
 public class DeleteAccountButton : MonoBehaviour
 {
-    private const string TextButton = "borrar cuenta";
-    private const string TextTitle = "borrar cuenta";
-    private const string TextBody = "tu cuenta y tus datos se borraran para siempre";
-    private const string TextWorking = "borrando";
-    private const string TextError = "no se pudo borrar la cuenta revisa tu conexion";
-    private const string TextCancel = "cancelar";
-    private const string TextConfirm = "borrar";
+    private const string KeyButton = "options.deleteAccount";
+    private const string KeyTitle = "delete.title";
+    private const string KeyBody = "delete.body";
+    private const string KeyWorking = "delete.working";
+    private const string KeyError = "delete.error";
+    private const string KeyCancel = "delete.cancel";
+    private const string KeyConfirm = "delete.confirm";
 
     private const float TitleFontSize = 40f;
     private const float BodyFontSize = 26f;
@@ -43,7 +43,7 @@ public class DeleteAccountButton : MonoBehaviour
             return;
         }
 
-        var button = MenuUiFactory.CloneButton(back, options.accountRow, "DeleteAccountButton", TextButton,
+        var button = MenuUiFactory.CloneButton(back, options.accountRow, "DeleteAccountButton", KeyButton,
             OptionsMenu.AccountButtonSize, OptionsMenu.AccountFontSize, OpenDialog);
         button.transform.SetAsLastSibling();
 
@@ -97,20 +97,20 @@ public class DeleteAccountButton : MonoBehaviour
         fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
         var labelTemplate = back.GetComponentInChildren<TMP_Text>(true);
-        var title = MenuUiFactory.CreateText(labelTemplate, windowRect, "Title", TextTitle, TextSize, TitleFontSize, false);
+        var title = MenuUiFactory.CreateText(labelTemplate, windowRect, "Title", KeyTitle, TextSize, TitleFontSize, false);
         title.color = TitleColor;
-        bodyText = MenuUiFactory.CreateText(labelTemplate, windowRect, "Body", TextBody, BodySize, BodyFontSize, true);
+        bodyText = MenuUiFactory.CreateText(labelTemplate, windowRect, "Body", KeyBody, BodySize, BodyFontSize, true);
 
         var row = MenuUiFactory.CreateGroup(windowRect, "Buttons", new Vector2(TextSize.x, DialogButtonSize.y), true, 40f);
-        cancelButton = MenuUiFactory.CloneButton(back, row, "CancelButton", TextCancel, DialogButtonSize, OptionsMenu.AccountFontSize, CloseDialog);
-        confirmButton = MenuUiFactory.CloneButton(back, row, "ConfirmDeleteButton", TextConfirm, DialogButtonSize, OptionsMenu.AccountFontSize, OnConfirmClicked);
+        cancelButton = MenuUiFactory.CloneButton(back, row, "CancelButton", KeyCancel, DialogButtonSize, OptionsMenu.AccountFontSize, CloseDialog);
+        confirmButton = MenuUiFactory.CloneButton(back, row, "ConfirmDeleteButton", KeyConfirm, DialogButtonSize, OptionsMenu.AccountFontSize, OnConfirmClicked);
 
         dialog.SetActive(false);
     }
 
     private void OpenDialog()
     {
-        bodyText.text = TextBody;
+        MenuUiFactory.SetKey(bodyText, KeyBody);
         SetDialogInteractable(true);
         dialog.SetActive(true);
         dialog.transform.SetAsLastSibling();
@@ -132,14 +132,14 @@ public class DeleteAccountButton : MonoBehaviour
         if (busy) return;
         busy = true;
         SetDialogInteractable(false);
-        bodyText.text = TextWorking;
+        MenuUiFactory.SetKey(bodyText, KeyWorking);
 
         bool deleted = await ApiManager.Instance.DeleteAccountAsync();
         if (!deleted)
         {
             busy = false;
             SetDialogInteractable(true);
-            bodyText.text = TextError;
+            MenuUiFactory.SetKey(bodyText, KeyError);
             return;
         }
 

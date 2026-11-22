@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 39622851}
   - component: {fileID: 39622850}
   - component: {fileID: 39622849}
+  - component: {fileID: 39622852}
   m_Layer: 5
   m_Name: Placeholder
   m_TagString: Untagged
@@ -197,7 +198,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: nombre de usuario
+  m_text: username
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -277,6 +278,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 39622847}
   m_CullTransparentMesh: 1
+--- !u!114 &39622852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39622847}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: placeholder.friendName
 --- !u!1 &46076602
 GameObject:
   m_ObjectHideFlags: 0
@@ -760,6 +774,7 @@ GameObject:
   - component: {fileID: 133277467}
   - component: {fileID: 133277469}
   - component: {fileID: 133277468}
+  - component: {fileID: 133277470}
   m_Layer: 5
   m_Name: RoleText
   m_TagString: Untagged
@@ -806,7 +821,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: dron ia equilibrado
+  m_text: balanced ai drone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -886,6 +901,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 133277466}
   m_CullTransparentMesh: 1
+--- !u!114 &133277470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 133277466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: role.balanced
 --- !u!1001 &137841538
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -920,7 +948,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: defensa
+      value: defense
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -1021,13 +1049,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 137841541}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &137841539 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 137841538}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &137841540 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 137841538}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &137841541
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 137841540}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.defense
 --- !u!1 &189063988
 GameObject:
   m_ObjectHideFlags: 0
@@ -1147,6 +1196,7 @@ GameObject:
   - component: {fileID: 225246945}
   - component: {fileID: 225246947}
   - component: {fileID: 225246946}
+  - component: {fileID: 225246948}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1193,7 +1243,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: salir
+  m_text: exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -1273,6 +1323,94 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225246944}
   m_CullTransparentMesh: 1
+--- !u!114 &225246948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225246944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: menu.exit
+--- !u!1 &248897216
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 248897217}
+  - component: {fileID: 248897219}
+  - component: {fileID: 248897218}
+  m_Layer: 5
+  m_Name: FondoOpaco
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &248897217
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248897216}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1885185104}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: -28, y: -28}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &248897218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248897216}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.051, g: 0.059, b: 0.149, a: 1}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &248897219
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 248897216}
+  m_CullTransparentMesh: 1
 --- !u!1001 &250027448
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1307,7 +1445,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: velocidad
+      value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -1412,13 +1550,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 250027451}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &250027449 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 250027448}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &250027450 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 250027448}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &250027451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250027450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.speed
 --- !u!1 &254656513
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,7 +1804,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: cadencia
+      value: fire rate
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -1754,13 +1913,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 313690768}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &313690766 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 313690765}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &313690767 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 313690765}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &313690768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313690767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.fireRate
 --- !u!1 &379735876
 GameObject:
   m_ObjectHideFlags: 0
@@ -1772,6 +1952,7 @@ GameObject:
   - component: {fileID: 379735877}
   - component: {fileID: 379735879}
   - component: {fileID: 379735878}
+  - component: {fileID: 379735880}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -1818,9 +1999,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'amigos
-
-'
+  m_text: friends
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -1900,6 +2079,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 379735876}
   m_CullTransparentMesh: 1
+--- !u!114 &379735880
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 379735876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.title
 --- !u!1 &400216489
 GameObject:
   m_ObjectHideFlags: 0
@@ -2071,7 +2263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: velocidad
+      value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -2172,13 +2364,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 410558028}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &410558026 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 410558025}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &410558027 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 410558025}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &410558028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 410558027}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.speed
 --- !u!1 &426802708
 GameObject:
   m_ObjectHideFlags: 0
@@ -2779,6 +2992,7 @@ GameObject:
   - component: {fileID: 456792022}
   - component: {fileID: 456792024}
   - component: {fileID: 456792023}
+  - component: {fileID: 456792025}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2825,7 +3039,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: invitar
+  m_text: invite
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -2905,6 +3119,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 456792021}
   m_CullTransparentMesh: 1
+--- !u!114 &456792025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456792021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.invite
 --- !u!1001 &465129323
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2939,7 +3166,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: cadencia
+      value: fire rate
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -3048,13 +3275,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 465129326}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &465129324 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 465129323}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &465129325 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 465129323}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &465129326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465129325}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.fireRate
 --- !u!1 &476456161
 GameObject:
   m_ObjectHideFlags: 0
@@ -3066,6 +3314,7 @@ GameObject:
   - component: {fileID: 476456162}
   - component: {fileID: 476456164}
   - component: {fileID: 476456163}
+  - component: {fileID: 476456165}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -3112,9 +3361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'invitaciones
-
-'
+  m_text: invites
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -3194,6 +3441,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 476456161}
   m_CullTransparentMesh: 1
+--- !u!114 &476456165
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 476456161}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.invites
 --- !u!1 &478444754
 GameObject:
   m_ObjectHideFlags: 0
@@ -3205,6 +3465,7 @@ GameObject:
   - component: {fileID: 478444755}
   - component: {fileID: 478444757}
   - component: {fileID: 478444756}
+  - component: {fileID: 478444758}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -3251,7 +3512,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: amigos
+  m_text: friends
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -3331,6 +3592,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478444754}
   m_CullTransparentMesh: 1
+--- !u!114 &478444758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 478444754}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.title
 --- !u!1001 &491029577
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3354,6 +3628,10 @@ PrefabInstance:
     - target: {fileID: 2573160798635781598, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_Name
       value: Stat_Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      propertyPath: m_text
+      value: attack
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -3458,13 +3736,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 491029580}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &491029578 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 491029577}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &491029579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 491029577}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &491029580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 491029579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.attack
 --- !u!1 &492759848
 GameObject:
   m_ObjectHideFlags: 0
@@ -4023,7 +4322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: velocidad
+      value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -4124,13 +4423,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 652241597}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &652241595 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 652241594}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &652241596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 652241594}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &652241597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652241596}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.speed
 --- !u!1 &668822070
 GameObject:
   m_ObjectHideFlags: 0
@@ -4307,6 +4627,7 @@ GameObject:
   - component: {fileID: 719588509}
   - component: {fileID: 719588511}
   - component: {fileID: 719588510}
+  - component: {fileID: 719588512}
   m_Layer: 5
   m_Name: RoleText
   m_TagString: Untagged
@@ -4353,7 +4674,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: dron ia sigiloso
+  m_text: stealth ai drone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -4433,6 +4754,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 719588508}
   m_CullTransparentMesh: 1
+--- !u!114 &719588512
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 719588508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: role.stealth
 --- !u!1001 &729305220
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4467,7 +4801,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: velocidad
+      value: speed
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -4572,13 +4906,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 729305223}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &729305221 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 729305220}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &729305222 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 729305220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &729305223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729305222}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.speed
 --- !u!1 &731222990
 GameObject:
   m_ObjectHideFlags: 0
@@ -4590,6 +4945,7 @@ GameObject:
   - component: {fileID: 731222991}
   - component: {fileID: 731222993}
   - component: {fileID: 731222992}
+  - component: {fileID: 731222994}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -4636,7 +4992,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: volver
+  m_text: back
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -4716,6 +5072,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 731222990}
   m_CullTransparentMesh: 1
+--- !u!114 &731222994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 731222990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: common.back
 --- !u!1 &738467247
 GameObject:
   m_ObjectHideFlags: 0
@@ -5448,6 +5817,7 @@ GameObject:
   - component: {fileID: 888793603}
   - component: {fileID: 888793605}
   - component: {fileID: 888793604}
+  - component: {fileID: 888793606}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -5494,10 +5864,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'rechazar
-
-
-'
+  m_text: decline
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -5577,6 +5944,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 888793602}
   m_CullTransparentMesh: 1
+--- !u!114 &888793606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 888793602}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.decline
 --- !u!1 &902049243
 GameObject:
   m_ObjectHideFlags: 0
@@ -5934,6 +6314,7 @@ GameObject:
   - component: {fileID: 935026352}
   - component: {fileID: 935026354}
   - component: {fileID: 935026353}
+  - component: {fileID: 935026355}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -5980,10 +6361,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'rechazar
-
-
-'
+  m_text: decline
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -6063,6 +6441,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 935026351}
   m_CullTransparentMesh: 1
+--- !u!114 &935026355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 935026351}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.decline
 --- !u!1 &967262673
 GameObject:
   m_ObjectHideFlags: 0
@@ -6246,7 +6637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: cadencia
+      value: fire rate
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -6355,13 +6746,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1051806444}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &1051806442 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 1051806441}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1051806443 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 1051806441}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1051806444
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1051806443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.fireRate
 --- !u!1 &1064779655
 GameObject:
   m_ObjectHideFlags: 0
@@ -6373,6 +6785,7 @@ GameObject:
   - component: {fileID: 1064779656}
   - component: {fileID: 1064779658}
   - component: {fileID: 1064779657}
+  - component: {fileID: 1064779659}
   m_Layer: 5
   m_Name: RoleText
   m_TagString: Untagged
@@ -6419,7 +6832,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: dron ia sigiloso
+  m_text: stealth ai drone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -6499,6 +6912,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1064779655}
   m_CullTransparentMesh: 1
+--- !u!114 &1064779659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064779655}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: role.stealth
 --- !u!1001 &1080583095
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6962,6 +7388,7 @@ GameObject:
   - component: {fileID: 1129171831}
   - component: {fileID: 1129171833}
   - component: {fileID: 1129171832}
+  - component: {fileID: 1129171834}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -7008,7 +7435,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: solicitud de amistad
+  m_text: friend request
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -7088,6 +7515,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1129171830}
   m_CullTransparentMesh: 1
+--- !u!114 &1129171834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129171830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.request
 --- !u!1 &1133483942
 GameObject:
   m_ObjectHideFlags: 0
@@ -7414,6 +7854,7 @@ GameObject:
   - component: {fileID: 1194509140}
   - component: {fileID: 1194509139}
   - component: {fileID: 1194509138}
+  - component: {fileID: 1194509141}
   m_Layer: 5
   m_Name: InputFriendUsername
   m_TagString: Untagged
@@ -7494,7 +7935,7 @@ MonoBehaviour:
   m_AsteriskChar: 42
   m_KeyboardType: 0
   m_LineType: 0
-  m_HideMobileInput: 0
+  m_HideMobileInput: 1
   m_HideSoftKeyboard: 0
   m_CharacterValidation: 0
   m_RegexValue: 
@@ -7580,6 +8021,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1194509136}
   m_CullTransparentMesh: 1
+--- !u!114 &1194509141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1194509136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f88d13305350b7c478e74296a91fdeff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::TextEntryField
+  labelKey: entry.friendName
 --- !u!1001 &1211285267
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7614,7 +8068,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: defensa
+      value: defense
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -7715,13 +8169,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1211285270}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &1211285268 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 1211285267}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1211285269 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 1211285267}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1211285270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1211285269}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.defense
 --- !u!1 &1214284482
 GameObject:
   m_ObjectHideFlags: 0
@@ -7816,6 +8291,7 @@ GameObject:
   - component: {fileID: 1226238108}
   - component: {fileID: 1226238110}
   - component: {fileID: 1226238109}
+  - component: {fileID: 1226238111}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -7862,7 +8338,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: elegir
+  m_text: select
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -7942,6 +8418,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1226238107}
   m_CullTransparentMesh: 1
+--- !u!114 &1226238111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1226238107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: select.confirm
 --- !u!1 &1269078871
 GameObject:
   m_ObjectHideFlags: 0
@@ -7953,6 +8442,7 @@ GameObject:
   - component: {fileID: 1269078872}
   - component: {fileID: 1269078874}
   - component: {fileID: 1269078873}
+  - component: {fileID: 1269078875}
   m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
@@ -7999,7 +8489,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: elige personaje
+  m_text: choose character
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -8079,6 +8569,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1269078871}
   m_CullTransparentMesh: 1
+--- !u!114 &1269078875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1269078871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: select.title
 --- !u!1 &1273804798
 GameObject:
   m_ObjectHideFlags: 0
@@ -9344,6 +9847,7 @@ GameObject:
   - component: {fileID: 1407192932}
   - component: {fileID: 1407192934}
   - component: {fileID: 1407192933}
+  - component: {fileID: 1407192935}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -9390,7 +9894,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: agregar
+  m_text: add
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -9470,6 +9974,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1407192931}
   m_CullTransparentMesh: 1
+--- !u!114 &1407192935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1407192931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.add
 --- !u!1 &1441372085
 GameObject:
   m_ObjectHideFlags: 0
@@ -9556,6 +10073,7 @@ GameObject:
   - component: {fileID: 1478264402}
   - component: {fileID: 1478264404}
   - component: {fileID: 1478264403}
+  - component: {fileID: 1478264405}
   m_Layer: 5
   m_Name: RoleText
   m_TagString: Untagged
@@ -9602,7 +10120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: dron ia de asalto
+  m_text: assault ai drone
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -9682,6 +10200,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1478264401}
   m_CullTransparentMesh: 1
+--- !u!114 &1478264405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1478264401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: role.assault
 --- !u!1 &1485023773
 GameObject:
   m_ObjectHideFlags: 0
@@ -9862,6 +10393,7 @@ GameObject:
   - component: {fileID: 1533336628}
   - component: {fileID: 1533336630}
   - component: {fileID: 1533336629}
+  - component: {fileID: 1533336631}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -9908,7 +10440,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: elegir
+  m_text: select
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -9988,6 +10520,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1533336627}
   m_CullTransparentMesh: 1
+--- !u!114 &1533336631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1533336627}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: select.confirm
 --- !u!1 &1546240957
 GameObject:
   m_ObjectHideFlags: 0
@@ -10235,7 +10780,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: defensa
+      value: defense
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -10332,13 +10877,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1555616184}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &1555616182 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 1555616181}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1555616183 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 1555616181}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1555616184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1555616183}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.defense
 --- !u!1 &1593611045
 GameObject:
   m_ObjectHideFlags: 0
@@ -10702,7 +11268,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: defensa
+      value: defense
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -10803,13 +11369,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1663475726}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &1663475724 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 1663475723}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1663475725 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 1663475723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1663475726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1663475725}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.defense
 --- !u!1 &1679659467
 GameObject:
   m_ObjectHideFlags: 0
@@ -11285,6 +11872,7 @@ GameObject:
   - component: {fileID: 1790272837}
   - component: {fileID: 1790272839}
   - component: {fileID: 1790272838}
+  - component: {fileID: 1790272840}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -11331,9 +11919,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'aceptar
-
-'
+  m_text: accept
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -11413,6 +11999,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790272836}
   m_CullTransparentMesh: 1
+--- !u!114 &1790272840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790272836}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.accept
 --- !u!1 &1799582632
 GameObject:
   m_ObjectHideFlags: 0
@@ -11862,6 +12461,7 @@ GameObject:
   - component: {fileID: 1878390806}
   - component: {fileID: 1878390808}
   - component: {fileID: 1878390807}
+  - component: {fileID: 1878390809}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -11908,7 +12508,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: elegir
+  m_text: select
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -11988,6 +12588,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1878390805}
   m_CullTransparentMesh: 1
+--- !u!114 &1878390809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1878390805}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: select.confirm
 --- !u!1 &1885185103
 GameObject:
   m_ObjectHideFlags: 0
@@ -12018,6 +12631,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 248897217}
   - {fileID: 379735877}
   - {fileID: 1194509137}
   - {fileID: 1187078528}
@@ -12045,7 +12659,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.5764706}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -12093,6 +12707,10 @@ PrefabInstance:
     - target: {fileID: 2573160798635781598, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_Name
       value: Stat_Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      propertyPath: m_text
+      value: attack
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -12197,13 +12815,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1902972051}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &1902972049 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 1902972048}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1902972050 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 1902972048}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1902972051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902972050}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.attack
 --- !u!1 &1913977282
 GameObject:
   m_ObjectHideFlags: 0
@@ -12423,6 +13062,7 @@ GameObject:
   - component: {fileID: 1948309957}
   - component: {fileID: 1948309959}
   - component: {fileID: 1948309958}
+  - component: {fileID: 1948309960}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -12469,7 +13109,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: elegir
+  m_text: select
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -12549,6 +13189,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1948309956}
   m_CullTransparentMesh: 1
+--- !u!114 &1948309960
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1948309956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: select.confirm
 --- !u!1 &1957541350
 GameObject:
   m_ObjectHideFlags: 0
@@ -12702,6 +13355,7 @@ GameObject:
   - component: {fileID: 2054545819}
   - component: {fileID: 2054545821}
   - component: {fileID: 2054545820}
+  - component: {fileID: 2054545822}
   m_Layer: 5
   m_Name: TextNoFriends
   m_TagString: Untagged
@@ -12748,7 +13402,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Tus amigos estan en el nexo... o quizas no existen
+  m_text: Your friends are in the nexus... or maybe they don't exist.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -12828,6 +13482,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2054545818}
   m_CullTransparentMesh: 1
+--- !u!114 &2054545822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2054545818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.none
 --- !u!1001 &2058758515
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12851,6 +13518,10 @@ PrefabInstance:
     - target: {fileID: 2573160798635781598, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_Name
       value: Stat_Attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      propertyPath: m_text
+      value: attack
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -12955,13 +13626,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2058758518}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &2058758516 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 2058758515}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2058758517 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 2058758515}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2058758518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2058758517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.attack
 --- !u!1001 &2062254231
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12996,7 +13688,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_text
-      value: cadencia
+      value: fire rate
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
@@ -13105,13 +13797,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2062254234}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &2062254232 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 2062254231}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2062254233 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 2062254231}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2062254234
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2062254233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.fireRate
 --- !u!1 &2103520747
 GameObject:
   m_ObjectHideFlags: 0
@@ -13123,6 +13836,7 @@ GameObject:
   - component: {fileID: 2103520748}
   - component: {fileID: 2103520750}
   - component: {fileID: 2103520749}
+  - component: {fileID: 2103520751}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -13169,9 +13883,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'aceptar
-
-'
+  m_text: accept
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -13251,6 +13963,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2103520747}
   m_CullTransparentMesh: 1
+--- !u!114 &2103520751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103520747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: friends.accept
 --- !u!1 &2145345824
 GameObject:
   m_ObjectHideFlags: 0
@@ -13587,6 +14312,10 @@ PrefabInstance:
       value: Stat_Attack
       objectReference: {fileID: 0}
     - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      propertyPath: m_text
+      value: attack
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431495138871453659, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
       propertyPath: m_fontSize
       value: 29
       objectReference: {fileID: 0}
@@ -13681,13 +14410,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6362107815959620350}
   m_SourcePrefab: {fileID: 100100000, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
 --- !u!224 &6362107815959620348 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8437693893534239758, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
   m_PrefabInstance: {fileID: 6362107815959620347}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6362107815959620349 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1655598873188234260, guid: d7a863a9bd47d674e9a4f664733b3fab, type: 3}
+  m_PrefabInstance: {fileID: 6362107815959620347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6362107815959620350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6362107815959620349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: stat.attack
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

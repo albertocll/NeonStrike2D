@@ -10,8 +10,8 @@ public static class MenuUiFactory
     // Estilos que en Orbitronio no se leen o rompen la regla de textos (mayúsculas, subrayado).
     private const FontStyles StylesNotAllowed = FontStyles.UpperCase | FontStyles.SmallCaps | FontStyles.Underline;
 
-    // Copia un botón (fondo y etiqueta) con otro texto, tamaño fijo y sin los listeners de la plantilla.
-    public static Button CloneButton(Button template, Transform parent, string name, string text,
+    // Copia un botón (fondo y etiqueta) con el texto de otra clave, tamaño fijo y sin los listeners de la plantilla.
+    public static Button CloneButton(Button template, Transform parent, string name, string key,
         Vector2 size, float fontSize, UnityAction onClick)
     {
         var clone = Object.Instantiate(template, parent);
@@ -19,8 +19,19 @@ public static class MenuUiFactory
         clone.onClick = new Button.ButtonClickedEvent();
         clone.onClick.AddListener(onClick);
         ((RectTransform)clone.transform).sizeDelta = size;
-        SetupLabel(clone.GetComponentInChildren<TMP_Text>(true), text, fontSize);
+        var label = clone.GetComponentInChildren<TMP_Text>(true);
+        SetupLabel(label, LanguageManager.Get(key), fontSize);
+        SetKey(label, key);
         return clone;
+    }
+
+    // Traduce el texto por clave y lo refresca al cambiar de idioma. Si el texto viene de una copia,
+    // reutiliza el LocalizedText copiado cambiándole la clave.
+    public static void SetKey(Component text, string key)
+    {
+        if (text == null) return;
+        if (!text.TryGetComponent(out LocalizedText localized)) localized = text.gameObject.AddComponent<LocalizedText>();
+        localized.Key = key;
     }
 
     // Etiqueta centrada que ocupa todo su padre, en una línea y con tamaño de fuente fijo.
@@ -36,8 +47,8 @@ public static class MenuUiFactory
         Stretch(label.rectTransform);
     }
 
-    // Texto suelto copiado de una plantilla (misma fuente y material) con tamaño fijo.
-    public static TMP_Text CreateText(TMP_Text template, Transform parent, string name, string text,
+    // Texto suelto copiado de una plantilla (misma fuente y material) con tamaño fijo, traducido por clave.
+    public static TMP_Text CreateText(TMP_Text template, Transform parent, string name, string key,
         Vector2 size, float fontSize, bool wrap)
     {
         TMP_Text t;
@@ -51,7 +62,7 @@ public static class MenuUiFactory
             t.transform.SetParent(parent, false);
         }
         t.name = name;
-        t.text = text;
+        SetKey(t, key);
         t.enableAutoSizing = false;
         t.fontSize = fontSize;
         t.fontStyle &= ~StylesNotAllowed;

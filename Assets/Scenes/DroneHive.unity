@@ -959,7 +959,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: puntos 0
+  m_text: Score 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -1219,6 +1219,7 @@ GameObject:
   - component: {fileID: 422595140}
   - component: {fileID: 422595142}
   - component: {fileID: 422595141}
+  - component: {fileID: 422595143}
   m_Layer: 5
   m_Name: TitleText
   m_TagString: Untagged
@@ -1265,7 +1266,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: fin de la partida
+  m_text: Game over
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -1345,6 +1346,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 422595139}
   m_CullTransparentMesh: 1
+--- !u!114 &422595143
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 422595139}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: gameOver.title
 --- !u!1 &445832123
 GameObject:
   m_ObjectHideFlags: 0
@@ -1680,6 +1694,7 @@ GameObject:
   - component: {fileID: 620403409}
   - component: {fileID: 620403411}
   - component: {fileID: 620403410}
+  - component: {fileID: 620403412}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -1726,7 +1741,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: inicio
+  m_text: Menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -1806,6 +1821,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620403408}
   m_CullTransparentMesh: 1
+--- !u!114 &620403412
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 620403408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: gameOver.home
 --- !u!1 &625080251
 GameObject:
   m_ObjectHideFlags: 0
@@ -2202,7 +2230,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: oleada alcanzada 0
+  m_text: Wave reached 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -2551,6 +2579,7 @@ GameObject:
   - component: {fileID: 862847736}
   - component: {fileID: 862847738}
   - component: {fileID: 862847737}
+  - component: {fileID: 862847739}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2597,7 +2626,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: reiniciar
+  m_text: Restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -2677,6 +2706,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 862847735}
   m_CullTransparentMesh: 1
+--- !u!114 &862847739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 862847735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: gameOver.restart
 --- !u!1 &875422528
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,6 +3140,7 @@ GameObject:
   - component: {fileID: 932923208}
   - component: {fileID: 932923210}
   - component: {fileID: 932923209}
+  - component: {fileID: 932923211}
   m_Layer: 5
   m_Name: TtitleText
   m_TagString: Untagged
@@ -3224,6 +3267,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 932923207}
   m_CullTransparentMesh: 1
+--- !u!114 &932923211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 932923207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: ranking.title
 --- !u!1 &997443156
 GameObject:
   m_ObjectHideFlags: 0
@@ -3428,7 +3484,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: oleada 1
+  m_text: Wave 1
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -4905,7 +4961,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: cargando
+  m_text: Loading...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -5092,10 +5148,10 @@ MonoBehaviour:
   - {fileID: 1663522414}
   - {fileID: 377516135}
   - {fileID: 1045391471}
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
 --- !u!1 &1434293239
 GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
@@ -5201,7 +5257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: puntos 0
+  m_text: Score 0
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -5292,6 +5348,7 @@ GameObject:
   - component: {fileID: 1471139679}
   - component: {fileID: 1471139681}
   - component: {fileID: 1471139680}
+  - component: {fileID: 1471139682}
   m_Layer: 5
   m_Name: Label
   m_TagString: Untagged
@@ -5351,7 +5408,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: silenciar
+  m_Text: mute
 --- !u!222 &1471139681
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5360,6 +5417,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1471139678}
   m_CullTransparentMesh: 1
+--- !u!114 &1471139682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1471139678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: pause.mute
 --- !u!1 &1473856046
 GameObject:
   m_ObjectHideFlags: 0
@@ -5371,6 +5441,7 @@ GameObject:
   - component: {fileID: 1473856047}
   - component: {fileID: 1473856049}
   - component: {fileID: 1473856048}
+  - component: {fileID: 1473856050}
   m_Layer: 5
   m_Name: RestartButtonText
   m_TagString: Untagged
@@ -5417,7 +5488,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: reiniciar
+  m_text: restart
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -5497,6 +5568,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1473856046}
   m_CullTransparentMesh: 1
+--- !u!114 &1473856050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1473856046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: pause.restart
 --- !u!1 &1492681317
 GameObject:
   m_ObjectHideFlags: 0
@@ -5740,6 +5824,7 @@ GameObject:
   - component: {fileID: 1552525811}
   - component: {fileID: 1552525813}
   - component: {fileID: 1552525812}
+  - component: {fileID: 1552525814}
   m_Layer: 5
   m_Name: ResumeButtonText
   m_TagString: Untagged
@@ -5786,7 +5871,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: reanudar
+  m_text: resume
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -5866,6 +5951,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552525810}
   m_CullTransparentMesh: 1
+--- !u!114 &1552525814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552525810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: pause.resume
 --- !u!1 &1571901891
 GameObject:
   m_ObjectHideFlags: 0
@@ -6139,7 +6237,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: vida 100
+  m_text: HP 100
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -6230,6 +6328,7 @@ GameObject:
   - component: {fileID: 1670820309}
   - component: {fileID: 1670820311}
   - component: {fileID: 1670820310}
+  - component: {fileID: 1670820312}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -6276,7 +6375,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: salir
+  m_text: exit
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -6356,6 +6455,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1670820308}
   m_CullTransparentMesh: 1
+--- !u!114 &1670820312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670820308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: menu.exit
 --- !u!1 &1697332681
 GameObject:
   m_ObjectHideFlags: 0
@@ -6492,6 +6604,7 @@ GameObject:
   - component: {fileID: 1715173932}
   - component: {fileID: 1715173934}
   - component: {fileID: 1715173933}
+  - component: {fileID: 1715173935}
   m_Layer: 5
   m_Name: PauseTitleText
   m_TagString: Untagged
@@ -6538,7 +6651,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: pausa
+  m_text: pause
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -6618,6 +6731,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1715173931}
   m_CullTransparentMesh: 1
+--- !u!114 &1715173935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1715173931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: pause.title
 --- !u!1 &1740853327
 GameObject:
   m_ObjectHideFlags: 0
@@ -7455,6 +7581,7 @@ GameObject:
   - component: {fileID: 1951793500}
   - component: {fileID: 1951793502}
   - component: {fileID: 1951793501}
+  - component: {fileID: 1951793503}
   m_Layer: 5
   m_Name: MainMenuButtonText
   m_TagString: Untagged
@@ -7501,9 +7628,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'inicio
-
-'
+  m_text: menu
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: aafe486941561564a87198d94558ae96, type: 2}
   m_sharedMaterial: {fileID: 2495246231579776681, guid: aafe486941561564a87198d94558ae96, type: 2}
@@ -7583,6 +7708,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1951793499}
   m_CullTransparentMesh: 1
+--- !u!114 &1951793503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1951793499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: pause.home
 --- !u!1 &1979385804
 GameObject:
   m_ObjectHideFlags: 0
@@ -7594,6 +7732,7 @@ GameObject:
   - component: {fileID: 1979385805}
   - component: {fileID: 1979385807}
   - component: {fileID: 1979385806}
+  - component: {fileID: 1979385808}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -7640,9 +7779,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'puntuaciones
-
-'
+  m_text: Scores
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
   m_sharedMaterial: {fileID: 3784096497526847797, guid: 8f89f9a461088c54bbbbdb5fe69ec151, type: 2}
@@ -7722,6 +7859,19 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1979385804}
   m_CullTransparentMesh: 1
+--- !u!114 &1979385808
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1979385804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66a98b90f921069409c28c79c324357f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: NeonStrike2D::LocalizedText
+  key: gameOver.scores
 --- !u!1 &2002069245
 GameObject:
   m_ObjectHideFlags: 0

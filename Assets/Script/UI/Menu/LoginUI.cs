@@ -157,11 +157,11 @@ public class LoginUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            textFeedbackLogin.text = "Rellena todos los campos.";
+            textFeedbackLogin.text = LanguageManager.Get("msg.fillFields");
             return;
         }
 
-        textFeedbackLogin.text = "Conectando...";
+        textFeedbackLogin.text = LanguageManager.Get("msg.connecting");
         buttonLogin.interactable = false;
 
         try
@@ -174,14 +174,14 @@ public class LoginUI : MonoBehaviour
                 NetworkManager.Instance.SetUserData(response.userId, response.username, response.token);
                 GameData.Username = response.username;
                 await NetworkManager.Instance.ConnectAsync();
-                textFeedbackLogin.text = $"Bienvenido, {response.username}!";
+                textFeedbackLogin.text = LanguageManager.Format("msg.welcome", response.username);
                 await Task.Delay(1000);
                 menuManager.CerrarPaneles();
                 SceneLoader.Load("CharacterSelect");
             }
             else
             {
-                textFeedbackLogin.text = response?.message ?? "Error al conectar.";
+                textFeedbackLogin.text = LanguageManager.ServerMessage(response?.message, "msg.connectError");
             }
         }
         catch (Exception e)
@@ -191,7 +191,7 @@ public class LoginUI : MonoBehaviour
             string inner = e.InnerException != null ? $" | Inner: {e.InnerException.GetType().Name}: {e.InnerException.Message}" : "";
             string fullError = $"[{errorType}] {e.Message}{inner}";
             Debug.LogError(fullError);
-            textFeedbackLogin.text = fullError.Length > 200 ? fullError.Substring(0, 200) : fullError;
+            textFeedbackLogin.text = LanguageManager.Get("msg.connectError");
         }
         finally
         {
@@ -226,17 +226,17 @@ public class LoginUI : MonoBehaviour
 
         if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))
         {
-            textFeedbackRegister.text = "Rellena todos los campos.";
+            textFeedbackRegister.text = LanguageManager.Get("msg.fillFields");
             return;
         }
 
         if (!IsValidUsername(username))
         {
-            textFeedbackRegister.text = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _.";
+            textFeedbackRegister.text = LanguageManager.Get("msg.usernameRule");
             return;
         }
 
-        textFeedbackRegister.text = "Registrando...";
+        textFeedbackRegister.text = LanguageManager.Get("msg.registering");
         buttonRegister.interactable = false;
 
         try
@@ -245,12 +245,12 @@ public class LoginUI : MonoBehaviour
 
             if (response != null && response.success)
             {
-                textFeedbackRegister.text = "Registro correcto. Ahora inicia sesión.";
+                textFeedbackRegister.text = LanguageManager.Get("msg.registered");
                 menuManager.AbrirLogin();
             }
             else
             {
-                textFeedbackRegister.text = response?.message ?? "Error al registrar.";
+                textFeedbackRegister.text = LanguageManager.ServerMessage(response?.message, "msg.registerError");
             }
         }
         catch (Exception e)
@@ -258,7 +258,8 @@ public class LoginUI : MonoBehaviour
             Debug.LogError($"[LoginUI] Error en registro: {e}");
             string errorType = e.GetType().Name;
             string inner = e.InnerException != null ? $" | Inner: {e.InnerException.GetType().Name}: {e.InnerException.Message}" : "";
-            textFeedbackRegister.text = $"[{errorType}] {e.Message}{inner}";
+            Debug.LogError($"[{errorType}] {e.Message}{inner}");
+            textFeedbackRegister.text = LanguageManager.Get("msg.connectError");
         }
         finally
         {
