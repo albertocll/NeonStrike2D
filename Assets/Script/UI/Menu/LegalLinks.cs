@@ -15,7 +15,7 @@ public class LegalLinks : MonoBehaviour
     private const string TextTerms = "terminos de uso";
     private const float FontSize = 20f;
     private static readonly Vector2 LinkSize = new Vector2(330f, 36f);
-    private static readonly Color LinkColor = new Color(0f, 0.9f, 1f, 1f);
+    private static readonly Color LinkColor = Color.white;
 
     private void Start()
     {
