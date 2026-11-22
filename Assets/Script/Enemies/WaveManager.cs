@@ -61,7 +61,7 @@ public class WaveManager : MonoBehaviour
         enemiesAlive = 0;
 
         if (waveText != null)
-            waveText.text = $"WAVE: {currentWave}";
+            waveText.text = $"oleada {currentWave}";
 
         if (level != null && currentWave == level.bossWave && level.bossPrefab != null)
             enemySpawner.SpawnBoss(level.bossPrefab, this);
@@ -77,7 +77,7 @@ public class WaveManager : MonoBehaviour
         RunState.Wave = wave;
         SFXManager.Instance?.PlayWaveStart();
         if (waveText != null)
-            waveText.text = $"WAVE: {currentWave}";
+            waveText.text = $"oleada {currentWave}";
     }
 
     public int EnemiesForWave(int wave) => baseEnemiesPerWave + ((wave - 1) * enemiesAddedPerWave);

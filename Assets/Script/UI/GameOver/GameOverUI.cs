@@ -17,6 +17,10 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private GameObject pauseButton;
     [SerializeField] private GameObject pausePanel;
 
+    // Textos del HUD (vida, puntos y oleada) que se ocultan con el fin de la partida.
+    // Al reiniciar se recarga la escena y vuelven a verse.
+    [SerializeField] private GameObject[] hudToHide;
+
     public void Show()
     {
         if (DamageOverlay.Instance != null)
@@ -34,14 +38,18 @@ public class GameOverUI : MonoBehaviour
         if (pausePanel != null)
             pausePanel.SetActive(false);
 
+        if (hudToHide != null)
+            foreach (var hud in hudToHide)
+                if (hud != null) hud.SetActive(false);
+
         if (gameOverPanel != null)
             gameOverPanel.SetActive(true);
 
         if (waveReachedText != null && waveManager != null)
-            waveReachedText.text = "WAVE " + waveManager.CurrentWave;
+            waveReachedText.text = "oleada alcanzada " + waveManager.CurrentWave;
 
         if (scoreReachedText != null && ScoreManager.Instance != null)
-            scoreReachedText.text = "SCORE: " + ScoreManager.Instance.CurrentScore;
+            scoreReachedText.text = "puntos " + ScoreManager.Instance.CurrentScore;
 
         if (rankingUI != null)
             rankingUI.Show();

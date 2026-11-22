@@ -3,23 +3,29 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Botón DELETE ACCOUNT en Opciones (issue #280, requisito de Google Play). Se crea por código copiando
-// BackButton, centrado debajo de él, y solo se ve con sesión iniciada. Abre una ventana de confirmación
+// Botón de borrar cuenta en Opciones (issue #280, requisito de Google Play). Se crea por código en la fila
+// de cuenta de la ventana de Opciones, que solo se ve con sesión iniciada. Abre una ventana de confirmación
 // (también creada por código con el estilo de Opciones) que avisa de que el borrado es irreversible;
 // al confirmar borra la cuenta en el servidor, olvida la sesión y recarga el menú principal.
 [RequireComponent(typeof(OptionsMenu))]
 public class DeleteAccountButton : MonoBehaviour
 {
-    private const string TextButton = "DELETE ACCOUNT";
-    private const string TextTitle = "DELETE ACCOUNT?";
-    private const string TextBody = "Your account, scores and friends will be deleted permanently.\nThis cannot be undone.";
-    private const string TextWorking = "Deleting...";
-    private const string TextError = "Could not delete the account. Check your connection and try again.";
-    private const float Gap = 16f;
-    private static readonly Vector2 DialogSize = new Vector2(600f, 300f);
-    private static readonly Color Dim = new Color(0f, 0f, 0f, 0.75f);
+    private const string TextButton = "borrar cuenta";
+    private const string TextTitle = "borrar cuenta";
+    private const string TextBody = "tu cuenta y tus datos se borraran para siempre";
+    private const string TextWorking = "borrando";
+    private const string TextError = "no se pudo borrar la cuenta revisa tu conexion";
+    private const string TextCancel = "cancelar";
+    private const string TextConfirm = "borrar";
 
-    private Button button;
+    private const float TitleFontSize = 40f;
+    private const float BodyFontSize = 26f;
+    private static readonly Vector2 TextSize = new Vector2(560f, 50f);
+    private static readonly Vector2 BodySize = new Vector2(560f, 80f);
+    private static readonly Vector2 DialogButtonSize = new Vector2(240f, 56f);
+    private static readonly Color Dim = new Color(0f, 0f, 0f, 1f);
+    private static readonly Color TitleColor = new Color(1f, 0.35f, 0.35f, 1f);
+
     private GameObject dialog;
     private TMP_Text bodyText;
     private Button cancelButton;
@@ -28,53 +34,46 @@ public class DeleteAccountButton : MonoBehaviour
 
     private void Start()
     {
-        GameObject panel = GetComponent<OptionsMenu>().optionsWindow;
-        Button back = null;
-        foreach (var b in panel.GetComponentsInChildren<Button>(true))
-            if (b.name == "BackButton") { back = b; break; }
-        if (back == null)
+        var options = GetComponent<OptionsMenu>();
+        Button back = options.backButton;
+        if (back == null || options.accountRow == null)
         {
-            Debug.LogWarning("[DeleteAccountButton] No se encontró BackButton; no se crea el botón de borrar cuenta.");
+            Debug.LogWarning("[DeleteAccountButton] Falta el botón de volver o la fila de cuenta; no se crea el botón de borrar cuenta.");
             enabled = false;
             return;
         }
 
-        button = CloneButton(back, back.transform.parent, "DeleteAccountButton", TextButton, OpenDialog);
-        var backRect = (RectTransform)back.transform;
-        ((RectTransform)button.transform).anchoredPosition =
-            new Vector2(0f, backRect.anchoredPosition.y - backRect.sizeDelta.y - Gap);
-        button.gameObject.SetActive(false);
+        var button = MenuUiFactory.CloneButton(back, options.accountRow, "DeleteAccountButton", TextButton,
+            OptionsMenu.AccountButtonSize, OptionsMenu.AccountFontSize, OpenDialog);
+        button.transform.SetAsLastSibling();
 
-        BuildDialog(panel.transform, back);
-    }
-
-    private void Update()
-    {
-        if (button == null) return;
-
-        // La sesión recordada se restaura en segundo plano, así que la visibilidad se comprueba cada frame.
-        bool hasSession = NetworkManager.Instance != null && !string.IsNullOrEmpty(NetworkManager.Instance.Token);
-        if (button.gameObject.activeSelf != hasSession) button.gameObject.SetActive(hasSession);
+        BuildDialog(options.optionsWindow.transform, back);
     }
 
     // Fondo oscuro a pantalla completa (bloquea los toques a Opciones) con una ventana centrada
-    // que copia la imagen de la ventana de Opciones.
+    // que copia la imagen de la ventana de Opciones. Título, texto y botones van en columna.
     private void BuildDialog(Transform panel, Button back)
     {
         dialog = new GameObject("DeleteAccountDialog", typeof(RectTransform), typeof(Image));
         var dimRect = (RectTransform)dialog.transform;
         dimRect.SetParent(panel, false);
-        dimRect.anchorMin = Vector2.zero;
-        dimRect.anchorMax = Vector2.one;
-        dimRect.offsetMin = dimRect.offsetMax = Vector2.zero;
+        MenuUiFactory.Stretch(dimRect);
         dialog.GetComponent<Image>().color = Dim;
 
-        var window = new GameObject("Window", typeof(RectTransform), typeof(Image));
+        var window = new GameObject("Window", typeof(RectTransform));
         var windowRect = (RectTransform)window.transform;
         windowRect.SetParent(dimRect, false);
-        windowRect.sizeDelta = DialogSize;
-        var windowImage = window.GetComponent<Image>();
-        var optionsImage = back.transform.parent.GetComponent<Image>();
+        windowRect.anchorMin = windowRect.anchorMax = windowRect.pivot = new Vector2(0.5f, 0.5f);
+
+        // El fondo va en un hijo que se estira y no cuenta para el layout: si la imagen estuviera en la
+        // propia ventana, su tamaño de sprite mandaría sobre el ContentSizeFitter.
+        var background = new GameObject("Fondo", typeof(RectTransform), typeof(Image), typeof(LayoutElement));
+        var backgroundRect = (RectTransform)background.transform;
+        backgroundRect.SetParent(windowRect, false);
+        MenuUiFactory.Stretch(backgroundRect);
+        background.GetComponent<LayoutElement>().ignoreLayout = true;
+        var windowImage = background.GetComponent<Image>();
+        var optionsImage = OptionsMenu.WindowBackground(back.transform.parent);
         if (optionsImage != null)
         {
             windowImage.sprite = optionsImage.sprite;
@@ -87,68 +86,26 @@ public class DeleteAccountButton : MonoBehaviour
             windowImage.color = new Color(0.03f, 0.04f, 0.06f, 1f);
         }
 
-        var labelTemplate = back.GetComponentInChildren<TMP_Text>(true);
-        var title = CreateText(labelTemplate, windowRect, TextTitle, new Vector2(0f, 100f), new Vector2(540f, 50f), 1.4f);
-        title.color = new Color(1f, 0.35f, 0.35f, 1f);
-        bodyText = CreateText(labelTemplate, windowRect, TextBody, new Vector2(0f, 15f), new Vector2(540f, 110f), 1f);
+        var column = window.AddComponent<VerticalLayoutGroup>();
+        column.padding = new RectOffset(40, 40, 40, 40);
+        column.spacing = 24f;
+        column.childAlignment = TextAnchor.MiddleCenter;
+        column.childControlWidth = column.childControlHeight = false;
+        column.childForceExpandWidth = column.childForceExpandHeight = false;
+        var fitter = window.AddComponent<ContentSizeFitter>();
+        fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+        fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-        cancelButton = CloneButton(back, windowRect, "CancelButton", "CANCEL", CloseDialog);
-        confirmButton = CloneButton(back, windowRect, "ConfirmDeleteButton", "DELETE", OnConfirmClicked);
-        PlaceInWindow(cancelButton, new Vector2(-130f, -100f));
-        PlaceInWindow(confirmButton, new Vector2(130f, -100f));
+        var labelTemplate = back.GetComponentInChildren<TMP_Text>(true);
+        var title = MenuUiFactory.CreateText(labelTemplate, windowRect, "Title", TextTitle, TextSize, TitleFontSize, false);
+        title.color = TitleColor;
+        bodyText = MenuUiFactory.CreateText(labelTemplate, windowRect, "Body", TextBody, BodySize, BodyFontSize, true);
+
+        var row = MenuUiFactory.CreateGroup(windowRect, "Buttons", new Vector2(TextSize.x, DialogButtonSize.y), true, 40f);
+        cancelButton = MenuUiFactory.CloneButton(back, row, "CancelButton", TextCancel, DialogButtonSize, OptionsMenu.AccountFontSize, CloseDialog);
+        confirmButton = MenuUiFactory.CloneButton(back, row, "ConfirmDeleteButton", TextConfirm, DialogButtonSize, OptionsMenu.AccountFontSize, OnConfirmClicked);
 
         dialog.SetActive(false);
-    }
-
-    private Button CloneButton(Button template, Transform parent, string name, string text, UnityEngine.Events.UnityAction onClick)
-    {
-        var clone = Instantiate(template, parent);
-        clone.name = name;
-        clone.onClick = new Button.ButtonClickedEvent(); // quita el CloseOptions copiado del botón de volver
-        clone.onClick.AddListener(onClick);
-
-        var label = clone.GetComponentInChildren<TMP_Text>(true);
-        if (label != null)
-        {
-            label.text = text;
-            var rect = (RectTransform)clone.transform;
-            float needed = label.GetPreferredValues(text).x + 20f;
-            if (needed > rect.sizeDelta.x) rect.sizeDelta = new Vector2(needed, rect.sizeDelta.y);
-        }
-        return clone;
-    }
-
-    private static void PlaceInWindow(Button b, Vector2 pos)
-    {
-        var rect = (RectTransform)b.transform;
-        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = pos;
-    }
-
-    private static TMP_Text CreateText(TMP_Text template, RectTransform parent, string text, Vector2 pos, Vector2 size, float scale)
-    {
-        TMP_Text t;
-        if (template != null)
-        {
-            t = Instantiate(template, parent);
-            t.fontSize = template.fontSize * scale;
-        }
-        else
-        {
-            t = new GameObject("Text", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
-            t.transform.SetParent(parent, false);
-            t.fontSize = 24f * scale;
-        }
-
-        var rect = t.rectTransform;
-        rect.anchorMin = rect.anchorMax = new Vector2(0.5f, 0.5f);
-        rect.pivot = new Vector2(0.5f, 0.5f);
-        rect.anchoredPosition = pos;
-        rect.sizeDelta = size;
-        t.alignment = TextAlignmentOptions.Center;
-        t.textWrappingMode = TextWrappingModes.Normal;
-        t.text = text;
-        return t;
     }
 
     private void OpenDialog()

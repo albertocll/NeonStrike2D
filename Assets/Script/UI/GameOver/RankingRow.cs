@@ -22,7 +22,7 @@ public class RankingRow : MonoBehaviour
         }
         if (bestWaveText != null)
         {
-            bestWaveText.text = $"Wave {bestWave}";
+            bestWaveText.text = $"oleada {bestWave}";
             bestWaveText.alignment = TextAlignmentOptions.Center;
         }
         if (scoreText != null)

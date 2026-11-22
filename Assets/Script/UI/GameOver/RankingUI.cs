@@ -45,7 +45,7 @@ public class RankingUI : MonoBehaviour
         if (statusText != null)
         {
             statusText.gameObject.SetActive(true);
-            statusText.text = "Loading...";
+            statusText.text = "cargando";
         }
 
         if (ApiManager.Instance == null)
@@ -61,7 +61,7 @@ public class RankingUI : MonoBehaviour
 
             if (string.IsNullOrEmpty(json))
             {
-                if (statusText != null) statusText.text = "Error: no response from server.";
+                if (statusText != null) statusText.text = "No se pudo conectar con el servidor";
                 return;
             }
 
@@ -85,7 +85,7 @@ public class RankingUI : MonoBehaviour
         catch (Exception e)
         {
             Debug.LogError($"[RankingUI] Error cargando ranking: {e.Message}");
-            if (statusText != null) statusText.text = "Error loading ranking.";
+            if (statusText != null) statusText.text = "No se pudo cargar el ranking";
         }
     }
 }
