@@ -40,6 +40,6 @@ public class ScoreManager : MonoBehaviour
     private void UpdateUI()
     {
         if (scoreText != null)
-            scoreText.text = $"SCORE: {currentScore}";
+            scoreText.text = $"puntos {currentScore}";
     }
 }

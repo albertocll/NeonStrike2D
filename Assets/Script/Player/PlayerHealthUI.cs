@@ -10,7 +10,7 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (playerHealth == null || healthText == null) return;
 
-        healthText.text = "HP: " + playerHealth.CurrentHealth;
+        healthText.text = "vida " + playerHealth.CurrentHealth;
     }
 
     private void Start()
