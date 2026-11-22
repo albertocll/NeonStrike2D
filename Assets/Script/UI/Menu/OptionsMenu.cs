@@ -11,10 +11,28 @@ public class OptionsMenu : MonoBehaviour
     public Slider sfxSlider;
     public Toggle sfxToggle;
 
+    [Header("Filas de la ventana (las coloca su layout)")]
+    public Button backButton;
+    public RectTransform leftHandedRow;
+    public RectTransform accountRow;
+    public RectTransform legalRow;
+
+    private const string TextLeftHanded = "modo zurdo";
+    private const string TextLogout = "cerrar sesion";
+    private const float ToggleFontSize = 34f;
+    private static readonly Vector2 LeftHandedSize = new Vector2(330f, 40f);
+    public const float AccountFontSize = 28f;
+    public static readonly Vector2 AccountButtonSize = new Vector2(300f, 56f);
+
     private float cachedVolume = 1f;
 
-    // Botón LOGOUT (issue #230): copia del botón de volver, reflejado al otro lado de la ventana.
-    private GameObject logoutButton;
+    // Imagen de fondo de la ventana de Opciones: está en el hijo Fondo para que el layout no use
+    // el tamaño del sprite. Si no existe, la de la propia ventana.
+    public static Image WindowBackground(Transform window)
+    {
+        var background = window.Find("Fondo");
+        return background != null ? background.GetComponent<Image>() : window.GetComponent<Image>();
+    }
 
     private void Start()
     {
@@ -47,24 +65,24 @@ public class OptionsMenu : MonoBehaviour
         }
     }
 
-    // Ajuste de controles para zurdos (issue #232): copia del toggle de efectos, a la altura del botón de volver.
+    // Ajuste de controles para zurdos (issue #232): copia del toggle de efectos en su propia fila.
     private void CreateLeftHandedToggle()
     {
-        if (sfxToggle == null) return;
+        if (sfxToggle == null || leftHandedRow == null) return;
 
-        var toggle = Instantiate(sfxToggle, sfxToggle.transform.parent);
+        var toggle = Instantiate(sfxToggle, leftHandedRow);
         toggle.name = "LeftHandedToggle";
         toggle.onValueChanged = new Toggle.ToggleEvent(); // sin los listeners copiados del toggle de efectos
-
-        var rect = (RectTransform)toggle.transform;
-        var sfxRect = (RectTransform)sfxToggle.transform;
-        float y = sfxRect.anchoredPosition.y - 60f;
-        foreach (var b in optionsWindow.GetComponentsInChildren<Button>(true))
-            if (b.name == "BackButton") { y = ((RectTransform)b.transform).anchoredPosition.y; break; }
-        rect.anchoredPosition = new Vector2(sfxRect.anchoredPosition.x, y);
+        ((RectTransform)toggle.transform).sizeDelta = LeftHandedSize;
 
         var label = toggle.GetComponentInChildren<TMP_Text>(true);
-        if (label != null) label.text = "left-handed";
+        if (label != null)
+        {
+            label.text = TextLeftHanded;
+            label.enableAutoSizing = false;
+            label.fontSize = ToggleFontSize;
+            label.textWrappingMode = TextWrappingModes.NoWrap;
+        }
 
         toggle.isOn = Joystick.LeftHanded;
         toggle.onValueChanged.AddListener(isOn => Joystick.LeftHanded = isOn);
@@ -72,51 +90,32 @@ public class OptionsMenu : MonoBehaviour
 
     private void Update()
     {
-        // La sesión recordada se restaura en segundo plano, así que la visibilidad se comprueba cada frame.
-        if (logoutButton != null)
+        // La sesión recordada se restaura en segundo plano, así que la fila de cuenta se comprueba cada frame.
+        if (accountRow != null)
         {
             bool hasSession = NetworkManager.Instance != null && !string.IsNullOrEmpty(NetworkManager.Instance.Token);
-            if (logoutButton.activeSelf != hasSession) logoutButton.SetActive(hasSession);
+            if (accountRow.gameObject.activeSelf != hasSession) accountRow.gameObject.SetActive(hasSession);
         }
     }
 
+    // Botón de cerrar sesión (issue #230): primero de la fila de cuenta.
     private void CreateLogoutButton()
     {
-        Button back = null;
-        foreach (var b in optionsWindow.GetComponentsInChildren<Button>(true))
-            if (b.name == "BackButton") { back = b; break; }
-        if (back == null)
+        if (backButton == null || accountRow == null)
         {
-            Debug.LogWarning("[OptionsMenu] No se encontró BackButton; no se crea el botón LOGOUT.");
+            Debug.LogWarning("[OptionsMenu] Falta el botón de volver o la fila de cuenta; no se crea el botón de cerrar sesion.");
             return;
         }
 
-        var button = Instantiate(back, back.transform.parent);
-        button.name = "LogoutButton";
-        button.onClick = new Button.ButtonClickedEvent(); // quita el CloseOptions copiado del botón de volver
-        button.onClick.AddListener(OnLogoutClicked);
-
-        var rect = (RectTransform)button.transform;
-        var backRect = (RectTransform)back.transform;
-        rect.anchoredPosition = new Vector2(-backRect.anchoredPosition.x, backRect.anchoredPosition.y);
-
-        var label = button.GetComponentInChildren<TMP_Text>(true);
-        if (label != null)
-        {
-            label.text = "LOGOUT";
-            // Ensancha el fondo si el texto no cabe en el ancho del botón de volver.
-            float needed = label.GetPreferredValues("LOGOUT").x + 20f;
-            if (needed > rect.sizeDelta.x) rect.sizeDelta = new Vector2(needed, rect.sizeDelta.y);
-        }
-
-        logoutButton = button.gameObject;
-        logoutButton.SetActive(false);
+        var button = MenuUiFactory.CloneButton(backButton, accountRow, "LogoutButton", TextLogout,
+            AccountButtonSize, AccountFontSize, OnLogoutClicked);
+        button.transform.SetAsFirstSibling();
     }
 
     private async void OnLogoutClicked()
     {
-        logoutButton.GetComponent<Button>().interactable = false;
-        CloseOptions();
+        var menuManager = FindFirstObjectByType<MenuManager>();
+        if (menuManager != null) menuManager.CerrarPaneles();
         await LoginUI.LogoutAsync();
     }
 
@@ -128,16 +127,6 @@ public class OptionsMenu : MonoBehaviour
     public void OnSfxToggleChanged(bool isOn)
     {
         SFXManager.Instance?.SetMuted(!isOn);
-    }
-
-    public void OpenOptions()
-    {
-        optionsWindow.SetActive(true);
-    }
-
-    public void CloseOptions()
-    {
-        optionsWindow.SetActive(false);
     }
 
     public void OnMusicSliderChanged(float value)
