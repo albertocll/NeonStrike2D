@@ -84,6 +84,14 @@ public static class LocalizedTexts
         { "server.badCredentials", ("Credenciales incorrectas.", "Wrong email, username or password.") },
         { "server.loginOk", ("Sesión iniciada.", "Logged in.") },
         { "server.playerOffline", ("El jugador no está conectado.", "That player is not online.") },
+        { "server.invalidEmail", ("El correo no es válido.", "That email is not valid.") },
+        { "server.passwordRule", ("La contraseña debe tener entre 8 y 128 caracteres.", "Password must be 8 to 128 characters.") },
+        { "server.rateLimited", ("Demasiados intentos. Espera un poco y vuelve a probar.", "Too many attempts. Wait a moment and try again.") },
+        { "server.scoreRejected", ("Resultado de partida no válido.", "Invalid match result.") },
+        { "server.userNotFound", ("Usuario no encontrado.", "User not found.") },
+        { "server.cannotAddSelf", ("No puedes añadirte a ti mismo.", "You can't add yourself.") },
+        { "server.requestExists", ("Ya existe una solicitud entre estos usuarios.", "There is already a request between you.") },
+        { "server.requestNotFound", ("Solicitud no encontrada.", "Request not found.") },
 
         // Selección de personaje (Orbitronio)
         { "select.title", ("elige personaje", "choose character") },
@@ -173,7 +181,35 @@ public static class LocalizedTexts
         { "El jugador no está conectado.", "server.playerOffline" },
     };
 
+    // Códigos de error del backend (campo code) y su texto.
+    private static readonly Dictionary<string, string> ServerCodes = new()
+    {
+        { "USERNAME_REQUIRED", "server.usernameRequired" },
+        { "EMAIL_REQUIRED", "server.emailRequired" },
+        { "PASSWORD_REQUIRED", "server.passwordRequired" },
+        { "LOGIN_REQUIRED", "server.loginRequired" },
+        { "INVALID_USERNAME", "msg.usernameRule" },
+        { "INVALID_EMAIL", "server.invalidEmail" },
+        { "INVALID_PASSWORD", "server.passwordRule" },
+        { "EMAIL_TAKEN", "server.emailTaken" },
+        { "USERNAME_TAKEN", "server.usernameTaken" },
+        { "BAD_CREDENTIALS", "server.badCredentials" },
+        { "RATE_LIMITED", "server.rateLimited" },
+        { "SCORE_REJECTED", "server.scoreRejected" },
+        { "USER_NOT_FOUND", "server.userNotFound" },
+        { "CANNOT_ADD_SELF", "server.cannotAddSelf" },
+        { "REQUEST_EXISTS", "server.requestExists" },
+        { "REQUEST_NOT_FOUND", "server.requestNotFound" },
+        { "PLAYER_OFFLINE", "server.playerOffline" },
+    };
+
     public static IEnumerable<string> Keys => Texts.Keys;
+    public static IEnumerable<string> CodeKeys => ServerCodes.Values;
+
+    public static bool TryGetCodeKey(string code, out string key)
+    {
+        return ServerCodes.TryGetValue(code, out key);
+    }
 
     public static bool TryGet(string key, LanguageManager.Language language, out string text)
     {

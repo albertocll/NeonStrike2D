@@ -145,8 +145,17 @@ public class MultiplayerUI : MonoBehaviour
         buttonAddFriend.interactable = false;
         ShowStatus(LanguageManager.Get("mp.sendingRequest"));
         var result = await ApiManager.Instance.SendFriendRequestAsync(username);
-        await NetworkManager.Instance.SendFriendRequestSignalRAsync(username);
-        ShowStatus(LanguageManager.Get(string.IsNullOrEmpty(result) ? "mp.requestError" : "mp.requestSent"));
+        var response = string.IsNullOrEmpty(result) ? null : JsonUtility.FromJson<FriendRequestResponse>(result);
+        if (response != null && response.success)
+        {
+            await NetworkManager.Instance.SendFriendRequestSignalRAsync(username);
+            ShowStatus(LanguageManager.Get("mp.requestSent"));
+        }
+        else
+        {
+            // Usuario que no existe, solicitud repetida, demasiados intentos...: el motivo, traducido.
+            ShowStatus(LanguageManager.ServerError(response?.code, response?.message, "mp.requestError"));
+        }
         buttonAddFriend.interactable = true;
     }
 
@@ -178,9 +187,9 @@ public class MultiplayerUI : MonoBehaviour
         ShowStatus(LanguageManager.Get("mp.waiting"), 10000);
     }
 
-    private void OnInviteError(string message)
+    private void OnInviteError(string code, string message)
     {
-        ShowStatus(LanguageManager.ServerMessage(message, "server.playerOffline"));
+        ShowStatus(LanguageManager.ServerError(code, message, "server.playerOffline"));
         buttonSendInvite.interactable = true;
     }
 

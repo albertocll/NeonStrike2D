@@ -58,6 +58,15 @@ public static class LanguageManager
         return string.Format(Get(key), args);
     }
 
+    // Error del servidor: se traduce por su código. Sin código conocido (servidor antiguo), por el
+    // texto del mensaje, y si tampoco, la clave de respaldo.
+    public static string ServerError(string code, string message, string fallbackKey)
+    {
+        if (!string.IsNullOrEmpty(code) && LocalizedTexts.TryGetCodeKey(code.Trim(), out var key))
+            return Get(key);
+        return ServerMessage(message, fallbackKey);
+    }
+
     // Mensajes del servidor que se enseñan al jugador: llegan en español, así que se traducen en el
     // cliente. Si el mensaje no es uno conocido se usa la clave de respaldo.
     public static string ServerMessage(string message, string fallbackKey)

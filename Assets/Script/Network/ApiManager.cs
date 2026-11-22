@@ -159,14 +159,14 @@ public class ApiManager : MonoBehaviour
 
 // DTOs
 [Serializable] public class LoginRequest { public string email; public string password; }
-[Serializable] public class LoginResponse { public bool success; public string message; public int userId; public string username; public string email; public string token; }
+[Serializable] public class LoginResponse { public bool success; public string message; public string code; public int userId; public string username; public string email; public string token; }
 // /me devuelve userId como texto porque sale directamente del claim del JWT.
 [Serializable] public class MeResponse { public string userId; public string username; public string email; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
-[Serializable] public class RegisterResponse { public bool success; public string message; }
+[Serializable] public class RegisterResponse { public bool success; public string message; public string code; }
 [Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; public int score; }
 [Serializable] public class RankingList { public RankingEntry[] items; }
 [Serializable] public class MatchResultRequest { public int userId; public int bestWave; public int score; }
-[Serializable] public class FriendRequestResponse { public bool success; public string message; }
+[Serializable] public class FriendRequestResponse { public bool success; public string message; public string code; }
 [Serializable] public class OnlineFriendsResponse { public string[] items; }
 [Serializable] public class UserResponse { public int userId; public string username; }

@@ -1,7 +1,6 @@
 using System.Text;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +11,7 @@ using NeonStrike2D.Backend.Api.Data;
 using NeonStrike2D.Backend.Api.Dtos;
 using NeonStrike2D.Backend.Api.Hubs;
 using NeonStrike2D.Backend.Api.Models;
+using NeonStrike2D.Backend.Api.Security;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -38,6 +38,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddGameRateLimits();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -51,7 +52,9 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    // Las pruebas usan una base de datos en memoria, sin migraciones.
+    if (db.Database.IsRelational())
+        db.Database.Migrate();
 }
 
 if (app.Environment.IsDevelopment())
@@ -62,11 +65,12 @@ if (app.Environment.IsDevelopment())
 
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRateLimiter();
 app.UseWebSockets();
 
 // ── GENERAL ──────────────────────────────────────────────────────────────────
 
-app.MapGet("/", () => "NeonStrike2D Backend API running");
+app.MapGet("/", () => "NeonStrike2D Backend API running").RequireRateLimiting(RateLimits.Public);
 
 app.MapGet("/me", async (ClaimsPrincipal user, AppDbContext db) =>
 {
@@ -79,7 +83,7 @@ app.MapGet("/me", async (ClaimsPrincipal user, AppDbContext db) =>
         return Results.Unauthorized();
 
     return Results.Ok(new { UserId = userId, Username = username, Email = email });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // Borrado de cuenta (issue #280, requisito de Google Play): borra el usuario y todos sus datos
 // en una transacción y cierra su WebSocket si está conectado.
@@ -101,33 +105,39 @@ app.MapDelete("/me", async (ClaimsPrincipal user, AppDbContext db) =>
 
     await WebSocketHandler.DisconnectUserAsync(username);
     return Results.Ok(new { Success = true });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 
 app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Username))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El username es obligatorio." });
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El username es obligatorio.", Code = ErrorCodes.UsernameRequired });
 
     if (string.IsNullOrWhiteSpace(request.Email))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El email es obligatorio." });
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El email es obligatorio.", Code = ErrorCodes.EmailRequired });
 
     if (string.IsNullOrWhiteSpace(request.Password))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "La contraseña es obligatoria." });
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "La contraseña es obligatoria.", Code = ErrorCodes.PasswordRequired });
 
     var username = request.Username.Trim();
     var email = request.Email.Trim();
 
-    // Misma regla que LoginUI.IsValidUsername en el cliente (#208).
-    if (!Regex.IsMatch(username, "^[A-Za-z0-9_]{3,16}$"))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _." });
+    if (!AccountRules.IsValidUsername(username))
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El nombre de usuario debe tener entre 3 y 16 caracteres: letras, números o _.", Code = ErrorCodes.InvalidUsername });
+
+    if (!AccountRules.IsValidEmail(email))
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "El correo no es válido.", Code = ErrorCodes.InvalidEmail });
+
+    // Solo al registrarse: las cuentas antiguas con contraseñas más cortas siguen entrando.
+    if (!AccountRules.IsValidPassword(request.Password))
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "La contraseña debe tener entre 8 y 128 caracteres.", Code = ErrorCodes.InvalidPassword });
 
     if (await db.Users.AnyAsync(u => u.Email.ToLower() == email.ToLower()))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese email ya está registrado." });
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese email ya está registrado.", Code = ErrorCodes.EmailTaken });
 
     if (await db.Users.AnyAsync(u => u.Username.ToLower() == username.ToLower()))
-        return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese username ya está en uso." });
+        return Results.BadRequest(new RegisterResponse { Success = false, Message = "Ese username ya está en uso.", Code = ErrorCodes.UsernameTaken });
 
     var user = new User { Username = username, Email = email };
     var passwordHasher = new PasswordHasher<User>();
@@ -137,15 +147,15 @@ app.MapPost("/register", async (RegisterRequest request, AppDbContext db) =>
     await db.SaveChangesAsync();
 
     return Results.Ok(new RegisterResponse { Success = true, Message = "Usuario registrado correctamente." });
-});
+}).RequireRateLimiting(RateLimits.Register);
 
 app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
 {
     if (string.IsNullOrWhiteSpace(request.Email))
-        return Results.BadRequest(new LoginResponse { Success = false, Message = "El email o usuario es obligatorio." });
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "El email o usuario es obligatorio.", Code = ErrorCodes.LoginRequired });
 
     if (string.IsNullOrWhiteSpace(request.Password))
-        return Results.BadRequest(new LoginResponse { Success = false, Message = "La contraseña es obligatoria." });
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "La contraseña es obligatoria.", Code = ErrorCodes.PasswordRequired });
 
     var input = request.Email.Trim().ToLower();
     User? user;
@@ -155,12 +165,12 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
         user = await db.Users.FirstOrDefaultAsync(u => u.Username.ToLower() == input);
 
     if (user == null)
-        return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas.", Code = ErrorCodes.BadCredentials });
 
     var passwordHasher = new PasswordHasher<User>();
     var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, request.Password);
     if (result == PasswordVerificationResult.Failed)
-        return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas." });
+        return Results.BadRequest(new LoginResponse { Success = false, Message = "Credenciales incorrectas.", Code = ErrorCodes.BadCredentials });
 
     var claims = new[]
     {
@@ -188,7 +198,7 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
         Email = user.Email,
         Token = new JwtSecurityTokenHandler().WriteToken(token)
     });
-});
+}).RequireRateLimiting(RateLimits.Login);
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 
@@ -196,6 +206,10 @@ app.MapPost("/match/result", async (MatchResultRequest request, ClaimsPrincipal 
 {
     // El resultado siempre es del usuario del token, nunca del id que llegue en el cuerpo (issue #288).
     var userId = int.Parse(user.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+
+    // Resultado imposible con los datos del juego: no se guarda (ver MatchResultRules).
+    if (!MatchResultRules.IsValid(request.BestWave, request.Score))
+        return Results.BadRequest(new { Success = false, Message = "Resultado de partida no válido.", Code = ErrorCodes.ScoreRejected });
 
     var session = new GameSession
     {
@@ -225,7 +239,7 @@ app.MapPost("/match/result", async (MatchResultRequest request, ClaimsPrincipal 
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.MatchResult);
 
 app.MapGet("/ranking", async (AppDbContext db) =>
 {
@@ -244,7 +258,7 @@ app.MapGet("/ranking", async (AppDbContext db) =>
     .ToListAsync();
 
     return Results.Ok(ranking);
-});
+}).RequireRateLimiting(RateLimits.Public);
 
 // ── AMIGOS ───────────────────────────────────────────────────────────────────
 
@@ -254,17 +268,17 @@ app.MapPost("/friends/request/{username}", async (string username, ClaimsPrincip
 
     var addressee = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
     if (addressee == null)
-        return Results.BadRequest(new { Success = false, Message = "Usuario no encontrado." });
+        return Results.BadRequest(new { Success = false, Message = "Usuario no encontrado.", Code = ErrorCodes.UserNotFound });
 
     if (addressee.Id == requesterId)
-        return Results.BadRequest(new { Success = false, Message = "No puedes añadirte a ti mismo." });
+        return Results.BadRequest(new { Success = false, Message = "No puedes añadirte a ti mismo.", Code = ErrorCodes.CannotAddSelf });
 
     var exists = await db.Friendships.AnyAsync(f =>
         (f.RequesterId == requesterId && f.AddresseeId == addressee.Id) ||
         (f.RequesterId == addressee.Id && f.AddresseeId == requesterId));
 
     if (exists)
-        return Results.BadRequest(new { Success = false, Message = "Ya existe una solicitud entre estos usuarios." });
+        return Results.BadRequest(new { Success = false, Message = "Ya existe una solicitud entre estos usuarios.", Code = ErrorCodes.RequestExists });
 
     db.Friendships.Add(new Friendship
     {
@@ -276,7 +290,7 @@ app.MapPost("/friends/request/{username}", async (string username, ClaimsPrincip
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true, Message = "Solicitud enviada." });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrincipal user, AppDbContext db) =>
 {
@@ -286,13 +300,13 @@ app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrinc
         f.RequesterId == requesterId && f.AddresseeId == addresseeId && f.Status == FriendshipStatus.Pending);
 
     if (friendship == null)
-        return Results.NotFound(new { Success = false, Message = "Solicitud no encontrada." });
+        return Results.NotFound(new { Success = false, Message = "Solicitud no encontrada.", Code = ErrorCodes.RequestNotFound });
 
     friendship.Status = FriendshipStatus.Accepted;
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true, Message = "Solicitud aceptada." });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db) =>
 {
@@ -306,7 +320,7 @@ app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db) =>
     var onlineFriends = friends.Where(f => WebSocketHandler.IsUserOnline(f)).ToList();
 
     return Results.Ok(onlineFriends);
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── USUARIOS ─────────────────────────────────────────────────────────────────
 
@@ -315,14 +329,17 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
     var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
     if (user == null) return Results.NotFound();
     return Results.Ok(new { userId = user.Id, username = user.Username });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── WEBSOCKET ────────────────────────────────────────────────────────────────
 
-app.Map("/ws", WebSocketHandler.Handle);
+app.Map("/ws", WebSocketHandler.Handle).RequireRateLimiting(RateLimits.Public);
 
 // Solo en local: en produccion no se expone quien esta conectado (issue #281).
 if (app.Environment.IsDevelopment())
     app.MapGet("/debug/online", () => Results.Ok(WebSocketHandler.GetOnlineUsers()));
 
 app.Run();
+
+// Para las pruebas de integración (WebApplicationFactory).
+public partial class Program;
