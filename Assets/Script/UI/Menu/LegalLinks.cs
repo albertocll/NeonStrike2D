@@ -11,8 +11,8 @@ public class LegalLinks : MonoBehaviour
     public const string PrivacyUrl = "https://neonstrike-game.netlify.app/politica-privacidad.html";
     public const string TermsUrl = "https://neonstrike-game.netlify.app/terminos-uso.html";
 
-    private const string TextPrivacy = "politica de privacidad";
-    private const string TextTerms = "terminos de uso";
+    private const string KeyPrivacy = "options.privacy";
+    private const string KeyTerms = "options.terms";
     private const float FontSize = 20f;
     private static readonly Vector2 LinkSize = new Vector2(330f, 36f);
     private static readonly Color LinkColor = Color.white;
@@ -28,18 +28,18 @@ public class LegalLinks : MonoBehaviour
         }
 
         var template = options.backButton.GetComponentInChildren<TMP_Text>(true);
-        CreateLink(template, options.legalRow, "PrivacyLink", TextPrivacy, PrivacyUrl);
-        CreateLink(template, options.legalRow, "TermsLink", TextTerms, TermsUrl);
+        CreateLink(template, options.legalRow, "PrivacyLink", KeyPrivacy, PrivacyUrl);
+        CreateLink(template, options.legalRow, "TermsLink", KeyTerms, TermsUrl);
     }
 
-    private static void CreateLink(TMP_Text template, Transform parent, string name, string text, string url)
+    private static void CreateLink(TMP_Text template, Transform parent, string name, string key, string url)
     {
         var go = new GameObject(name, typeof(RectTransform));
         var rect = (RectTransform)go.transform;
         rect.SetParent(parent, false);
         rect.sizeDelta = LinkSize;
 
-        var label = MenuUiFactory.CreateText(template, rect, "Label", text, LinkSize, FontSize, false);
+        var label = MenuUiFactory.CreateText(template, rect, "Label", key, LinkSize, FontSize, false);
         MenuUiFactory.Stretch(label.rectTransform);
         label.color = LinkColor;
         label.raycastTarget = true;

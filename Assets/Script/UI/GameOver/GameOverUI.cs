@@ -46,10 +46,10 @@ public class GameOverUI : MonoBehaviour
             gameOverPanel.SetActive(true);
 
         if (waveReachedText != null && waveManager != null)
-            waveReachedText.text = "oleada alcanzada " + waveManager.CurrentWave;
+            waveReachedText.text = LanguageManager.Format("gameOver.wave", waveManager.CurrentWave);
 
         if (scoreReachedText != null && ScoreManager.Instance != null)
-            scoreReachedText.text = "puntos " + ScoreManager.Instance.CurrentScore;
+            scoreReachedText.text = LanguageManager.Format("gameOver.score", ScoreManager.Instance.CurrentScore);
 
         if (rankingUI != null)
             rankingUI.Show();

@@ -130,7 +130,7 @@ public class MultiplayerUI : MonoBehaviour
         if (string.IsNullOrEmpty(toUsername)) return;
 
         buttonSendInvite.interactable = false;
-        ShowStatus("Enviando invitación...");
+        ShowStatus(LanguageManager.Get("mp.sendingInvite"));
         GameData.RemoteUsername = toUsername;
         GameData.IsHost = true;
         await NetworkManager.Instance.SendInviteAsync(toUsername);
@@ -143,17 +143,17 @@ public class MultiplayerUI : MonoBehaviour
         if (string.IsNullOrEmpty(username)) return;
 
         buttonAddFriend.interactable = false;
-        ShowStatus("Enviando solicitud...");
+        ShowStatus(LanguageManager.Get("mp.sendingRequest"));
         var result = await ApiManager.Instance.SendFriendRequestAsync(username);
         await NetworkManager.Instance.SendFriendRequestSignalRAsync(username);
-        ShowStatus(string.IsNullOrEmpty(result) ? "Error al enviar solicitud." : "Solicitud enviada!");
+        ShowStatus(LanguageManager.Get(string.IsNullOrEmpty(result) ? "mp.requestError" : "mp.requestSent"));
         buttonAddFriend.interactable = true;
     }
 
     private void OnFriendRequestReceived(string fromUsername)
     {
         _pendingFriendRequestFrom = fromUsername;
-        textFriendRequestFrom.text = $"{fromUsername} quiere ser tu amigo";
+        textFriendRequestFrom.text = LanguageManager.Format("mp.friendRequest", fromUsername);
         friendRequestPanel.SetActive(true);
     }
 
@@ -175,18 +175,18 @@ public class MultiplayerUI : MonoBehaviour
     {
         _pendingRoomId = roomId;
         GameData.RoomId = roomId;
-        ShowStatus("Esperando respuesta...", 10000);
+        ShowStatus(LanguageManager.Get("mp.waiting"), 10000);
     }
 
     private void OnInviteError(string message)
     {
-        ShowStatus(message);
+        ShowStatus(LanguageManager.ServerMessage(message, "server.playerOffline"));
         buttonSendInvite.interactable = true;
     }
 
     private void OnInviteDeclined()
     {
-        ShowStatus("Invitación rechazada.");
+        ShowStatus(LanguageManager.Get("mp.declined"));
         buttonSendInvite.interactable = true;
     }
 
@@ -194,7 +194,7 @@ public class MultiplayerUI : MonoBehaviour
     {
         _pendingFromUsername = fromUsername;
         _pendingRoomId = roomId;
-        textInviteFrom.text = $"{fromUsername} te ha invitado a jugar";
+        textInviteFrom.text = LanguageManager.Format("mp.invited", fromUsername);
         receivePanel.SetActive(true);
     }
 

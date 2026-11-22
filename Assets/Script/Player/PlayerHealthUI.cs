@@ -10,7 +10,7 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (playerHealth == null || healthText == null) return;
 
-        healthText.text = "vida " + playerHealth.CurrentHealth;
+        healthText.text = LanguageManager.Format("hud.hp", playerHealth.CurrentHealth);
     }
 
     private void Start()
