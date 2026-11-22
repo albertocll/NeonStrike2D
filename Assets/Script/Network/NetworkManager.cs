@@ -29,7 +29,7 @@ public class NetworkManager : MonoBehaviour
 
     public event Action<string, string> OnInviteReceived;
     public event Action<string> OnInviteWaiting;
-    public event Action<string> OnInviteError;
+    public event Action<string, string> OnInviteError;
     public event Action OnInviteDeclined;
     public event Action<string> OnFriendRequestReceived;
 
@@ -77,7 +77,11 @@ public class NetworkManager : MonoBehaviour
     {
         _connectTcs = new TaskCompletionSource<bool>();
 
-        _ws = new WebSocket(serverUrl);
+        // Con sesión, el servidor saca el nombre del jugador del token (no de los mensajes).
+        var headers = new Dictionary<string, string>();
+        if (!string.IsNullOrEmpty(Token))
+            headers["Authorization"] = $"Bearer {Token}";
+        _ws = new WebSocket(serverUrl, headers);
 
         _ws.OnOpen += () =>
         {
@@ -179,7 +183,7 @@ public class NetworkManager : MonoBehaviour
 
                 case "InviteError":
                     var ie = JsonUtility.FromJson<WsInviteError>(raw);
-                    OnInviteError?.Invoke(ie.message);
+                    OnInviteError?.Invoke(ie.code, ie.message);
                     break;
 
                 case "InviteDeclined":
@@ -193,6 +197,14 @@ public class NetworkManager : MonoBehaviour
 
                 case "RoomFull":
                     Debug.LogWarning("[NetworkManager] La sala está llena");
+                    break;
+
+                case "JoinRejected":
+                    Debug.LogWarning("[NetworkManager] El servidor no deja entrar en la sala");
+                    break;
+
+                case "RegisterRejected":
+                    Debug.LogWarning("[NetworkManager] El servidor no acepta el registro de este nombre");
                     break;
 
                 default:
@@ -296,5 +308,5 @@ public class NetworkManager : MonoBehaviour
 [Serializable] public class WsLevel { public string type; public string scene; }
 [Serializable] public class WsInviteReceived { public string type; public string fromUsername; public string roomId; }
 [Serializable] public class WsInviteWaiting { public string type; public string roomId; }
-[Serializable] public class WsInviteError { public string type; public string message; }
+[Serializable] public class WsInviteError { public string type; public string message; public string code; }
 [Serializable] public class WsFriendRequest { public string type; public string fromUsername; }

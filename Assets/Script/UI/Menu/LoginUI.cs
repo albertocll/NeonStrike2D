@@ -181,7 +181,7 @@ public class LoginUI : MonoBehaviour
             }
             else
             {
-                textFeedbackLogin.text = LanguageManager.ServerMessage(response?.message, "msg.connectError");
+                textFeedbackLogin.text = LanguageManager.ServerError(response?.code, response?.message, "msg.connectError");
             }
         }
         catch (Exception e)
@@ -250,7 +250,7 @@ public class LoginUI : MonoBehaviour
             }
             else
             {
-                textFeedbackRegister.text = LanguageManager.ServerMessage(response?.message, "msg.registerError");
+                textFeedbackRegister.text = LanguageManager.ServerError(response?.code, response?.message, "msg.registerError");
             }
         }
         catch (Exception e)
