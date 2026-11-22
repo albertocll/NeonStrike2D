@@ -83,7 +83,7 @@ app.MapGet("/me", async (ClaimsPrincipal user, AppDbContext db) =>
         return Results.Unauthorized();
 
     return Results.Ok(new { UserId = userId, Username = username, Email = email });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // Borrado de cuenta (issue #280, requisito de Google Play): borra el usuario y todos sus datos
 // en una transacción y cierra su WebSocket si está conectado.
@@ -105,7 +105,7 @@ app.MapDelete("/me", async (ClaimsPrincipal user, AppDbContext db) =>
 
     await WebSocketHandler.DisconnectUserAsync(username);
     return Results.Ok(new { Success = true });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── AUTH ─────────────────────────────────────────────────────────────────────
 
@@ -239,7 +239,7 @@ app.MapPost("/match/result", async (MatchResultRequest request, ClaimsPrincipal 
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.MatchResult);
 
 app.MapGet("/ranking", async (AppDbContext db) =>
 {
@@ -290,7 +290,7 @@ app.MapPost("/friends/request/{username}", async (string username, ClaimsPrincip
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true, Message = "Solicitud enviada." });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrincipal user, AppDbContext db) =>
 {
@@ -306,7 +306,7 @@ app.MapPost("/friends/accept/{requesterId}", async (int requesterId, ClaimsPrinc
     await db.SaveChangesAsync();
 
     return Results.Ok(new { Success = true, Message = "Solicitud aceptada." });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db) =>
 {
@@ -320,7 +320,7 @@ app.MapGet("/friends/online", async (ClaimsPrincipal user, AppDbContext db) =>
     var onlineFriends = friends.Where(f => WebSocketHandler.IsUserOnline(f)).ToList();
 
     return Results.Ok(onlineFriends);
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── USUARIOS ─────────────────────────────────────────────────────────────────
 
@@ -329,7 +329,7 @@ app.MapGet("/users/{username}", async (string username, AppDbContext db) =>
     var user = await db.Users.FirstOrDefaultAsync(u => u.Username == username);
     if (user == null) return Results.NotFound();
     return Results.Ok(new { userId = user.Id, username = user.Username });
-}).RequireAuthorization();
+}).RequireAuthorization().RequireRateLimiting(RateLimits.Session);
 
 // ── WEBSOCKET ────────────────────────────────────────────────────────────────
 
