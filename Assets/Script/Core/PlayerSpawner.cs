@@ -145,7 +145,10 @@ public class PlayerSpawner : MonoBehaviour
 
         var sync = _remotePlayer.GetComponent<PlayerSync>();
         if (sync != null)
+        {
             sync.SetTargetPosition(new Vector2(state.x, state.y));
+            sync.SetTargetFacing(new Vector2(state.dx, state.dy)); // (0,0) de un cliente anterior: se ignora
+        }
     }
 }
 
@@ -157,4 +160,6 @@ public class PlayerState
     public string kind;
     public float x;
     public float y;
+    public float dx;
+    public float dy;
 }

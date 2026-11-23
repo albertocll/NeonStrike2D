@@ -50,17 +50,22 @@ public class WeaponController : MonoBehaviour
     private void Update()
     {
         if (firePoint == null || bulletPrefab == null || autoOrientation == null) return;
-        if (autoOrientation.CurrentTarget == null) return;
+        // Sin enemigo valido (vivo, en la arena y a la vista) no se dispara al vacio.
+        Transform target = autoOrientation.CurrentTarget;
+        if (target == null || PlayerAutoOrientation2D.IsDead(target)) return;
         if (WaitsForFireKey && !Input.GetKey(fireKey)) return;
         if (Time.time < nextShotTime) return;
 
         float currentFireRate = fireRate * (heavyWeaponActive ? heavyWeaponFireRateMultiplier : 1f);
         nextShotTime = Time.time + (1f / currentFireRate);
 
+        // La nave mira hacia donde se mueve; las balas van hacia el enemigo desde el punto de disparo.
+        Vector2 aim = AimFrom(firePoint.position, target.position);
+
         if (tripleShotActive)
-            FireTripleShot();
+            FireTripleShot(aim);
         else
-            FireSingleShot(autoOrientation.CurrentAimDirection, firePoint.position);
+            FireSingleShot(aim, firePoint.position);
     }
 
     private void FireSingleShot(Vector2 direction, Vector3 spawnPos)
@@ -86,9 +91,14 @@ public class WeaponController : MonoBehaviour
             bullet.damage += heavyWeaponDamageBonus;
     }
 
-    private void FireTripleShot()
+    private Vector2 AimFrom(Vector2 spawn, Vector2 target)
     {
-        Vector2 baseDir = autoOrientation.CurrentAimDirection;
+        Vector2 direction = target - spawn;
+        return direction.sqrMagnitude > 0.0001f ? direction.normalized : autoOrientation.CurrentAimDirection;
+    }
+
+    private void FireTripleShot(Vector2 baseDir)
+    {
 
         FireSingleShot(RotateDirection(baseDir, -tripleShotSpreadAngle), firePointLeft.position);
         FireSingleShot(baseDir, firePoint.position);

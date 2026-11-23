@@ -213,7 +213,7 @@ public class BossSentinelController : MonoBehaviour, IDamageable, IBoss, IRemote
         {
             if (prefab == null) continue;
             Vector3 offset = (Vector3)(UnityEngine.Random.insideUnitCircle * 0.5f);
-            Instantiate(prefab, transform.position + offset, Quaternion.identity);
+            RewardMagnet.Attach(Instantiate(prefab, transform.position + offset, Quaternion.identity));
         }
     }
 
