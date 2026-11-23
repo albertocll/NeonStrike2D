@@ -20,6 +20,10 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
     [SerializeField] private RectTransform handle;
     [SerializeField] private RectTransform joystickContainer;
     [SerializeField] private float range = 100f;
+    [Tooltip("Fraccion del recorrido que no mueve la nave: evita que un temblor del dedo cerca del centro la mueva a toda velocidad en cualquier direccion.")]
+    [Range(0f, 0.5f)] [SerializeField] private float deadZone = 0.15f;
+    [Tooltip("Si el dedo se aleja mas que el recorrido, la base del joystick le sigue. Asi, para cambiar de direccion basta con mover el dedo hacia el otro lado, sin tener que volver primero hasta la base.")]
+    [SerializeField] private bool baseFollowsFinger = true;
 
     private RectTransform area;
     public Vector2 Direction { get; private set; }
@@ -74,9 +78,34 @@ public class Joystick : MonoBehaviour, IPointerDownHandler, IDragHandler, IPoint
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             joystickContainer, eventData.position, eventData.pressEventCamera, out pos);
 
+        if (baseFollowsFinger && pos.magnitude > range)
+        {
+            Vector2 excess = pos - pos.normalized * range;
+            joystickContainer.anchoredPosition += excess * LocalToAreaScale();
+            pos -= excess;
+        }
+
         pos = Vector2.ClampMagnitude(pos, range);
         handle.anchoredPosition = pos;
-        Direction = pos / range;
+        Direction = ApplyDeadZone(pos / range, deadZone);
+    }
+
+    // Fuera de la zona muerta, la inclinacion se reparte de 0 a 1 (sin salto al salir de ella).
+    public static Vector2 ApplyDeadZone(Vector2 raw, float deadZone)
+    {
+        float magnitude = raw.magnitude;
+        if (magnitude <= deadZone || magnitude <= 0f) return Vector2.zero;
+        float scaled = Mathf.Clamp01((magnitude - deadZone) / (1f - deadZone));
+        return raw / magnitude * scaled;
+    }
+
+    // joystickContainer y el area pueden tener escalas distintas: lo que se mueve el dedo en el
+    // espacio del joystick, pasado al espacio del area (donde vive su anchoredPosition).
+    private float LocalToAreaScale()
+    {
+        float containerScale = joystickContainer.lossyScale.x;
+        float areaScale = area.lossyScale.x;
+        return areaScale > 0f ? containerScale / areaScale : 1f;
     }
 
     public void OnPointerUp(PointerEventData eventData)

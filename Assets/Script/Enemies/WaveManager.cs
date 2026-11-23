@@ -16,6 +16,8 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private int baseEnemiesPerWave = 3;
     [SerializeField] private int enemiesAddedPerWave = 2;
     [SerializeField] private float timeBetweenWaves = 2f;
+    [Tooltip("Tras el jefe del nivel, segundos maximos esperando a que se recojan sus recompensas antes de cambiar de zona.")]
+    [SerializeField] private float maxRewardWait = 6f;
     [SerializeField] private float initialDelay = 3f;
 
     private LevelData level;
@@ -113,12 +115,18 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator StartNextWaveWithDelay()
     {
+        float clearedAt = Time.time;
         yield return new WaitForSeconds(timeBetweenWaves);
 
         // La siguiente oleada es de otro nivel: se acaba de limpiar la ultima de este.
         LevelData nextLevel = LevelManager.LevelForWave(currentWave + 1);
         if (nextLevel != null && nextLevel != level)
         {
+            // Las recompensas del jefe van solas hacia la nave (RewardMagnet): se espera a que esten
+            // recogidas antes de cambiar de zona, con un maximo.
+            while (RewardMagnet.PendingCount > 0 && Time.time - clearedAt < maxRewardWait)
+                yield return null;
+
             if (!GameData.IsCoop)
                 LevelTransition.Begin(nextLevel);
             else if (GameData.IsHost)

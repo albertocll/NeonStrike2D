@@ -4,7 +4,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("Movement")]
+    [Tooltip("Velocidad maxima. La de cada nave la pone PlayerSpawner (Init).")]
     [SerializeField] private float speed = 8f;
+    [Tooltip("Inclinacion del joystick (0-1, ya sin la zona muerta) a partir de la cual se va a la velocidad maxima. Por debajo, la velocidad es proporcional.")]
+    [Range(0.1f, 1f)] [SerializeField] private float fullSpeedInput = 0.5f;
+    [Tooltip("Interpolar el Rigidbody2D: la nave se dibuja suave entre pasos de fisica (50 por segundo) aunque la pantalla vaya a 60 o mas.")]
+    [SerializeField] private bool interpolateMovement = true;
 
     [Header("Animator params")]
     [SerializeField] private string movingParam = "Moving";
@@ -50,6 +55,8 @@ public class PlayerController : MonoBehaviour
     private float speedMultiplier = 1f;
 
     public bool IsDashing => isDashing;
+    // Ultima direccion en la que se ha movido la nave: hacia ahi mira (PlayerAutoOrientation2D).
+    public Vector2 FacingDirection => lastMoveDirection;
     public bool IsDashReady => cooldownTimer <= 0f;
     public float CooldownProgress => dashCooldown <= 0f ? 1f : 1f - Mathf.Clamp01(cooldownTimer / dashCooldown);
 
@@ -58,6 +65,7 @@ public class PlayerController : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         rb.gravityScale = 0f;
+        rb.interpolation = interpolateMovement ? RigidbodyInterpolation2D.Interpolate : RigidbodyInterpolation2D.None;
 
         trail = GetComponent<TrailRenderer>();
         if (trail != null)
@@ -148,8 +156,8 @@ public class PlayerController : MonoBehaviour
         // Joystick móvil
         Vector2 joystickInput = joystick != null ? joystick.Direction : Vector2.zero;
 
-        // Combinar ambos
-        input = (keyboardInput + joystickInput).normalized;
+        // Combinar ambos. Sin inercia: la velocidad sale directamente de la entrada de este fotograma.
+        input = CombineInput(keyboardInput, joystickInput, fullSpeedInput);
 
         if (input.sqrMagnitude > 0.01f)
             lastMoveDirection = input;
@@ -172,6 +180,17 @@ public class PlayerController : MonoBehaviour
                     trail.emitting = false;
             }
         }
+    }
+
+    // Teclado: siempre a toda velocidad. Joystick: proporcional hasta fullSpeedInput y a tope a partir de ahi.
+    public static Vector2 CombineInput(Vector2 keyboard, Vector2 joystick, float fullSpeedInput)
+    {
+        if (keyboard.sqrMagnitude > 0f) return (keyboard + joystick).normalized;
+
+        float magnitude = joystick.magnitude;
+        if (magnitude <= 0f) return Vector2.zero;
+        float scaled = fullSpeedInput > 0f ? Mathf.Clamp01(magnitude / fullSpeedInput) : 1f;
+        return joystick / magnitude * scaled;
     }
 
     private void FixedUpdate()

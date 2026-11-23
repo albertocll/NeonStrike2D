@@ -207,7 +207,7 @@ public abstract class BossBase : MonoBehaviour, IDamageable, IBoss, IRemoteBoss
         {
             if (prefab == null) continue;
             Vector3 offset = (Vector3)(UnityEngine.Random.insideUnitCircle * 0.8f);
-            Instantiate(prefab, transform.position + offset, Quaternion.identity);
+            RewardMagnet.Attach(Instantiate(prefab, transform.position + offset, Quaternion.identity));
         }
 
         GetComponent<EnemyWaveMember>()?.NotifyDeath();
