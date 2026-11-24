@@ -15,6 +15,22 @@
 
 🌐 **Web del lore:** [neonstrike-game.netlify.app](https://neonstrike-game.netlify.app)
 📦 **Última versión Android:** [GitHub Releases](https://github.com/albertocll/NeonStrike2D/releases)
+<!-- enlace de Google Play: se añade al pasar a producción -->
+
+---
+
+## 📸 Capturas
+
+| | |
+|:---:|:---:|
+| ![Level1](docs/img/level1.webp) | ![The Grid](docs/img/the-grid.webp) |
+| Level1 | The Grid |
+| ![Core Chamber](docs/img/core-chamber.webp) | ![Nexus Core](docs/img/nexus-core.webp) |
+| Core Chamber | Nexus Core |
+| ![Menú principal](docs/img/menu-principal.webp) | ![Selección de personaje](docs/img/seleccion-personaje.webp) |
+| Menú principal | Selección de personaje |
+| ![Opciones](docs/img/opciones.png) | |
+| Opciones | |
 
 ---
 
