@@ -4,7 +4,8 @@ Registro de los packs de música revisados para NeonStrike2D. El texto de cada l
 de la página de origen (consultada el 24/11/2026). Solo se usan packs gratuitos que permiten el uso comercial
 en un juego publicado en Google Play sin pedir atribución.
 
-Toda la música del juego sale de un único pack: Retro Synthwave Music Pack (CC0).
+La música nueva sale de un único pack: Retro Synthwave Music Pack (CC0). Además se mantienen las tres pistas que
+ya tenía el juego (ver "Pistas anteriores").
 
 ## Pack usado
 
@@ -73,11 +74,11 @@ Toda la música del juego sale de un único pack: Retro Synthwave Music Pack (CC
 
 ## Pistas usadas
 
-Todas del Retro Synthwave Music Pack (CC0).
+Las 15 pistas nuevas son del Retro Synthwave Music Pack (CC0). El menú conserva su pista anterior.
 
 | Hueco | Archivo en `Assets/Music/` | Pista original |
 |---|---|---|
-| Menú principal | `MusicMenu.ogg` | Digital |
+| Menú principal | `MusicMainMenu.ogg` | Pista anterior (ver abajo) |
 | Zona Level1 | `MusicZoneLevel1.ogg` | Skyline |
 | Zona TheGrid | `MusicZoneTheGrid.ogg` | Sunset |
 | Zona PlasmaFrontier | `MusicZonePlasmaFrontier.ogg` | Neon |
@@ -93,3 +94,22 @@ Todas del Retro Synthwave Music Pack (CC0).
 | Jefe Hivemind (DroneHive) | `MusicBossHivemind.ogg` | Heartbeat |
 | Jefe Specter (CorruptedSignalZone) | `MusicBossSpecter.ogg` | Dreams |
 | Jefe NexusCore (CoreChamber) | `MusicBossNexusCore.ogg` | Pixel |
+
+Pistas del pack que no se usan ni entran en el repositorio: Digital, Nights, Electric, Waves y Time.
+
+## Pistas anteriores
+
+Las tres pistas que ya tenía el juego se mantienen por decisión de Alberto (24/11/2026).
+
+Ninguna trae autor, título, comentario ni URL en sus metadatos. Nombre con el que entraron en el repositorio:
+
+- `MusicMainMenu.ogg`: `new_factory_129bpm.ogg` (commit 4f6e53f, 27/02/2026). Etiquetas vacías salvo
+  `encoder = FL Studio`.
+- `MusicGameplay.mp3`: `leberch-cyberpunk-437545.mp3` (commit d47af2c, 13/04/2026). Sin etiquetas ID3.
+- `MusicGameplayIntense.mp3`: entró ya con ese nombre (commit f18fe63, 30/09/2026). Sin etiquetas ID3.
+
+| Archivo en `Assets/Music/` | Uso | Origen y licencia |
+|---|---|---|
+| `MusicMainMenu.ogg` | Menú principal (`menuMusic`) | Origen pendiente de verificar |
+| `MusicGameplay.mp3` | Sustituto de zona (`gameMusic`), sin uso mientras todos los niveles tengan `zoneMusic` | Origen pendiente de verificar |
+| `MusicGameplayIntense.mp3` | Sustituto de crescendo y jefe (`gameMusicIntense`), sin uso mientras esos huecos tengan pista | Origen pendiente de verificar |
