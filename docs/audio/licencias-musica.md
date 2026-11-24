@@ -100,16 +100,18 @@ Pistas del pack que no se usan ni entran en el repositorio: Digital, Nights, Ele
 ## Pistas anteriores
 
 Las tres pistas que ya tenía el juego se mantienen por decisión de Alberto (24/11/2026).
+Se importan en estéreo, Streaming, Vorbis y calidad 0.9.
 
 Ninguna trae autor, título, comentario ni URL en sus metadatos. Nombre con el que entraron en el repositorio:
 
 - `MusicMainMenu.ogg`: `new_factory_129bpm.ogg` (commit 4f6e53f, 27/02/2026). Etiquetas vacías salvo
   `encoder = FL Studio`.
 - `MusicGameplay.mp3`: `leberch-cyberpunk-437545.mp3` (commit d47af2c, 13/04/2026). Sin etiquetas ID3.
-- `MusicGameplayIntense.mp3`: entró ya con ese nombre (commit f18fe63, 30/09/2026). Sin etiquetas ID3.
+- `MusicGameplayIntense.mp3`: entró ya con ese nombre exacto (commit f18fe63, 30/09/2026) y no aparece con otro
+  nombre en ninguna rama del historial. Sin etiquetas ID3.
 
 | Archivo en `Assets/Music/` | Uso | Origen y licencia |
 |---|---|---|
 | `MusicMainMenu.ogg` | Menú principal (`menuMusic`) | Origen pendiente de verificar |
-| `MusicGameplay.mp3` | Sustituto de zona (`gameMusic`), sin uso mientras todos los niveles tengan `zoneMusic` | Origen pendiente de verificar |
+| `MusicGameplay.mp3` | Sustituto de zona (`gameMusic`), sin uso mientras todos los niveles tengan `zoneMusic` | Pixabay, autor leberch, ID 437545, licencia de contenido de Pixabay |
 | `MusicGameplayIntense.mp3` | Sustituto de crescendo y jefe (`gameMusicIntense`), sin uso mientras esos huecos tengan pista | Origen pendiente de verificar |
