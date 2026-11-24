@@ -18,6 +18,7 @@ public class MusicImportSettings : AssetPostprocessor
         settings.loadType = AudioClipLoadType.Streaming;
         settings.preloadAudioData = false;
         settings.compressionFormat = AudioCompressionFormat.Vorbis;
+        settings.quality = 0.65f;
         importer.defaultSampleSettings = settings;
     }
 }
