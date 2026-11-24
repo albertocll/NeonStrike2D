@@ -4,7 +4,9 @@ Registro de los packs de música revisados para NeonStrike2D. El texto de cada l
 de la página de origen (consultada el 24/11/2026). Solo se usan packs gratuitos que permiten el uso comercial
 en un juego publicado en Google Play sin pedir atribución.
 
-## Packs aceptados
+Toda la música del juego sale de un único pack: Retro Synthwave Music Pack (CC0).
+
+## Pack usado
 
 ### Retro Synthwave Music Pack (Swarajthegreat)
 
@@ -17,12 +19,21 @@ en un juego publicado en Google Play sin pedir atribución.
   >
   > Ideal for games, videos, podcasts, streams, or any creative endeavor needing a retro-futuristic edge.
 
-- Nota: la ficha de itch.io declara "AI Disclosure: AI Assisted, Graphics, Sounds".
+- Contenido del zip: 20 pistas en MP3 (48 kHz, estéreo), sin archivo de licencia aparte. La licencia es la de
+  la página.
+- Nota sobre IA: la ficha de itch.io declara "AI Disclosure: AI Assisted, Graphics, Sounds". No cambia la
+  licencia CC0 ni impide el uso comercial; queda anotado por si Google Play u otra tienda lo pregunta.
+- Tratamiento: las pistas se convierten de MP3 a OGG Vorbis. Solo se recorta el silencio digital del principio y
+  del final. La CC0 permite modificarlas sin límites.
+
+## Packs descartados
 
 ### Synthwave Music Pack (AD Sounds)
 
 - Origen: https://ad-sounds.itch.io/synthwave-music-pack
-- Archivo descargado: `MusicSynthwaveMusicVolI.zip` (212 MB, 10 pistas en bucle)
+- Motivo: la licencia dice "No license to remix". Pasar a OGG y recortar podría entenderse como modificar la obra.
+  El pack CC0 tiene pistas de sobra para los 16 huecos, así que se descarta para no depender de esa
+  interpretación (decisión del supervisor, 24/11/2026).
 - Licencia: no exclusiva, uso comercial en juegos permitido, sin créditos.
 - Texto literal de la página:
 
@@ -34,9 +45,6 @@ en un juego publicado en Google Play sin pedir atribución.
   > non-exclusive license – you’re free to use these packs in your commercial games. No license to remix or
   > claim as your own work.
 
-- Nota: la licencia no permite remezclar. Las pistas se usan tal cual; solo se convierten a OGG para importarlas.
-
-## Packs descartados
 
 ### Free Cyber Game Music (Michael Kalra / earentech)
 
@@ -62,3 +70,26 @@ en un juego publicado en Google Play sin pedir atribución.
   > games, without cost or permission. The only thing that I would ask is for you to give credit where it is due
   > by mentioning by name, François Gérin-Lajoie. Thank you! And if you want, you could also mention which tracks
   > you used in which game in the "comments" section below.
+
+## Pistas usadas
+
+Todas del Retro Synthwave Music Pack (CC0).
+
+| Hueco | Archivo en `Assets/Music/` | Pista original |
+|---|---|---|
+| Menú principal | `MusicMenu.ogg` | Digital |
+| Zona Level1 | `MusicZoneLevel1.ogg` | Skyline |
+| Zona TheGrid | `MusicZoneTheGrid.ogg` | Sunset |
+| Zona PlasmaFrontier | `MusicZonePlasmaFrontier.ogg` | Neon |
+| Zona DroneHive | `MusicZoneDroneHive.ogg` | Synthwave |
+| Zona CorruptedSignalZone | `MusicZoneCorruptedSignalZone.ogg` | Midnight |
+| Zona CoreChamber | `MusicZoneCoreChamber.ogg` | Nostalgia |
+| Zona Sector7 | `MusicZoneSector7.ogg` | Chase |
+| Crescendo A (niveles 1, 3 y 5) | `MusicCrescendoA.ogg` | Future |
+| Crescendo B (niveles 2, 4 y 6) | `MusicCrescendoB.ogg` | Cruise |
+| Jefe Sentinel (Level1) | `MusicBossSentinel.ogg` | Traveler |
+| Jefe DataCrawler (TheGrid) | `MusicBossDataCrawler.ogg` | Cosmic |
+| Jefe Bulwark (PlasmaFrontier) | `MusicBossBulwark.ogg` | Arcade |
+| Jefe Hivemind (DroneHive) | `MusicBossHivemind.ogg` | Heartbeat |
+| Jefe Specter (CorruptedSignalZone) | `MusicBossSpecter.ogg` | Dreams |
+| Jefe NexusCore (CoreChamber) | `MusicBossNexusCore.ogg` | Pixel |
