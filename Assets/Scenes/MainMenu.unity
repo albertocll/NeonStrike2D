@@ -1508,7 +1508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6115dafdf9608c648880c6d1f05e1b30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
-  menuMusic: {fileID: 8300000, guid: 8622c5f32af5cd24f8a9c02cf4de3ab9, type: 3}
+  menuMusic: {fileID: 8300000, guid: 90436a587d2a45142968b19d16419d35, type: 3}
   crescendoMusicA: {fileID: 8300000, guid: 360ca10c3351ed843b6acfa0bf28c971, type: 3}
   crescendoMusicB: {fileID: 8300000, guid: cd5355059050424438d2ec51008e3822, type: 3}
   gameMusic: {fileID: 8300000, guid: e9160bd46325b6f42b3b0bd43a8c68cc, type: 3}

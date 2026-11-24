@@ -2,7 +2,7 @@ using UnityEditor;
 using UnityEngine;
 
 // Ajustes de importación para las pistas nuevas de Assets/Music (issue #262): en mono, se reproducen en streaming y
-// no se cargan hasta que suenan, así las 16 pistas no ocupan memoria a la vez ni dan tirones al entrar.
+// no se cargan hasta que suenan, así las pistas no ocupan memoria a la vez ni dan tirones al entrar.
 // Solo se aplica la primera vez que se importa cada archivo; lo que se cambie luego a mano se respeta.
 public class MusicImportSettings : AssetPostprocessor
 {
