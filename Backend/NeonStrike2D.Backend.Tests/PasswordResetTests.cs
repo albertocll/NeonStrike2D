@@ -303,6 +303,36 @@ public class PasswordResetTests : IClassFixture<ApiFactory>
         await AssertErrorAsync(await ResetAsync(email, "123456"), HttpStatusCode.TooManyRequests, ErrorCodes.RateLimited);
     }
 
+    // ── Limpieza de códigos caducados ────────────────────────────────────────
+
+    [Fact]
+    public async Task Limpieza_BorraLosCaducadosHaceMasDeUnDia()
+    {
+        var oldEmail = NewName("Viejo").ToLowerInvariant() + "@prueba.com";
+        var freshEmail = NewName("Reciente").ToLowerInvariant() + "@prueba.com";
+        Assert.Equal(HttpStatusCode.OK, (await ForgotAsync(oldEmail)).StatusCode);
+        Assert.Equal(HttpStatusCode.OK, (await ForgotAsync(freshEmail)).StatusCode);
+
+        var oldHash = PasswordResetRules.HashEmail(oldEmail);
+        var freshHash = PasswordResetRules.HashEmail(freshEmail);
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var old = await db.PasswordResetCodes.SingleAsync(c => c.EmailHash == oldHash);
+            old.ExpiresAt = DateTime.UtcNow - PasswordResetRules.KeepExpired - TimeSpan.FromMinutes(1);
+            await db.SaveChangesAsync();
+        }
+
+        await PasswordResetCleanup.DeleteExpiredAsync(factory.Services.GetRequiredService<IServiceScopeFactory>(), DateTime.UtcNow);
+
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            Assert.False(await db.PasswordResetCodes.AnyAsync(c => c.EmailHash == oldHash));
+            Assert.True(await db.PasswordResetCodes.AnyAsync(c => c.EmailHash == freshHash));
+        }
+    }
+
     // ── Brevo sin configurar ─────────────────────────────────────────────────
 
     [Fact]

@@ -41,6 +41,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 builder.Services.AddGameRateLimits();
 builder.Services.AddSingleton<PasswordResetLimiter>();
+builder.Services.AddHostedService<PasswordResetCleanup>();
 
 // Correo de recuperación de contraseña con Brevo (issue #199).
 builder.Services.AddHttpClient(BrevoPasswordResetMailer.HttpClientName, client => client.Timeout = TimeSpan.FromSeconds(15));
