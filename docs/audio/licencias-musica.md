@@ -112,6 +112,6 @@ Ninguna trae autor, título, comentario ni URL en sus metadatos. Nombre con el q
 
 | Archivo en `Assets/Music/` | Uso | Origen y licencia |
 |---|---|---|
-| `MusicMainMenu.ogg` | Menú principal (`menuMusic`) | Origen pendiente de verificar |
+| `MusicMainMenu.ogg` | Menú principal (`menuMusic`) | Pixabay, licencia de contenido de Pixabay (según Alberto; nombre original no conservado) |
 | `MusicGameplay.mp3` | Sustituto de zona (`gameMusic`), sin uso mientras todos los niveles tengan `zoneMusic` | Pixabay, autor leberch, ID 437545, licencia de contenido de Pixabay |
-| `MusicGameplayIntense.mp3` | Sustituto de crescendo y jefe (`gameMusicIntense`), sin uso mientras esos huecos tengan pista | Origen pendiente de verificar |
+| `MusicGameplayIntense.mp3` | Sustituto de crescendo y jefe (`gameMusicIntense`), sin uso mientras esos huecos tengan pista | Pixabay, licencia de contenido de Pixabay (según Alberto; nombre original no conservado) |
