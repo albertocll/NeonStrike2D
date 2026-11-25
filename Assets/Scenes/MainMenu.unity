@@ -1509,8 +1509,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MusicManager
   menuMusic: {fileID: 8300000, guid: 90436a587d2a45142968b19d16419d35, type: 3}
-  crescendoMusicA: {fileID: 0}
-  crescendoMusicB: {fileID: 0}
+  crescendoMusicA: {fileID: 8300000, guid: 360ca10c3351ed843b6acfa0bf28c971, type: 3}
+  crescendoMusicB: {fileID: 8300000, guid: cd5355059050424438d2ec51008e3822, type: 3}
   gameMusic: {fileID: 8300000, guid: e9160bd46325b6f42b3b0bd43a8c68cc, type: 3}
   gameMusicIntense: {fileID: 8300000, guid: 8aba5f518ece6fe4b9f3fa9465ffad51, type: 3}
   gameMusicIntenseStartOffset: 9.5

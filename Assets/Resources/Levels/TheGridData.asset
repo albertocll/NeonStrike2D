@@ -18,6 +18,8 @@ MonoBehaviour:
   bossWave: 20
   bossPrefab: {fileID: 6629848046291351369, guid: 9f8629ba5e91fb64c8ec795a3368ad28, type: 3}
   enemyHealthMultiplier: 1.1
+  zoneMusic: {fileID: 8300000, guid: 0f669f9f868d5c241b58db4841d06c53, type: 3}
+  bossMusic: {fileID: 8300000, guid: 79a8e82ab94202f4aad2759c23ebbbbc, type: 3}
   firstWaveEnemies: 0
   enemiesAddedPerWave: 1
   maxEnemiesPerWave: 0
