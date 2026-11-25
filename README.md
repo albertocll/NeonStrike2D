@@ -23,7 +23,7 @@
 - 🗺️ **7 niveles**: Level 1, The Grid, Plasma Frontier, Drone Hive, Corrupted Signal Zone, Core Chamber y Sector 7.
 - 👹 **6 jefes**, uno al final de cada nivel salvo Sector 7: Sentinel, DataCrawler, Bulwark, Hivemind, Specter y NexusCore.
 - 🌍 **Español e inglés**, con selector de idioma en el juego.
-- 🎵 **Música propia de cada momento**: una pista por zona, otra por jefe y dos crescendos antes de cada jefe, con fundidos entre pistas.
+- 🎵 **Música por momento de juego**: una pista por zona, otra por jefe y dos crescendos antes de cada jefe, con fundidos entre pistas. Las pistas son de Pixabay y de un pack CC0 (ver [docs/audio/licencias-musica.md](docs/audio/licencias-musica.md)).
 
 ---
 
@@ -103,32 +103,43 @@ Cada personaje tiene **stats únicos** (vida, velocidad, daño) configurados med
 ```
 NeonStrike2D/
 ├── Assets/
-│   ├── Art/
-│   │   ├── Animations/
-│   │   │   ├── Player/
-│   │   │   │   ├── Violet/
-│   │   │   │   ├── Cyrus/
-│   │   │   │   ├── Nyx/
-│   │   │   │   └── Atlas/
-│   │   │   └── Enemies/
-│   │   └── Character/
+│   ├── Art/               # Sprites y animaciones de personajes, enemigos y jefes
+│   ├── Editor/            # Herramientas del Editor (build del AAB, importación de la música)
+│   ├── Music/             # Música del juego
+│   ├── SFX/               # Efectos de sonido
+│   ├── Prefab/            # Prefabs (enemigos, jefes, coleccionables...)
+│   ├── Resources/Levels/  # LevelData de cada nivel
+│   ├── Scenes/            # MainMenu, CharacterSelect, LoadingScreen, Level1, TheGrid, PlasmaFrontier,
+│   │                      # DroneHive, CorruptedSignalZone, CoreChamber, Sector7
 │   ├── Script/
-│   │   ├── Core/          # GameData, CharacterData, PlayerSpawner, MusicManager
-│   │   ├── Player/        # PlayerController, PlayerHealth, PlayerSync, PlayerHealthUI
-│   │   ├── Enemies/       # WardenAI, EnemyController, WaveManager, EnemySpawner
-│   │   ├── Network/       # ApiManager, NetworkManager, UnityMainThreadDispatcher
-│   │   ├── Projectiles/   # Bullet
-│   │   └── UI/            # GameOverUI, RankingUI, CharacterSelectController, MultiplayerUI, LoginUI
-│   ├── Scenes/            # MainMenu, CharacterSelect, Level1, TheGrid
-│   └── Prefab/
+│   │   ├── Audio/
+│   │   ├── Collectibles/
+│   │   ├── Core/          # LevelData, LevelManager, MusicManager, idiomas (Language/)
+│   │   ├── Enemies/       # IA de enemigos y jefes, WaveManager, EnemySpawner
+│   │   ├── Network/       # ApiManager, NetworkManager
+│   │   ├── Player/
+│   │   ├── PowerUps/
+│   │   ├── Projectiles/
+│   │   ├── UI/            # Menú, HUD, selección de personaje, fin de partida
+│   │   └── Weapons/
+│   └── Tests/             # Pruebas EditMode y PlayMode
 ├── Backend/
-│   └── NeonStrike2D.Backend.Api/
-│       ├── Data/          # AppDbContext
-│       ├── Models/        # User, Friendship, GameSession, GameResult
-│       ├── Dtos/          # Request/Response DTOs
-│       ├── Hubs/          # WebSocketHandler
-│       ├── Program.cs
-│       └── Dockerfile
+│   ├── NeonStrike2D.Backend.Api/
+│   │   ├── Data/          # AppDbContext
+│   │   ├── Models/        # User, Friendship, GameSession, GameResult
+│   │   ├── Dtos/          # DTOs de peticiones y respuestas
+│   │   ├── Hubs/          # WebSocketHandler
+│   │   ├── Security/      # Reglas de cuentas y resultados, límites de peticiones, códigos de error
+│   │   ├── Migrations/
+│   │   ├── Program.cs
+│   │   └── Dockerfile
+│   └── NeonStrike2D.Backend.Tests/
+├── docs/
+│   ├── audio/             # Licencias de la música
+│   ├── google-play/       # Preparación de la ficha y del AAB
+│   └── img/               # Capturas del README
+├── web/                   # Web publicada en Netlify (lore, política de privacidad, términos, borrar cuenta)
+├── scripts/
 └── README.md
 ```
 
@@ -252,28 +263,32 @@ dotnet ef database update --connection "Host=HOST;Port=PORT;Database=railway;Use
 | `POST` | `/register` | Registro de usuario | ❌ |
 | `POST` | `/login` | Login, devuelve JWT | ❌ |
 | `GET` | `/me` | Info del usuario actual | ✅ |
+| `DELETE` | `/me` | Borra la cuenta y todos sus datos | ✅ |
 | `GET` | `/ranking` | Top 10 jugadores | ❌ |
 | `POST` | `/match/result` | Guarda resultado de partida | ✅ |
 | `POST` | `/friends/request/{username}` | Envía solicitud de amistad | ✅ |
 | `POST` | `/friends/accept/{requesterId}` | Acepta solicitud de amistad | ✅ |
 | `GET` | `/friends/online` | Lista de amigos online | ✅ |
 | `GET` | `/users/{username}` | Resuelve ID por username | ✅ |
+| `GET` | `/ws` | WebSocket para el multijugador en tiempo real | Token JWT al conectar (obligatorio si `Security__RequireWebSocketAuth` está activo) |
 
-Además, el backend expone un WebSocket en `/ws` para multijugador en tiempo real.
+Todos los endpoints tienen límite de peticiones (por IP en los públicos y por usuario en los que piden sesión).
 
 ---
 
 ## 📦 Build de Android
 
-1. `File → Build Settings → Switch Platform a Android`
-2. En `Player Settings`:
-   - **Package Name:** `com.albertocll.neonstrike2d`
-   - **Minimum API Level:** Android 8.0+
-3. `Build` → genera el APK.
+El juego se publica en Google Play como AAB:
+
+1. Configura la clave de subida en Unity como explica [docs/google-play/clave-de-subida-y-aab.md](docs/google-play/clave-de-subida-y-aab.md). Las contraseñas no se guardan en el proyecto.
+2. Menú **NeonStrike2D → Build Android (AAB)**. Genera `Builds/Android/NeonStrike2D-<versión>.aab` con IL2CPP y ARM64.
+3. Antes de cada subida, aumenta el **Bundle Version Code** en Player Settings.
 
 ---
 
 ## 🗺️ Roadmap
+
+**Estado actual:** en prueba cerrada en Google Play.
 
 ### ✅ Completado
 - 4 personajes jugables con stats, animaciones y ScriptableObjects
@@ -286,31 +301,31 @@ Además, el backend expone un WebSocket en `/ws` para multijugador en tiempo rea
 - Ranking persistente en PostgreSQL (modo solitario)
 - JWT + "Recordar cuenta" + modo invitado
 - Joystick virtual para móvil
-- MusicManager entre escenas
-- Build Android funcional
 - Backend desplegado en Railway
 - Sitio web del lore en Netlify
-
-### 🔄 Borrador v0.2.0 — 14 may
-- Login con username además de email
-- Botón EXIT en paneles de personaje
-- Limpieza de debug logs para release
-- Fix de `MissingReferenceException` en LoginUI
-
-### 📋 Defensa v1.0.0 — 2 jun
-- Chat de texto entre amigos
-- Primer mini-boss
-- Nuevo tipo de enemigo básico
-- Sistema de drops (vida + coleccionables)
-- Sistema de puntuación ampliado (kills + coleccionables)
+- 7 niveles: Level 1, The Grid, Plasma Frontier, Drone Hive, Corrupted Signal Zone, Core Chamber y Sector 7
+- 6 jefes: Sentinel, DataCrawler, Bulwark, Hivemind, Specter y NexusCore
+- 8 enemigos nuevos: Fuse, Echo, Bastion, Swarm, Flak, Herald, Wisp y Anvil
+- Juego en español e inglés
+- Música por zona y por jefe, con crescendos antes de cada jefe
+- Controles nuevos: joystick que sigue al dedo, auto apuntado, impulso y modo zurdo
+- Seguridad del backend: WebSocket identificado por el token JWT, validación de resultados y límites de peticiones
+- Borrado de cuenta desde el juego, con instrucciones en la web
 
 ### 🔮 Futuro
-- Sistema de localización ES / EN
-- Autenticación con Google (OAuth)
-- Distribución en Google Play
-- Soporte iOS
-- Partidas con más de 2 jugadores
-- Resto de enemigos y segundo mini-boss
+**v1.0.3 — Arreglos de la prueba cerrada**
+- Que los enemigos no hagan daño sin llegar a tocar la nave (#319)
+- Que la pausa detenga siempre el juego (#318)
+- Recuperación de contraseña por código de 6 dígitos (#199)
+
+**v1.1**
+- Que cada nave se note distinta al jugar (#320)
+- Joystick de disparo con apuntado manual (#252)
+- Sistema de anuncios (#114)
+- Estadísticas del jugador (#111)
+- Perfil de usuario editable (#110)
+- Tutorial para nuevos jugadores (#103)
+- Autenticación con Google (#75)
 
 ---
 
