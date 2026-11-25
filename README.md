@@ -5,32 +5,37 @@
 [![Unity](https://img.shields.io/badge/Unity-6_LTS-000000?logo=unity&logoColor=white)](https://unity.com/)
 [![.NET](https://img.shields.io/badge/.NET-9-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-Railway-336791?logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![SignalR](https://img.shields.io/badge/SignalR-WebSockets-512BD4)](https://learn.microsoft.com/aspnet/signalr/)
+[![WebSocket](https://img.shields.io/badge/WebSocket-tiempo_real-512BD4)](https://developer.mozilla.org/docs/Web/API/WebSockets_API)
 
 ---
 
 ## 📖 Sobre el proyecto
 
-**NeonStrike2D** es un juego de acción 2D top-down con estética cyberpunk, desarrollado como Trabajo de Fin de Grado. Combina combate en arena, sistema de oleadas con dificultad creciente y multijugador online cooperativo en tiempo real, todo soportado por un backend propio en ASP.NET Core con base de datos PostgreSQL y comunicación vía SignalR.
+**NeonStrike2D** es un juego de acción 2D top-down con estética cyberpunk, desarrollado como Trabajo de Fin de Grado. Combina combate en arena, sistema de oleadas con dificultad creciente y multijugador online cooperativo en tiempo real, todo soportado por un backend propio en ASP.NET Core con base de datos PostgreSQL y comunicación en tiempo real por WebSocket.
 
 🌐 **Web del lore:** [neonstrike-game.netlify.app](https://neonstrike-game.netlify.app)
-📦 **Última versión Android:** [GitHub Releases](https://github.com/albertocll/NeonStrike2D/releases)
 <!-- enlace de Google Play: se añade al pasar a producción -->
+
+---
+
+## 🆕 Novedades
+
+- 🗺️ **7 niveles**: Level 1, The Grid, Plasma Frontier, Drone Hive, Corrupted Signal Zone, Core Chamber y Sector 7.
+- 👹 **6 jefes**, uno al final de cada nivel salvo Sector 7: Sentinel, DataCrawler, Bulwark, Hivemind, Specter y NexusCore.
+- 🌍 **Español e inglés**, con selector de idioma en el juego.
+- 🎵 **Música propia de cada momento**: una pista por zona, otra por jefe y dos crescendos antes de cada jefe, con fundidos entre pistas.
 
 ---
 
 ## 📸 Capturas
 
-| | |
-|:---:|:---:|
 | ![Level1](docs/img/level1.webp) | ![The Grid](docs/img/the-grid.webp) |
+|:---:|:---:|
 | Level1 | The Grid |
 | ![Core Chamber](docs/img/core-chamber.webp) | ![Nexus Core](docs/img/nexus-core.webp) |
 | Core Chamber | Nexus Core |
 | ![Menú principal](docs/img/menu-principal.webp) | ![Selección de personaje](docs/img/seleccion-personaje.webp) |
 | Menú principal | Selección de personaje |
-| ![Opciones](docs/img/opciones.png) | |
-| Opciones | |
 
 ---
 
@@ -60,7 +65,7 @@ Cada personaje tiene **stats únicos** (vida, velocidad, daño) configurados med
 ## ✨ Características
 
 - ⚔️ **4 personajes jugables** con stats y animaciones únicos
-- 🤝 **Multijugador online cooperativo** (2 jugadores) con SignalR
+- 🤝 **Multijugador online cooperativo** (2 jugadores) por WebSocket
 - 👥 **Sistema de amigos** con solicitudes, lista online y notificaciones en tiempo real
 - ✉️ **Sistema de invitaciones** entre amigos para partidas cooperativas
 - ✅ **Coordinación de inicio**: ambos jugadores deben confirmar para empezar
@@ -80,14 +85,14 @@ Cada personaje tiene **stats únicos** (vida, velocidad, daño) configurados med
 - **Físicas:** Rigidbody2D con Continuous Collision Detection
 - **Animaciones:** Animator + Animation Override Controllers por personaje
 - **UI:** Canvas + TextMesh Pro
-- **Networking:** UnityWebRequest (REST) + SignalR Client (tiempo real)
+- **Networking:** UnityWebRequest (REST) + NativeWebSocket (tiempo real)
 - **Plataformas:** Windows y Android
 
 ### Backend
 - **Framework:** ASP.NET Core 9 (Minimal API)
 - **Base de datos:** PostgreSQL + Entity Framework Core
 - **Autenticación:** JWT Bearer Tokens
-- **Tiempo real:** SignalR (WebSockets)
+- **Tiempo real:** WebSocket (`System.Net.WebSockets`)
 - **Despliegue:** Railway (backend + PostgreSQL)
 - **Sitio del lore:** Netlify
 
@@ -121,7 +126,7 @@ NeonStrike2D/
 │       ├── Data/          # AppDbContext
 │       ├── Models/        # User, Friendship, GameSession, GameResult
 │       ├── Dtos/          # Request/Response DTOs
-│       ├── Hubs/          # GameHub (SignalR)
+│       ├── Hubs/          # WebSocketHandler
 │       ├── Program.cs
 │       └── Dockerfile
 └── README.md
@@ -152,7 +157,7 @@ NeonStrike2D/
 
 ## 🌐 Sistema multijugador cooperativo
 
-El sistema usa **SignalR** sobre WebSockets para garantizar baja latencia en la sincronización entre jugadores.
+El sistema usa **WebSocket** para garantizar baja latencia en la sincronización entre jugadores.
 
 - 🔄 **Sincronización de posiciones** a 20 Hz con interpolación suave
 - 🎬 **Sincronización de animaciones** inferida desde la velocidad
@@ -251,7 +256,7 @@ dotnet ef database update --connection "Host=HOST;Port=PORT;Database=railway;Use
 | `GET` | `/friends/online` | Lista de amigos online | ✅ |
 | `GET` | `/users/{username}` | Resuelve ID por username | ✅ |
 
-Además, el backend expone un Hub de SignalR en `/gamehub` para multijugador en tiempo real.
+Además, el backend expone un WebSocket en `/ws` para multijugador en tiempo real.
 
 ---
 
@@ -263,15 +268,13 @@ Además, el backend expone un Hub de SignalR en `/gamehub` para multijugador en 
    - **Minimum API Level:** Android 8.0+
 3. `Build` → genera el APK.
 
-> Las APKs publicadas se distribuyen como assets en [GitHub Releases](https://github.com/albertocll/NeonStrike2D/releases) bajo versionado semántico (`v0.1.1`, `v0.2.0`...).
-
 ---
 
 ## 🗺️ Roadmap
 
 ### ✅ Completado
 - 4 personajes jugables con stats, animaciones y ScriptableObjects
-- Multijugador cooperativo 2 jugadores sobre SignalR (posiciones + animaciones sincronizadas)
+- Multijugador cooperativo 2 jugadores por WebSocket (posiciones + animaciones sincronizadas)
 - Sistema de amigos: solicitudes, lista online, notificaciones en tiempo real
 - Sistema de invitaciones a partida
 - Coordinación de inicio (`PlayerReady`)
