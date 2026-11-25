@@ -140,14 +140,17 @@ NeonStrike2D/
 | Acción | Tecla |
 |--------|-------|
 | Movimiento | `W` `A` `S` `D` |
-| Disparar | Click izquierdo |
-| Apuntar | Ratón |
+| Disparar | `Espacio` (mantener) |
+| Apuntar | Automático: la nave apunta al enemigo más cercano a la vista |
+| Impulso | `Intro` |
+| Pausa | `Esc` |
 
 ### Controles — Android
 | Acción | Control |
 |--------|---------|
-| Movimiento | Joystick virtual flotante (izquierda) |
-| Disparar | Botón táctil (derecha) |
+| Movimiento | Joystick en la mitad derecha de la pantalla (izquierda con el modo zurdo de Opciones) |
+| Disparar | Automático, con auto apuntado |
+| Impulso | Botón táctil |
 
 ### Modos de juego
 - **Solitario** — sobrevive a oleadas crecientes de enemigos. La puntuación se guarda en el ranking global.
