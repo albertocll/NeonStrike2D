@@ -111,6 +111,7 @@ img {
   display: flex;
   align-items: center;
   gap: 12px;
+  flex-shrink: 0;
 }
 
 .nav-logo {
@@ -152,6 +153,7 @@ img {
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .status-dot {
@@ -763,6 +765,26 @@ img {
 }
 
 /* ============================================
+   CAPTURAS (reutiliza .zone-card)
+   ============================================ */
+.capture-card {
+  margin: 0;
+  padding: 16px;
+}
+
+.capture-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-bottom: 12px;
+  border: 1px solid var(--border);
+}
+
+.capture-card .zone-tag {
+  margin-bottom: 0;
+}
+
+/* ============================================
    COLLECTIBLES
    ============================================ */
 .collectibles-grid {
@@ -896,6 +918,24 @@ img {
 /* ============================================
    RESPONSIVE
    ============================================ */
+/* Menú superior: con 11 enlaces no cabe con el espacio normal por debajo de unos 1520 px.
+   Entre 1261 y 1520 px se junta un poco; por debajo, los enlaces se ocultan como en el móvil. */
+@media (max-width: 1520px) {
+  .nav {
+    padding: 14px 24px;
+  }
+
+  .nav-links {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 1260px) {
+  .nav-links {
+    display: none;
+  }
+}
+
 @media (max-width: 1024px) {
   .chars-grid {
     grid-template-columns: repeat(2, 1fr);

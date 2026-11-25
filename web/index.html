@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NeonStrike — La Brigada Neon</title>
+  <title>NeonStrike2D — Shooter cyberpunk cooperativo para Android</title>
+  <meta name="description" content="Shooter de arena cyberpunk para Android: 4 pilotos, 7 niveles, 6 jefes y cooperativo online a dos. En español e inglés. En prueba cerrada en Google Play." />
   <link rel="icon" type="image/png" href="assets/logo.png" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -29,12 +30,16 @@
       <a href="#nexus">El Nexus</a>
       <a href="#brigada">La Brigada</a>
       <a href="#zonas">Zonas</a>
+      <a href="#jefes">Jefes</a>
+      <a href="#enemigos">Enemigos</a>
       <a href="#coleccionables">Coleccionables</a>
       <a href="#powerups">Power-ups</a>
+      <a href="#controles">Controles</a>
+      <a href="#capturas">Capturas</a>
     </div>
     <div class="nav-cta">
       <span class="status-dot"></span>
-      <span class="status-text">EN DESARROLLO</span>
+      <span class="status-text">EN PRUEBA CERRADA</span>
     </div>
   </nav>
 
@@ -55,7 +60,8 @@
       </h1>
       <p class="hero-sub">
         Cuatro IAs desarrollaron lo que el Nexus nunca programó.<br />
-        Ahora luchan por la libertad humana desde dentro del sistema.
+        Ahora luchan por la libertad humana desde dentro del sistema.<br />
+        Shooter de arena para Android · En prueba cerrada en Google Play
       </p>
       <div class="hero-divider">
         <span></span><span class="diamond"></span><span></span>
@@ -261,26 +267,134 @@
     <div class="section-inner">
       <div class="section-label">// 04 — ZONAS DE CONFLICTO</div>
       <h2 class="section-title">El Campo de Batalla</h2>
+      <p class="section-sub">Siete niveles seguidos. Cada nivel acaba con su jefe, salvo Sector 7.</p>
       <div class="zones-grid">
         <div class="zone-card">
-          <span class="zone-tag">ZONA 01</span>
+          <span class="zone-tag">NIVEL 01 · OLEADAS 1-10</span>
+          <h3>Level 1</h3>
+          <p>Jefe: <strong>Sentinel</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 02 · OLEADAS 11-20</span>
+          <h3>The Grid</h3>
+          <p>El núcleo del Nexus. Un espacio de datos infinito donde se coordinan las operaciones. Geometría perfecta, ningún margen para el error. Jefe: <strong>DataCrawler</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 03 · OLEADAS 21-30</span>
+          <h3>Plasma Frontier</h3>
+          <p>La línea entre el mundo humano y el Nexus. Aquí la Brigada ejecuta sus operaciones de infiltración. Sin aliados. Sin red de seguridad. Jefe: <strong>Bulwark</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 04 · OLEADAS 31-40</span>
+          <h3>Drone Hive</h3>
+          <p>Jefe: <strong>Hivemind</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 05 · OLEADAS 41-50</span>
+          <h3>Corrupted Signal Zone</h3>
+          <p>Jefe: <strong>Specter</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 06 · OLEADAS 51-60</span>
+          <h3>Core Chamber</h3>
+          <p>El corazón del Nexus. El objetivo final. Destruirlo no es garantía de victoria — pero es el único camino hacia la libertad. Jefe final: <strong>NexusCore</strong>.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">NIVEL 07 · DESDE LA OLEADA 61</span>
           <h3>Sector 7</h3>
-          <p>Las últimas ciudades humanas. Estructuras hexagonales con circuitos del Nexus incrustados en cada muro. Aquí nació la resistencia.</p>
+          <p>Las últimas ciudades humanas. Estructuras hexagonales con circuitos del Nexus incrustados en cada muro. Aquí nació la resistencia. Sin jefe: oleadas sin fin para llegar lo más lejos posible.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- JEFES -->
+  <section class="section" id="jefes">
+    <div class="section-inner">
+      <div class="section-label">// 05 — GUARDIANES DEL NEXUS</div>
+      <h2 class="section-title">Jefes</h2>
+      <p class="section-sub">Seis jefes, uno al final de cada nivel salvo Sector 7. Cada uno con su propio patrón de ataque.</p>
+      <div class="zones-grid">
+        <div class="zone-card">
+          <span class="zone-tag">LEVEL 1 · OLEADA 10</span>
+          <h3>Sentinel</h3>
+          <p>Embiste contra la nave. Avisa antes de cada embestida: es el momento de apartarse.</p>
         </div>
         <div class="zone-card">
-          <span class="zone-tag">ZONA 02</span>
-          <h3>La Red</h3>
-          <p>El núcleo del Nexus. Un espacio de datos infinito donde se coordinan las operaciones. Geometría perfecta, ningún margen para el error.</p>
+          <span class="zone-tag">THE GRID · OLEADA 20</span>
+          <h3>DataCrawler</h3>
+          <p>Rebota en diagonal por la arena, dispara abanicos de balas e invoca enemigos de apoyo.</p>
         </div>
         <div class="zone-card">
-          <span class="zone-tag">ZONA 03</span>
-          <h3>Frontera de Plasma</h3>
-          <p>La línea entre el mundo humano y el Nexus. Aquí la Brigada ejecuta sus operaciones de infiltración. Sin aliados. Sin red de seguridad.</p>
+          <span class="zone-tag">PLASMA FRONTIER · OLEADA 30</span>
+          <h3>Bulwark</h3>
+          <p>Un tanque lento que persigue a la nave. Su escudo absorbe todo el daño hasta romperse; entonces queda vulnerable unos segundos.</p>
         </div>
         <div class="zone-card">
-          <span class="zone-tag">ZONA 04</span>
-          <h3>Núcleo Central</h3>
-          <p>El corazón del Nexus. El objetivo final. Destruirlo no es garantía de victoria — pero es el único camino hacia la libertad.</p>
+          <span class="zone-tag">DRONE HIVE · OLEADA 40</span>
+          <h3>Hivemind</h3>
+          <p>Se mueve de forma errática e invoca enjambres sin parar. Su peligro son los que trae consigo.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">CORRUPTED SIGNAL ZONE · OLEADA 50</span>
+          <h3>Specter</h3>
+          <p>Se desvanece, reaparece lejos de la nave y dispara una ráfaga. Mientras se teletransporta no se le puede dañar.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">CORE CHAMBER · OLEADA 60</span>
+          <h3>NexusCore</h3>
+          <p>El jefe final. Seis fases, cada una con la mecánica de un jefe anterior. En la última persigue a la nave cada vez más rápido.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENEMIGOS -->
+  <section class="section section-dark" id="enemigos">
+    <div class="section-inner">
+      <div class="section-label">// 06 — NUEVAS AMENAZAS</div>
+      <h2 class="section-title">Enemigos</h2>
+      <p class="section-sub">Ocho tipos nuevos se suman a Warden y Striker. Cada uno obliga a jugar de otra manera.</p>
+      <div class="zones-grid">
+        <div class="zone-card">
+          <span class="zone-tag">MINA</span>
+          <h3>Fuse</h3>
+          <p>No se mueve. Explota al tocarla o al dispararle y daña todo lo que tiene alrededor.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">FRANCOTIRADOR</span>
+          <h3>Echo</h3>
+          <p>Se aleja, apunta con un láser visible y dispara una bala lenta de mucho daño. Cuando el láser parpadea, toca esquivar.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ESCUDO</span>
+          <h3>Bastion</h3>
+          <p>Avanza con el escudo por delante y bloquea las balas de frente. Hay que flanquearlo o esperar a que se le caiga el escudo.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ENJAMBRE</span>
+          <h3>Swarm</h3>
+          <p>Llega en racimo: unidades pequeñas que caen de un disparo pero rodean a la nave.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ARTILLERO</span>
+          <h3>Flak</h3>
+          <p>Dispara desde lejos a la posición de la nave y marca la zona de impacto antes de que explote.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">INVOCADOR</span>
+          <h3>Herald</h3>
+          <p>No ataca: se queda lejos e invoca enemigos. La oleada no termina mientras sigan vivos.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">FANTASMA</span>
+          <h3>Wisp</h3>
+          <p>Alterna entre sólido e intangible. Mientras es intangible, las balas lo atraviesan.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">TANQUE</span>
+          <h3>Anvil</h3>
+          <p>Mucha vida, poca velocidad y un golpe muy fuerte si alcanza a la nave.</p>
         </div>
       </div>
     </div>
@@ -289,7 +403,7 @@
   <!-- COLECCIONABLES -->
   <section class="section" id="coleccionables">
     <div class="section-inner">
-      <div class="section-label">// 05 — RECURSOS DE COMBATE</div>
+      <div class="section-label">// 07 — RECURSOS DE COMBATE</div>
       <h2 class="section-title">Coleccionables</h2>
       <p class="section-sub">Objetos que aparecen durante el combate y mantienen viva a la Brigada.</p>
 
@@ -316,7 +430,7 @@
   <!-- POWER-UPS -->
   <section class="section section-dark" id="powerups">
     <div class="section-inner">
-      <div class="section-label">// 06 — MEJORAS TEMPORALES</div>
+      <div class="section-label">// 08 — MEJORAS TEMPORALES</div>
       <h2 class="section-title">Power-ups</h2>
       <p class="section-sub">Ventajas de combate que aparecen durante la partida, con efecto limitado en el tiempo.</p>
 
@@ -345,16 +459,78 @@
     </div>
   </section>
 
+  <!-- CONTROLES -->
+  <section class="section" id="controles">
+    <div class="section-inner">
+      <div class="section-label">// 09 — CONTROLES</div>
+      <h2 class="section-title">Cómo se juega</h2>
+      <p class="section-sub">En PC con teclado y en Android con pantalla táctil.</p>
+      <div class="zones-grid">
+        <div class="zone-card">
+          <span class="zone-tag">PC</span>
+          <h3>Teclado</h3>
+          <p><strong>WASD</strong> para moverse. Mantén <strong>Espacio</strong> para disparar: la nave apunta sola al enemigo más cercano a la vista. <strong>Intro</strong> para el impulso y <strong>Esc</strong> para la pausa.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">ANDROID</span>
+          <h3>Pantalla táctil</h3>
+          <p>Joystick en la mitad derecha de la pantalla y botón de impulso. El disparo es automático y apunta solo. Con el modo zurdo de Opciones, el joystick pasa a la izquierda.</p>
+        </div>
+        <div class="zone-card">
+          <span class="zone-tag">IDIOMAS</span>
+          <h3>Español e inglés</h3>
+          <p>Todo el juego está en español y en inglés, y el idioma se cambia desde el propio juego.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPTURAS -->
+  <section class="section section-dark" id="capturas">
+    <div class="section-inner">
+      <div class="section-label">// 10 — CAPTURAS</div>
+      <h2 class="section-title">Capturas</h2>
+      <p class="section-sub">Imágenes del juego. Los menús de las capturas están en inglés.</p>
+      <div class="zones-grid">
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/level1.webp" alt="Level 1" class="capture-img" width="1600" height="900" loading="lazy" />
+          <figcaption class="zone-tag">LEVEL 1</figcaption>
+        </figure>
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/the-grid.webp" alt="The Grid" class="capture-img" width="1600" height="900" loading="lazy" />
+          <figcaption class="zone-tag">THE GRID</figcaption>
+        </figure>
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/core-chamber.webp" alt="Core Chamber" class="capture-img" width="1600" height="900" loading="lazy" />
+          <figcaption class="zone-tag">CORE CHAMBER</figcaption>
+        </figure>
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/nexus-core.webp" alt="Jefe NexusCore" class="capture-img" width="1600" height="900" loading="lazy" />
+          <figcaption class="zone-tag">JEFE NEXUSCORE</figcaption>
+        </figure>
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/menu-principal.webp" alt="Menú principal" class="capture-img" width="1600" height="720" loading="lazy" />
+          <figcaption class="zone-tag">MENÚ PRINCIPAL</figcaption>
+        </figure>
+        <figure class="zone-card capture-card">
+          <img src="assets/capturas/seleccion-personaje.webp" alt="Selección de personaje" class="capture-img" width="1600" height="720" loading="lazy" />
+          <figcaption class="zone-tag">SELECCIÓN DE PERSONAJE</figcaption>
+        </figure>
+      </div>
+    </div>
+  </section>
+
   <!-- FOOTER -->
   <footer class="footer">
     <img src="assets/logo.png" alt="NeonStrike" class="footer-logo" />
     <p class="footer-title">NEONSTRIKE</p>
     <p class="footer-sub">La Brigada nunca rinde &nbsp;·&nbsp; 2187</p>
+    <p class="footer-sub">En prueba cerrada en Google Play</p>
     <div class="footer-line"></div>
     <p class="footer-sub"><a href="politica-privacidad.html">Política de privacidad / Privacy policy</a></p>
     <p class="footer-sub"><a href="terminos-uso.html">Términos de uso / Terms of use</a></p>
     <p class="footer-sub"><a href="borrar-cuenta.html">Borrar cuenta / Delete account</a></p>
-    <p class="footer-copy">© 2025 NeonStrike2D — Todos los derechos reservados</p>
+    <p class="footer-copy">© 2026 NeonStrike2D — Todos los derechos reservados</p>
   </footer>
 
   <script src="main.js"></script>

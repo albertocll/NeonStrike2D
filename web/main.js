@@ -241,8 +241,8 @@ const statusText = document.querySelector('.status-text');
 
 if (statusText) {
   const messages = [
-    'EN DESARROLLO',
-    'PRÓXIMAMENTE',
+    'EN PRUEBA CERRADA',
+    'GOOGLE PLAY',
     'BRIGADA ACTIVA',
     'NEXUS DETECTADO',
   ];
