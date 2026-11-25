@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
 using NeonStrike2D.Backend.Api.Data;
+using NeonStrike2D.Backend.Api.Email;
 using NeonStrike2D.Backend.Api.Models;
 
 namespace NeonStrike2D.Backend.Tests;
@@ -42,8 +43,15 @@ public class ApiFactory : WebApplicationFactory<Program>
                 services.Remove(descriptor);
 
             services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase(databaseName));
+
+            // Los correos de recuperación no salen a Brevo: se quedan en FakeMailer.
+            foreach (var descriptor in services.Where(d => d.ServiceType == typeof(IPasswordResetMailer)).ToList())
+                services.Remove(descriptor);
+            services.AddSingleton<IPasswordResetMailer>(Mailer);
         });
     }
+
+    public FakeMailer Mailer { get; } = new();
 
     // Cada petición con una IP distinta, para que los límites de intentos no se mezclen entre pruebas.
     public static string NewIp()

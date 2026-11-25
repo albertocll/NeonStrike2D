@@ -13,6 +13,7 @@ public class AppDbContext : DbContext
     public DbSet<GameSession> GameSessions => Set<GameSession>();
     public DbSet<GameResult> GameResults => Set<GameResult>();
     public DbSet<Friendship> Friendships => Set<Friendship>();
+    public DbSet<PasswordResetCode> PasswordResetCodes => Set<PasswordResetCode>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,5 +60,16 @@ public class AppDbContext : DbContext
             .WithMany()
             .HasForeignKey(f => f.AddresseeId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Códigos de recuperación de contraseña: se borran con la cuenta.
+        modelBuilder.Entity<PasswordResetCode>()
+            .HasOne(c => c.User)
+            .WithMany()
+            .HasForeignKey(c => c.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<PasswordResetCode>().Property(c => c.EmailHash).HasMaxLength(64);
+        modelBuilder.Entity<PasswordResetCode>().HasIndex(c => c.EmailHash);
+        modelBuilder.Entity<PasswordResetCode>().HasIndex(c => c.ExpiresAt);
     }
 }

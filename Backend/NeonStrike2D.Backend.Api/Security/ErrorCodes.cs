@@ -21,4 +21,11 @@ public static class ErrorCodes
     public const string RequestExists = "REQUEST_EXISTS";
     public const string RequestNotFound = "REQUEST_NOT_FOUND";
     public const string PlayerOffline = "PLAYER_OFFLINE";
+
+    // Recuperación de contraseña (issue #199).
+    public const string CodeRequired = "CODE_REQUIRED";
+    public const string InvalidCode = "INVALID_CODE";
+    public const string CodeExpired = "CODE_EXPIRED";
+    public const string CodeUsed = "CODE_USED";
+    public const string TooManyAttempts = "TOO_MANY_ATTEMPTS";
 }

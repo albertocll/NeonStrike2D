@@ -42,6 +42,21 @@ public class ApiManager : MonoBehaviour
         return JsonUtility.FromJson<RegisterResponse>(result);
     }
 
+    // RECUPERAR CONTRASEÑA (issue #199). null si no hay conexión con el servidor.
+    public async Task<RegisterResponse> ForgotPasswordAsync(string email, string language)
+    {
+        var body = JsonUtility.ToJson(new ForgotPasswordRequest { email = email, language = language });
+        var result = await PostAsync("/password/forgot", body);
+        return string.IsNullOrEmpty(result) ? null : JsonUtility.FromJson<RegisterResponse>(result);
+    }
+
+    public async Task<RegisterResponse> ResetPasswordAsync(string email, string code, string newPassword)
+    {
+        var body = JsonUtility.ToJson(new ResetPasswordRequest { email = email, code = code, newPassword = newPassword });
+        var result = await PostAsync("/password/reset", body);
+        return string.IsNullOrEmpty(result) ? null : JsonUtility.FromJson<RegisterResponse>(result);
+    }
+
     // SESIÓN: valida un token guardado. unauthorized = true solo si el servidor responde 401;
     // si falla la red, me es null y unauthorized es false (el token sigue siendo utilizable más tarde).
     public async Task<(MeResponse me, bool unauthorized)> GetMeAsync(string token)
@@ -164,6 +179,8 @@ public class ApiManager : MonoBehaviour
 [Serializable] public class MeResponse { public string userId; public string username; public string email; }
 [Serializable] public class RegisterRequest { public string username; public string email; public string password; }
 [Serializable] public class RegisterResponse { public bool success; public string message; public string code; }
+[Serializable] public class ForgotPasswordRequest { public string email; public string language; }
+[Serializable] public class ResetPasswordRequest { public string email; public string code; public string newPassword; }
 [Serializable] public class RankingEntry { public int userId; public string username; public int bestWave; public int score; }
 [Serializable] public class RankingList { public RankingEntry[] items; }
 [Serializable] public class MatchResultRequest { public int userId; public int bestWave; public int score; }

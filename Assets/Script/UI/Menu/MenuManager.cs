@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
@@ -57,10 +58,22 @@ public class MenuManager : MonoBehaviour
 
     public void CerrarPaneles() => ShowOnly(null);
 
+    // Paneles creados por código (recuperar contraseña, issue #199): se abren y cierran igual que los de la escena.
+    private readonly List<GameObject> extraPanels = new();
+
+    public void AddPanel(GameObject panel)
+    {
+        if (panel != null && !extraPanels.Contains(panel)) extraPanels.Add(panel);
+    }
+
+    public void AbrirPanel(GameObject panel) => ShowOnly(panel);
+
     // Deja abierto solo el panel indicado; con null, ninguno y vuelve el contenido principal.
     private void ShowOnly(GameObject panel)
     {
         foreach (var p in new[] { panelLogin, panelRegister, optionsPanel, exitPanel })
+            if (p != null) p.SetActive(p == panel);
+        foreach (var p in extraPanels)
             if (p != null) p.SetActive(p == panel);
         if (mainContent != null) mainContent.SetActive(panel == null);
     }

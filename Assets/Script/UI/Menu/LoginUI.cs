@@ -69,6 +69,22 @@ public class LoginUI : MonoBehaviour
             inputEmail.text = PlayerPrefs.GetString(KEY_EMAIL, "");
             toggleRememberMe.isOn = true;
         }
+
+        BuildPasswordRecovery();
+    }
+
+    // Enlace "¿Olvidaste tu contraseña?" y sus dos paneles (issue #199), copiados del panel de registro.
+    // El enlace toma la fuente de "¿No tienes cuenta?".
+    private void BuildPasswordRecovery()
+    {
+        var loginPanel = inputEmail.transform.parent.gameObject;
+        var registerPanel = inputEmailReg.transform.parent.gameObject;
+        TMP_Text linkTemplate = null;
+        foreach (Transform child in loginPanel.transform)
+            if (child.name.Trim() == "TextNoAccount") linkTemplate = child.GetComponent<TMP_Text>();
+
+        var recovery = gameObject.AddComponent<PasswordRecoveryUI>();
+        recovery.Build(menuManager, loginPanel, registerPanel, inputEmail, textFeedbackLogin, linkTemplate);
     }
 
     // Borra la contraseña que hubieran dejado guardada versiones anteriores del juego.

@@ -131,6 +131,49 @@ namespace NeonStrike2D.Backend.Api.Migrations
                     b.ToTable("GameSessions");
                 });
 
+            modelBuilder.Entity("NeonStrike2D.Backend.Api.Models.PasswordResetCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Attempts")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("CodeHash")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("EmailHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)");
+
+                    b.Property<DateTime>("ExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("UsedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("UserId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmailHash");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("PasswordResetCodes");
+                });
+
             modelBuilder.Entity("NeonStrike2D.Backend.Api.Models.User", b =>
                 {
                     b.Property<int>("Id")
@@ -221,6 +264,16 @@ namespace NeonStrike2D.Backend.Api.Migrations
                     b.Navigation("Player2");
 
                     b.Navigation("Winner");
+                });
+
+            modelBuilder.Entity("NeonStrike2D.Backend.Api.Models.PasswordResetCode", b =>
+                {
+                    b.HasOne("NeonStrike2D.Backend.Api.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
