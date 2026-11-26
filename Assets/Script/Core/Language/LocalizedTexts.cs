@@ -19,6 +19,12 @@ public static class LocalizedTexts
         { "common.back", ("volver", "back") },
         { "register.title", ("registro", "sign up") },
 
+        // Recuperar contraseña (Orbitronio)
+        { "forgot.title", ("recuperar contrasena", "reset password") },
+        { "forgot.send", ("pedir codigo", "get code") },
+        { "reset.title", ("nueva contrasena", "new password") },
+        { "reset.confirm", ("cambiar", "change") },
+
         // Menú principal (Roboto)
         { "menu.guest", ("JUGAR COMO INVITADO", "PLAY AS GUEST") },
 
@@ -58,6 +64,16 @@ public static class LocalizedTexts
         { "placeholder.email", ("correo", "email") },
         { "placeholder.friendName", ("nombre de usuario", "username") },
 
+        // Recuperar contraseña (Roboto y LiberationSans)
+        { "login.forgotPassword", ("¿Olvidaste tu contraseña?", "Forgot password?") },
+        { "reset.codeLabel", ("Código", "Code") },
+        { "reset.newPasswordLabel", ("Contraseña nueva", "New password") },
+        { "reset.repeatLabel", ("Repite la contraseña", "Repeat password") },
+        { "reset.noCode", ("¿No te ha llegado?", "Didn't get it?") },
+        { "placeholder.code", ("código de 6 cifras", "6 digit code") },
+        { "placeholder.newPassword", ("contraseña nueva", "new password") },
+        { "placeholder.repeatPassword", ("repite la contraseña", "repeat password") },
+
         // Ventana de escritura (botones en Orbitronio, nombre del campo en la fuente del campo)
         { "entry.accept", ("aceptar", "accept") },
         { "entry.cancel", ("cancelar", "cancel") },
@@ -72,6 +88,17 @@ public static class LocalizedTexts
         { "msg.registering", ("Registrando...", "Signing up...") },
         { "msg.registered", ("Registro correcto. Ahora inicia sesión.", "Account created. Now log in.") },
         { "msg.registerError", ("No se pudo completar el registro.", "Sign up failed.") },
+
+        // Mensajes de recuperar contraseña (Roboto)
+        { "forgot.hint", ("Escribe tu correo y te enviaremos un código.", "Enter your email and we'll send you a code.") },
+        { "forgot.sending", ("Enviando...", "Sending...") },
+        { "forgot.error", ("No se pudo pedir el código.", "Could not request the code.") },
+        { "reset.sent", ("Si el correo está registrado, te llegará un código. Caduca en 15 minutos.", "If the email is registered, you'll get a code. It expires in 15 minutes.") },
+        { "reset.codeRule", ("El código tiene 6 cifras.", "The code has 6 digits.") },
+        { "reset.mismatch", ("Las contraseñas no coinciden.", "Passwords don't match.") },
+        { "reset.changing", ("Cambiando...", "Changing...") },
+        { "reset.error", ("No se pudo cambiar la contraseña.", "Could not change the password.") },
+        { "reset.done", ("Contraseña cambiada. Ya puedes iniciar sesión.", "Password changed. You can log in now.") },
 
         // Mensajes del servidor, traducidos en el cliente (Roboto)
         { "server.usernameRequired", ("El nombre de usuario es obligatorio.", "Username is required.") },
@@ -92,6 +119,11 @@ public static class LocalizedTexts
         { "server.cannotAddSelf", ("No puedes añadirte a ti mismo.", "You can't add yourself.") },
         { "server.requestExists", ("Ya existe una solicitud entre estos usuarios.", "There is already a request between you.") },
         { "server.requestNotFound", ("Solicitud no encontrada.", "Request not found.") },
+        { "server.codeRequired", ("El código es obligatorio.", "The code is required.") },
+        { "server.invalidCode", ("El código no es correcto.", "That code is not correct.") },
+        { "server.codeExpired", ("El código ha caducado. Pide otro.", "The code has expired. Ask for a new one.") },
+        { "server.codeUsed", ("Ese código ya se ha usado. Pide otro.", "That code has already been used. Ask for a new one.") },
+        { "server.tooManyAttempts", ("Demasiados intentos con este código. Pide otro.", "Too many attempts with this code. Ask for a new one.") },
 
         // Selección de personaje (Orbitronio)
         { "select.title", ("elige personaje", "choose character") },
@@ -201,6 +233,11 @@ public static class LocalizedTexts
         { "REQUEST_EXISTS", "server.requestExists" },
         { "REQUEST_NOT_FOUND", "server.requestNotFound" },
         { "PLAYER_OFFLINE", "server.playerOffline" },
+        { "CODE_REQUIRED", "server.codeRequired" },
+        { "INVALID_CODE", "server.invalidCode" },
+        { "CODE_EXPIRED", "server.codeExpired" },
+        { "CODE_USED", "server.codeUsed" },
+        { "TOO_MANY_ATTEMPTS", "server.tooManyAttempts" },
     };
 
     public static IEnumerable<string> Keys => Texts.Keys;

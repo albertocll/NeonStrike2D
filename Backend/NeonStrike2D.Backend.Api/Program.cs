@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 using NeonStrike2D.Backend.Api.Data;
 using NeonStrike2D.Backend.Api.Dtos;
+using NeonStrike2D.Backend.Api.Email;
 using NeonStrike2D.Backend.Api.Hubs;
 using NeonStrike2D.Backend.Api.Models;
 using NeonStrike2D.Backend.Api.Security;
@@ -39,6 +40,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 builder.Services.AddGameRateLimits();
+builder.Services.AddSingleton<PasswordResetLimiter>();
+builder.Services.AddHostedService<PasswordResetCleanup>();
+
+// Correo de recuperación de contraseña con Brevo (issue #199).
+builder.Services.AddHttpClient(BrevoPasswordResetMailer.HttpClientName, client => client.Timeout = TimeSpan.FromSeconds(15));
+builder.Services.AddSingleton<IPasswordResetMailer, BrevoPasswordResetMailer>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -99,6 +106,7 @@ app.MapDelete("/me", async (ClaimsPrincipal user, AppDbContext db) =>
         await db.GameResults.Where(r => r.UserId == userId || sessions.Any(s => s.Id == r.GameSessionId)).ExecuteDeleteAsync();
         await sessions.ExecuteDeleteAsync();
         await db.Friendships.Where(f => f.RequesterId == userId || f.AddresseeId == userId).ExecuteDeleteAsync();
+        await db.PasswordResetCodes.Where(c => c.UserId == userId).ExecuteDeleteAsync();
         await db.Users.Where(u => u.Id == userId).ExecuteDeleteAsync();
         await tx.CommitAsync();
     }
@@ -199,6 +207,128 @@ app.MapPost("/login", async (LoginRequest request, AppDbContext db) =>
         Token = new JwtSecurityTokenHandler().WriteToken(token)
     });
 }).RequireRateLimiting(RateLimits.Login);
+
+// ── RECUPERAR CONTRASEÑA (issue #199) ───────────────────────────────────────
+
+// Pide un código. Responde siempre lo mismo, exista o no el correo. Si existe, guarda el hash de un
+// código de 6 dígitos (15 minutos, 5 intentos) y lo envía por correo; si no, guarda el hash de un
+// código que nunca se envía, para que /password/reset tampoco delate qué correos tienen cuenta.
+// Cada código nuevo borra el anterior de ese correo.
+app.MapPost("/password/forgot", async (ForgotPasswordRequest request, AppDbContext db, PasswordResetLimiter limiter,
+    IPasswordResetMailer mailer, ILogger<Program> logger) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Email))
+        return Results.BadRequest(new { Success = false, Message = "El email es obligatorio.", Code = ErrorCodes.EmailRequired });
+
+    var email = PasswordResetRules.NormalizeEmail(request.Email);
+    if (!AccountRules.IsValidEmail(email))
+        return Results.BadRequest(new { Success = false, Message = "El correo no es válido.", Code = ErrorCodes.InvalidEmail });
+
+    if (!limiter.TryForgot(email))
+        return Results.Json(new { Success = false, Message = RateLimits.RejectedMessage, Code = ErrorCodes.RateLimited },
+            statusCode: StatusCodes.Status429TooManyRequests);
+
+    var user = await db.Users.FirstOrDefaultAsync(u => u.Email.ToLower() == email);
+    var emailHash = PasswordResetRules.HashEmail(email);
+    var now = DateTime.UtcNow;
+
+    var oldRows = await db.PasswordResetCodes
+        .Where(c => c.EmailHash == emailHash || c.ExpiresAt < now - PasswordResetRules.KeepExpired)
+        .ToListAsync();
+    db.PasswordResetCodes.RemoveRange(oldRows);
+
+    var code = PasswordResetRules.NewCode();
+    db.PasswordResetCodes.Add(new PasswordResetCode
+    {
+        EmailHash = emailHash,
+        UserId = user?.Id,
+        CodeHash = PasswordResetRules.HashCode(code),
+        CreatedAt = now,
+        ExpiresAt = now + PasswordResetRules.Lifetime
+    });
+    await db.SaveChangesAsync();
+
+    if (user != null)
+    {
+        // El envío va aparte para que la respuesta tarde lo mismo con y sin cuenta.
+        bool english = string.Equals(request.Language?.Trim(), "en", StringComparison.OrdinalIgnoreCase);
+        var to = user.Email;
+        _ = Task.Run(async () =>
+        {
+            try
+            {
+                await mailer.SendCodeAsync(to, code, english);
+            }
+            catch (Exception e)
+            {
+                logger.LogError("No se pudo enviar el correo de recuperación: {Error}", e.GetType().Name);
+            }
+        });
+    }
+
+    return Results.Ok(new { Success = true, Message = PasswordResetRules.ForgotMessage });
+}).RequireRateLimiting(RateLimits.PasswordForgot);
+
+// Cambia la contraseña con el código. Con las mismas reglas de contraseña que el registro. Un
+// código fallido suma un intento; al quinto deja de valer y hay que pedir otro.
+app.MapPost("/password/reset", async (ResetPasswordRequest request, AppDbContext db, PasswordResetLimiter limiter) =>
+{
+    if (string.IsNullOrWhiteSpace(request.Email))
+        return Results.BadRequest(new { Success = false, Message = "El email es obligatorio.", Code = ErrorCodes.EmailRequired });
+
+    if (string.IsNullOrWhiteSpace(request.Code))
+        return Results.BadRequest(new { Success = false, Message = "El código es obligatorio.", Code = ErrorCodes.CodeRequired });
+
+    if (string.IsNullOrEmpty(request.NewPassword))
+        return Results.BadRequest(new { Success = false, Message = "La contraseña es obligatoria.", Code = ErrorCodes.PasswordRequired });
+
+    if (!AccountRules.IsValidPassword(request.NewPassword))
+        return Results.BadRequest(new { Success = false, Message = "La contraseña debe tener entre 8 y 128 caracteres.", Code = ErrorCodes.InvalidPassword });
+
+    var email = PasswordResetRules.NormalizeEmail(request.Email);
+    if (!limiter.TryReset(email))
+        return Results.Json(new { Success = false, Message = RateLimits.RejectedMessage, Code = ErrorCodes.RateLimited },
+            statusCode: StatusCodes.Status429TooManyRequests);
+
+    var emailHash = PasswordResetRules.HashEmail(email);
+    var entry = await db.PasswordResetCodes
+        .Where(c => c.EmailHash == emailHash)
+        .OrderByDescending(c => c.CreatedAt)
+        .FirstOrDefaultAsync();
+
+    var invalid = Results.BadRequest(new { Success = false, Message = "El código no es correcto.", Code = ErrorCodes.InvalidCode });
+    if (entry == null)
+        return invalid;
+
+    if (entry.UsedAt != null)
+        return Results.BadRequest(new { Success = false, Message = "Ese código ya se ha usado. Pide otro.", Code = ErrorCodes.CodeUsed });
+
+    if (entry.ExpiresAt <= DateTime.UtcNow)
+        return Results.BadRequest(new { Success = false, Message = "El código ha caducado. Pide otro.", Code = ErrorCodes.CodeExpired });
+
+    var tooMany = Results.BadRequest(new { Success = false, Message = "Demasiados intentos con este código. Pide otro.", Code = ErrorCodes.TooManyAttempts });
+    if (entry.Attempts >= PasswordResetRules.MaxAttempts)
+        return tooMany;
+
+    var code = request.Code.Trim();
+    if (!PasswordResetRules.IsWellFormed(code) || !PasswordResetRules.VerifyCode(entry.CodeHash, code))
+    {
+        entry.Attempts++;
+        await db.SaveChangesAsync();
+        return entry.Attempts >= PasswordResetRules.MaxAttempts ? tooMany : invalid;
+    }
+
+    // Código correcto. Una fila sin usuario nunca llega aquí (su código no se envía), pero por si acaso.
+    var user = entry.UserId is int userId ? await db.Users.FirstOrDefaultAsync(u => u.Id == userId) : null;
+    if (user == null)
+        return invalid;
+
+    user.PasswordHash = new PasswordHasher<User>().HashPassword(user, request.NewPassword);
+    entry.UsedAt = DateTime.UtcNow;
+    await db.SaveChangesAsync();
+
+    return Results.Ok(new { Success = true, Message = "Contraseña cambiada. Ya puedes iniciar sesión." });
+}).RequireRateLimiting(RateLimits.PasswordReset);
 
 // ── RANKING ──────────────────────────────────────────────────────────────────
 

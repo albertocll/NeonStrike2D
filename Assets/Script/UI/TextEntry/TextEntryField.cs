@@ -14,6 +14,13 @@ public class TextEntryField : MonoBehaviour
 
     public TMP_InputField Field => field;
 
+    // Para los campos copiados por código con otro nombre (recuperar contraseña).
+    public string LabelKey
+    {
+        get => labelKey;
+        set => labelKey = value;
+    }
+
     public string Label
     {
         get

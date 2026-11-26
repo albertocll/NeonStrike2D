@@ -6,11 +6,15 @@ namespace NeonStrike2D.Backend.Api.Security;
 
 // Límite de peticiones. Endpoints públicos, por IP: /login 5 por minuto, /register 3 por hora y
 // el resto 60 por minuto. Endpoints con sesión, por usuario (id del token): /match/result 10 por
-// minuto y el resto 120 por minuto. Al pasarse, 429 con el código RATE_LIMITED.
+// minuto y el resto 120 por minuto. Recuperación de contraseña, por IP: /password/forgot 10 por
+// hora y /password/reset 20 por hora (y además por correo, ver PasswordResetLimiter). Al pasarse,
+// 429 con el código RATE_LIMITED.
 public static class RateLimits
 {
     public const string Login = "login";
     public const string Register = "register";
+    public const string PasswordForgot = "contrasena-pedir";
+    public const string PasswordReset = "contrasena-cambiar";
     public const string Public = "publico";
     public const string MatchResult = "partida";
     public const string Session = "sesion";
@@ -30,6 +34,8 @@ public static class RateLimits
 
             options.AddPolicy(Login, context => Fixed(context, 5, TimeSpan.FromMinutes(1)));
             options.AddPolicy(Register, context => Fixed(context, 3, TimeSpan.FromHours(1)));
+            options.AddPolicy(PasswordForgot, context => Fixed(context, 10, TimeSpan.FromHours(1)));
+            options.AddPolicy(PasswordReset, context => Fixed(context, 20, TimeSpan.FromHours(1)));
             options.AddPolicy(Public, context => Fixed(context, 60, TimeSpan.FromMinutes(1)));
             options.AddPolicy(MatchResult, context => PerUser(context, 10, TimeSpan.FromMinutes(1)));
             options.AddPolicy(Session, context => PerUser(context, 120, TimeSpan.FromMinutes(1)));

@@ -262,6 +262,8 @@ dotnet ef database update --connection "Host=HOST;Port=PORT;Database=railway;Use
 | `GET` | `/` | Health check | ❌ |
 | `POST` | `/register` | Registro de usuario | ❌ |
 | `POST` | `/login` | Login, devuelve JWT | ❌ |
+| `POST` | `/password/forgot` | Envía por correo un código de 6 dígitos para cambiar la contraseña (misma respuesta exista o no el correo) | ❌ |
+| `POST` | `/password/reset` | Cambia la contraseña con el código (15 minutos, 5 intentos) | ❌ |
 | `GET` | `/me` | Info del usuario actual | ✅ |
 | `DELETE` | `/me` | Borra la cuenta y todos sus datos | ✅ |
 | `GET` | `/ranking` | Top 10 jugadores | ❌ |
@@ -272,7 +274,9 @@ dotnet ef database update --connection "Host=HOST;Port=PORT;Database=railway;Use
 | `GET` | `/users/{username}` | Resuelve ID por username | ✅ |
 | `GET` | `/ws` | WebSocket para el multijugador en tiempo real | Token JWT al conectar (obligatorio si `Security__RequireWebSocketAuth` está activo) |
 
-Todos los endpoints tienen límite de peticiones (por IP en los públicos y por usuario en los que piden sesión).
+Todos los endpoints tienen límite de peticiones (por IP en los públicos y por usuario en los que piden sesión; los de recuperar contraseña, además, por correo).
+
+El correo de recuperación se envía con Brevo. El servidor necesita `Brevo__ApiKey` y `Brevo__SenderEmail` en sus variables de entorno; sin ellas no se envía el correo y se registra el error.
 
 ---
 
